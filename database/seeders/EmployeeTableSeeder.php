@@ -22,8 +22,8 @@ class EmployeeTableSeeder extends Seeder
         ]);
 
         Employee::create([
-            'first_name' => 'Kit',
-            'last_name' => 'Corbita',
+            'first_name' => 'Admin',
+            'last_name' => 'Admin',
             'address' => 'Panabo',
             'phone_number' => '09511046579',
             'user_id' => $user->id,
