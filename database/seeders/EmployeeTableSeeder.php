@@ -15,9 +15,10 @@ class EmployeeTableSeeder extends Seeder
     public function run(): void
     {
         $user = User::create([
-            'email' => 'corbita.kit@gmail.com',
-            'password' => 'Kit D. Great',
-            'role_id' => 1
+            'email' => 'admin@admin.com',
+            'password' => 'admin12345',
+            'role_id' => 1,
+            'email_verified_at' => '2024-07-22 08:07:17'
         ]);
 
         Employee::create([

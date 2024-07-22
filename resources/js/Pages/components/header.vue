@@ -29,7 +29,7 @@ const props = defineProps({
                 <p class="mt-1.5 text-sm text-gray-500"></p>
             </div>
 
-            <div class="mt-4 flex flex-col gap-4 sm:mt-0 sm:flex-row sm:items-center" v-if="displayBtn || user.role.name == 'Admin'">
+            <div class="mt-4 flex flex-col gap-4 sm:mt-0 sm:flex-row sm:items-center" v-if="displayBtn">
             
                 <button  @click="$emit('submit')" class="block rounded-lg bg-indigo-600 px-5 py-3 text-sm font-medium text-white transition hover:bg-indigo-700 focus:outline-none focus:ring"
                 type="button"
