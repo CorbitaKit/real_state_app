@@ -29,5 +29,21 @@ class EmployeeTableSeeder extends Seeder
             'user_id' => $user->id,
             'birth_day' => '1992-01-18'
         ]);
+
+        $user = User::create([
+            'email' => 'staff@staff.com',
+            'password' => 'staff12345',
+            'role_id' => 2,
+            'email_verified_at' => '2024-07-22 08:07:17'
+        ]);
+
+        Employee::create([
+            'first_name' => 'Staff',
+            'last_name' => 'Staff',
+            'address' => 'Panabo',
+            'phone_number' => '09511046579',
+            'user_id' => $user->id,
+            'birth_day' => '1992-01-18'
+        ]);
     }
 }
