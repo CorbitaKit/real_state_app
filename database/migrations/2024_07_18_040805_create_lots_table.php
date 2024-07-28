@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('lots', function (Blueprint $table) {
             $table->id();
             $table->timestamps();
+            $table->string('name');
             $table->string('status');
             $table->foreignId('lot_group_id')->nullable();
             $table->foreignId('property_id');

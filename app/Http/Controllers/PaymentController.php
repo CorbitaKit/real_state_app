@@ -34,7 +34,7 @@ class PaymentController extends Controller
 
     public function update(Request $request, $id)
     {
-        $this->service->doUpdate($request->all(), $id);
+        $this->service->doUpdate($request->all(), (int)$id);
     }
 
     public function getUserPayment()

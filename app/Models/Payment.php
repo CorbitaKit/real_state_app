@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\Relations\MorphOne;
 
 #[ObservedBy([PaymentObserver::class])]
@@ -21,12 +22,13 @@ class Payment extends Model
         'amount',
         'mode_of_payment',
         'date_of_payment',
-        'status'
+        'status',
+        'invoice_number'
     ];
 
-    public function file(): MorphOne
+    public function files(): MorphMany
     {
-        return $this->morphOne(File::class, 'fileable');
+        return $this->morphMany(File::class, 'fileable');
     }
 
     public function lots(): HasMany

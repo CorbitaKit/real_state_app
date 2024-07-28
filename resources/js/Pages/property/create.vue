@@ -36,6 +36,7 @@ const submit = () => {
 
 <template>
     <Header  :displayBtn="false" :title="'Property Creation Page'" />
+    <Toast />
     <div class="mx-auto bg-white p-8 my-8 rounded shadow-md">
         <Wizard @submit="submit"/>
     </div>

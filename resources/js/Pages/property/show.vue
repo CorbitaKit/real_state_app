@@ -17,6 +17,8 @@ const confirm = useConfirm();
 
 const user = getUserInfo()
 const visible = ref(false)
+const payments = ref()
+const payment_view = ref(false)
 const props = defineProps({
     property: Object
 })
@@ -30,6 +32,12 @@ const form = useForm({
 
 
 const checkUser = (lot) => {
+    if (user.role_id !== 3 && lot.status !== 'Available') {
+        if (lot.payments) {
+            payment_view.value = true
+            payments.value = lot.payments
+        }
+    }
     if (user.role_id === 3) {
         if (!user.personal_info) {
             confirm.require({
@@ -86,6 +94,35 @@ defineOptions({layout: Layout})
     <Header  :displayBtn="false" :title="'Property Details'" />
     <ConfirmDialog />
     <Toast />
+    <Dialog v-model:visible="payment_view" modal header="Payment History" :style="{ width: '50rem' }">
+        <v-table>
+    <thead>
+      <tr>
+        <th class="text-left">
+          Amount
+        </th>
+        <th class="text-left">
+          Mode Of Payment
+        </th>
+        <th class="text-left">
+          Payment Date
+        </th>
+        <th class="text-left">
+          Invoice Number
+        </th>
+
+      </tr>
+    </thead>
+    <tbody>
+      <tr v-for="payment in payments" :key="payment.id" >
+        <td>{{ payment.amount }}</td>
+        <td>{{ payment.mode_of_payment }}</td>
+        <td>{{ payment.date_of_payment }}</td>
+        <td>{{ payment.invoice_number }}</td>
+      </tr>
+    </tbody>
+  </v-table>
+    </Dialog>
     <Dialog v-model:visible="visible" modal header="Site visit" :style="{ width: '50rem' }">
         <span class="text-surface-500 dark:text-surface-400 block mb-8">Set a date for your site visit.</span>
         <div class="flex items-center gap-4 mb-4">

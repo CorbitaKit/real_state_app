@@ -61,7 +61,7 @@ const setLots = () => {
     useProperty.property.lots = []
     for (var i = 0; i < useProperty.property.number_of_lot; i++) {
         useProperty.property.lots.push({
-            id: i + 1,
+            name: 'Lot ' +  (i + 1),
             sqr_meter: '',
             color_label: '',
             is_set: false,

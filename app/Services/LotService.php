@@ -23,7 +23,8 @@ class LotService extends Service
             parent::doCreate([
                 'color_label' => $lot['color_label']['color'],
                 'status' => $lot['status'],
-                'property_id' => $propertyId
+                'property_id' => $propertyId,
+                'name' => $lot['name']
             ]);
         }
 
@@ -35,5 +36,10 @@ class LotService extends Service
         foreach ($lots as $lot) {
             parent::doUpdate(['lot_group_id' => $lotGroupId], $lot['id']);
         }
+    }
+
+    public function doGetClientLots(int $clientId): Collection
+    {
+        return $this->repo->doFetchClientLots($clientId);
     }
 }

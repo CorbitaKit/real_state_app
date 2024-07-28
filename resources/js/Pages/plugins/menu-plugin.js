@@ -18,19 +18,24 @@ const sidebar_menus = [
     },
     {
         name: 'My Applications',
-        icon: 'fa-landmark',
+        icon: 'fa-tasks',
         link: '/application/get-by-user',
+    },
+    {
+        name: 'My Properties',
+        icon: 'fa-landmark',
+        link: '/lots/get-client-lots',
     },
 
     
 ]
 
 const admin_side_bar_menus = [
-    // {
-    //     name: 'Dashboard',
-    //     icon: 'fa-list-alt',
-    //     link: '/dashboard',
-    // },
+    {
+        name: 'Dashboard',
+        icon: 'fa-list-alt',
+        link: '/dashboard',
+    },
     {
         name: 'Properties',
         icon: 'fa-landmark',

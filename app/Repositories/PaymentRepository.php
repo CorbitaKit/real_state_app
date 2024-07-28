@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Collection;
 
 class PaymentRepository extends Repository
 {
-    protected $relations = ['lots.property', 'user', 'file'];
+    protected $relations = ['lots.property', 'user', 'files'];
     public function __construct(Payment $payment)
     {
         parent::__construct($payment, $this->relations);

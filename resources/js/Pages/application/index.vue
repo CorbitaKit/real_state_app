@@ -84,7 +84,7 @@ defineOptions({layout: Layout})
         <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
             <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                 <tr>
-                    <th v-if="user.role.name == 'Admin'" scope="col" class="px-6 py-3">
+                    <th v-if="user.role_id != 3" scope="col" class="px-6 py-3">
                        Applicant
                     </th>
                     <th scope="col" class="px-6 py-3">
@@ -99,15 +99,15 @@ defineOptions({layout: Layout})
                     <th scope="col" class="px-6 py-3">
                         Status
                     </th>
-                    <th v-if="user.role.name == 'Admin'" scope="col" class="px-6 py-3">
+                    <th v-if="user.role_id != 3" scope="col" class="px-6 py-3">
                         Actions
                     </th>
                 </tr>
             </thead>
             <tbody>
                 <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700" v-for="application in applications" :key="application.id">
-                    <th v-if="user.role.name == 'Admin'" scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                        {{ application.user.personal_info.first_name }} {{ application.user.personal_info.last_name }} 
+                    <th v-if="user.role_id != 3" scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                        <a class="text-blue" style="color:blue;" :href="`/users/${application.user.id}`">{{ application.user.personal_info.first_name }} {{ application.user.personal_info.last_name }} </a>
                     </th>
                     <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                         {{ application.application_type }}
@@ -131,7 +131,7 @@ defineOptions({layout: Layout})
                         <Tag v-if="application.status === 'Approved'" severity="success" :value="application.status"></Tag>
                         <Tag v-if="application.status === 'Rejected'" severity="danger" :value="application.status"></Tag>
                     </td>
-                    <td class="px-6 py-4" v-if="user.role.name == 'Admin'">
+                    <td class="px-6 py-4" v-if="user.role_id != 3">
                         <v-icon v-if="application.status === 'For Review'" @click="handleStatusChange('Approved', application.id)" name="fc-approval" animation="ring" scale="2" class="text-4xl rounded cursor-pointer block float-left mr-2"/>
                         <v-icon v-if="application.status === 'For Review'" @click="handleStatusChange('Rejected', application.id)" fill="red" name="fa-window-close" animation="wrench" scale="2" class="text-4xl rounded cursor-pointer block float-left mr-2"/>
                         

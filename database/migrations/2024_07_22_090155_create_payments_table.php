@@ -20,6 +20,7 @@ return new class extends Migration
             $table->string('mode_of_payment');
             $table->date('date_of_payment');
             $table->string('status');
+            $table->string('invoice_number')->nullable();
         });
     }
 

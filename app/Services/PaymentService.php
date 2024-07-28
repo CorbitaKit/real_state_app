@@ -35,7 +35,20 @@ class PaymentService extends Service
             'filename' => $fileUpload->getClientOriginalName(),
             'url' => $path
         ]);
-        $payment->file()->save($file);
+        $payment->files()->save($file);
+        return $payment;
+    }
+
+    public function doUpdate(array $data, $id): Model
+    {
+        $payment = parent::doUpdate($data, $id);
+        $fileUpload = $data['file']['value'];
+        $path = $this->uploadFile($fileUpload, 'files/payments/invoice');
+        $file = $this->fileService->doCreate([
+            'filename' => $fileUpload->getClientOriginalName(),
+            'url' => $path
+        ]);
+        $payment->files()->save($file);
         return $payment;
     }
 }

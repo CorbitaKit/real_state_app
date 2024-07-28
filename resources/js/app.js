@@ -27,6 +27,19 @@ import Calendar from 'primevue/calendar';
 import Image from 'primevue/image';
 import Tag from 'primevue/tag';
 import Dialog from 'primevue/dialog';
+import Chart from 'primevue/chart';
+import { createVuetify } from 'vuetify'
+import * as components from 'vuetify/components'
+import * as directives from 'vuetify/directives'
+import '@mdi/font/css/materialdesignicons.css'
+// import 'vuetify/styles'
+
+const vuetify = createVuetify({
+  components,
+  directives,
+  ssr: true,
+})
+
 const pinia = createPinia()
 
 createInertiaApp({
@@ -39,6 +52,7 @@ createInertiaApp({
     createApp({ render: () => h(App, props) })
       .use(plugin)
       .use(PrimeVue)
+      .use(vuetify)
       .use(Vue3FormWizard)
       .use(pinia)
       .use(ToastService)
@@ -61,6 +75,7 @@ createInertiaApp({
       .component('Image', Image)
       .component('Tag', Tag)
       .component('Dialog', Dialog)
+      .component('Chart', Chart)
       .mount(el)
   },
 })

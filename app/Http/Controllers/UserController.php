@@ -16,9 +16,14 @@ class UserController extends Controller
     }
     public function show($id)
     {
-        return Inertia::render('user/profile', ['user_id'  => (int)$id]);
-    }
+        $user = $this->service->doFindById((int)$id);
 
+        if ($user->personal_info) {
+            return Inertia::render('user/view', ['userInfo' => $this->service->doFindById((int)$id)]);
+        } else {
+            return Inertia::render('user/profile', ['user_id' => ($id)]);
+        }
+    }
     public function store(Request $request)
     {
         return $this->service->doStore($request);

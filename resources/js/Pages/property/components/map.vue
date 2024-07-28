@@ -33,10 +33,10 @@ const setLotValue = (lot) => {
     </div>
     <div class="grid grid-cols-4 gap-3">
         
-        <div class="mb-4" v-for="lot in useProperty.property.lots" :key="lot.id">
+        <div class="mb-4" v-for="lot in useProperty.property.lots" :key="lot.name">
             
             <button @click="setLotValue(lot)" type="button" class="block w-full rounded p-4 text-sm font-medium transition hover:scale-105" :class="[lot.color_label ? lot.color_label.color : 'bg-gray-200']">
-               <span> Lot {{ lot.id }}</span><br>
+               <span> {{ lot.name }}</span><br>
                <span> {{ lot.sqr_meter }} sqr meter</span><br>
             </button>
         </div>

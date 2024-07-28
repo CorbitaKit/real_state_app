@@ -3,6 +3,7 @@
 use App\Http\Controllers\ApplicationController;
 use App\Http\Controllers\Auth\UserController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\LotController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\PropertyController;
 use Illuminate\Support\Facades\Route;
@@ -37,6 +38,8 @@ Route::get('login', [UserController::class, 'index'])->name('login')->middleware
 Route::middleware(['auth:sanctum', 'verified'])->group(function () {
     Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard');
     Route::get('payments/get-by-user', [PaymentController::class, 'getUserPayment']);
+    Route::post('payments/update/{id}', [PaymentController::class, 'update']);
+    Route::get('lots/get-client-lots', [LotController::class, 'getClientLots']);
     Route::get('application/get-by-user', [ApplicationController::class, 'getUserApplication']);
     Route::resource('properties', PropertyController::class);
     Route::resource('users', ClientController::class);
