@@ -97,7 +97,8 @@ const calculateTotalAmount = (lot_group) => {
     <div class="grid grid-cols-2 gap-3 mx-9 mb-5">
         <div class="mb-2">
             <label for="purok" class="block text-gray-700 font-semibold mb-2">Down Payment</label>
-            <input v-model="useProperty.property.down_payment" type="number"  class="block appearance-none w-full px-3 py-2 border rounded-md focus:outline-none focus:ring focus:border-blue-300" />
+            <InputNumber v-model="useProperty.property.down_payment" inputId="integeronly" fluid class="w-full"/>
+            <!-- <input v-model="useProperty.property.down_payment" type="number"  class="block appearance-none w-full px-3 py-2 border rounded-md focus:outline-none focus:ring focus:border-blue-300" /> -->
             
         </div>
         <div class="mb-2">
@@ -108,12 +109,16 @@ const calculateTotalAmount = (lot_group) => {
 
         <div class="mb-2">
             <label for="purok" class="block text-gray-700 font-semibold mb-2">Number of Lot(s)</label>
-            <input v-model="useProperty.property.number_of_lot" @blur="setLots" type="number" min="1" max="100" class="block appearance-none w-full px-3 py-2 border rounded-md focus:outline-none focus:ring focus:border-blue-300" />
+            <InputNumber :min="0" :max="100" @blur="setLots" v-model="useProperty.property.number_of_lot" inputId="integeronly" fluid class="w-full"/>
+            
+            <!-- <input v-model="useProperty.property.number_of_lot" @blur="setLots" type="number" min="1" max="100" class="block appearance-none w-full px-3 py-2 border rounded-md focus:outline-none focus:ring focus:border-blue-300" /> -->
         </div>
         
         <div class="mb-2">
             <label for="purok" class="block text-gray-700 font-semibold mb-2">Number of Lot group(s)</label>
-            <input v-model="useProperty.property.number_of_lot_groups" @blur="setLotGroups" type="number" min="1" max="5" class="block appearance-none w-full px-3 py-2 border rounded-md focus:outline-none focus:ring focus:border-blue-300" />
+            <InputNumber :min="0" :max="5"  @blur="setLotGroups" v-model="useProperty.property.number_of_lot_groups" inputId="integeronly" fluid class="w-full"/>
+            
+            <!-- <input v-model="useProperty.property.number_of_lot_groups" @blur="setLotGroups" type="number" min="1" max="5" class="block appearance-none w-full px-3 py-2 border rounded-md focus:outline-none focus:ring focus:border-blue-300" /> -->
             
         </div>
     </div>
@@ -133,15 +138,15 @@ const calculateTotalAmount = (lot_group) => {
         </div>
         <div class="mb-4">
             <label for="purok" class="block text-gray-700 font-semibold mb-2">sqr meter</label>
-            <input v-model="lot_group.sqr_meter" type="text" class="block appearance-none w-full px-3 py-2 border rounded-md focus:outline-none focus:ring focus:border-blue-300" />
+            <input v-model="lot_group.sqr_meter" type="number" class="block appearance-none w-full px-3 py-2 border rounded-md focus:outline-none focus:ring focus:border-blue-300" />
         </div>
         <div class="mb-4">
             <label for="purok" class="block text-gray-700 font-semibold mb-2" style="white-space: nowrap;">Amount per sqr meter</label>
-            <input v-model="lot_group.amount_per_sqr_meter" @blur="calculateTotalAmount(lot_group)" type="text" class="block appearance-none w-full px-3 py-2 border rounded-md focus:outline-none focus:ring focus:border-blue-300" />
+            <input v-model="lot_group.amount_per_sqr_meter" @blur="calculateTotalAmount(lot_group)" type="number" class="block appearance-none w-full px-3 py-2 border rounded-md focus:outline-none focus:ring focus:border-blue-300" />
         </div>
         <div class="mb-4">
             <label for="purok" class="block text-gray-700 font-semibold mb-2" style="white-space: nowrap;">Monthly Amortization</label>
-            <input v-model="lot_group.monthly_amortizations" type="text" class="block appearance-none w-full px-3 py-2 border rounded-md focus:outline-none focus:ring focus:border-blue-300" />
+            <input v-model="lot_group.monthly_amortizations" type="number" class="block appearance-none w-full px-3 py-2 border rounded-md focus:outline-none focus:ring focus:border-blue-300" />
         </div>
         <div class="mb-4">
             <label for="purok" class="block text-gray-700 font-semibold mb-2">Total Amount</label>

@@ -9,7 +9,7 @@
             <div class="flex content-between items-center gap-4">
                 <v-icon  name="fa-users" scale="2"></v-icon>
                 <h2 class="bold">
-                    Coeints
+                    Clients
                 </h2>
                 <span>
                     <Tag :value="10" />
