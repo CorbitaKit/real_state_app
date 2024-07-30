@@ -75,6 +75,14 @@ const submit = () => {
                 <td>12345asd7</td>
             
             </tr>
+            <tr >
+                <td></td>
+                <td></td>
+                <td></td>
+                <td>Remaining Balance:</td>
+                <td>12,000</td>
+            
+            </tr>
             </tbody>
         </v-table>
     </Dialog>
