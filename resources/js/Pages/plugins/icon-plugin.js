@@ -1,5 +1,5 @@
 import { addIcons } from "oh-vue-icons";
-import { FaArrowRight, FaChartLine, FaClipboard, FaFileAlt, FaLandmark, FaReceipt, FaTasks, FaUserFriends, FaWindowClose, FcApproval } from "oh-vue-icons/icons";
+import { FaArrowRight, FaChartLine, FaClipboard, FaEdit, FaEye, FaFileAlt, FaLandmark, FaMoneyBill, FaReceipt, FaTasks, FaTrash, FaUserFriends, FaWindowClose, FcApproval } from "oh-vue-icons/icons";
 import { FaArrowLeft } from "oh-vue-icons/icons";
 import { FaArchive } from "oh-vue-icons/icons";
 import { FaListAlt } from "oh-vue-icons/icons";
@@ -26,7 +26,11 @@ const iconPlugin = addIcons(
     FaClipboard,
     FaFileAlt,
     FcApproval,
-    FaWindowClose
+    FaWindowClose,
+    FaEdit,
+    FaTrash,
+    FaEye,
+    FaMoneyBill
 )
 
 export default {

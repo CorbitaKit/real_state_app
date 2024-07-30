@@ -87,6 +87,13 @@ const sendApplication = () => {
         })
     })
 }
+const calculatePercentage = (lot) => {
+    const total_amount = lot.lot_group.sqr_meter * lot.lot_group.amount_per_sqr_meter;
+    const total_payment = lot.payments.reduce((sum, payment) => sum + payment.amount, 0);
+    
+    const percentage = (total_payment / total_amount) * 100;
+    return percentage.toFixed(2);
+}
 defineOptions({layout: Layout})
 </script>
 
@@ -143,12 +150,12 @@ defineOptions({layout: Layout})
         </p>
 
         <div class="grid grid-cols-4 gap-3 mb-4 ">
-            <div class="mb-4 border-2 p-4"  v-for="lot_group in property.lot_groups" :key="lot_group.id">
+            <div class="mb-4 border-2 p-4"  v-for="lot_group in property.lot_groups" :key="lot_group.id" :class="lot_group.color_label">
                 
-                <button  type="button" class="block w-full items-center rounded p-4 text-sm font-medium transition hover:scale-105" :class="lot_group.color_label">
+                
                     <span>{{ lot_group.amount_per_sqr_meter }} - Per sqr meter</span><br>
                     <span>{{ lot_group.sqr_meter }} sqr meter</span>
-                </button>
+
             </div>
         </div>
         <div class="grid grid-cols-4 gap-3">
@@ -161,8 +168,11 @@ defineOptions({layout: Layout})
                     <span> Total Amount:  {{ lot.lot_group.sqr_meter * lot.lot_group.amount_per_sqr_meter }}</span><br>
                     <span> Status: {{ lot.status }}</span><br>
                     <span v-if="lot.user && lot.status === 'Pending'"> Applied By: {{ lot.user.personal_info.first_name }} {{ lot.user.personal_info.last_name }}</span>
-                    <span v-if="lot.user && lot.status === 'Occupied'"> Owned By: {{ lot.user.personal_info.first_name }} {{ lot.user.personal_info.last_name }}</span>
-                    
+                    <span v-if="lot.user && lot.status === 'Occupied'"> Owned By: {{ lot.user.personal_info.first_name }} {{ lot.user.personal_info.last_name }}</span><br>
+                    <span v-if="lot.user && lot.status === 'Occupied'">Remaining Balance: 2000</span><br>
+                    <span v-if="lot.user && lot.status === 'Occupied'">Total percentage: 
+                        <ProgressBar :value="calculatePercentage(lot)"></ProgressBar>
+                    </span><br>
                 </button>
             </div>
             

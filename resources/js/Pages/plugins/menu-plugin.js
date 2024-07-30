@@ -37,6 +37,16 @@ const admin_side_bar_menus = [
         link: '/dashboard',
     },
     {
+        name: 'Staffs',
+        icon: 'fa-users',
+        link: '/users'
+    },
+    {
+        name: 'Clients',
+        icon: 'fa-users',
+        link: '/clients'
+    },
+    {
         name: 'Properties',
         icon: 'fa-landmark',
         link: '/properties',

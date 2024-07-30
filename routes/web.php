@@ -41,6 +41,8 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
     Route::post('payments/update/{id}', [PaymentController::class, 'update']);
     Route::get('lots/get-client-lots', [LotController::class, 'getClientLots']);
     Route::get('application/get-by-user', [ApplicationController::class, 'getUserApplication']);
+    Route::get('users/create-client', [ClientController::class, 'createClient']);
+    Route::get('clients', [ClientController::class, 'clients']);
     Route::resource('properties', PropertyController::class);
     Route::resource('users', ClientController::class);
     Route::resource('applications', ApplicationController::class);

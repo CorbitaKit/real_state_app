@@ -54,7 +54,7 @@ const statuses = [
         </div>
         
         <div class="mb-4">
-            <label for="purok" class="block text-gray-700 font-semibold mb-2 rounded-md">Length of stay</label>
+            <label for="purok" class="block text-gray-700 font-semibold mb-2 rounded-md">Length of Service</label>
             <InputNumber v-model="work_details.length_of_stay" class="w-full" suffix=" year(s)"/>        
         </div>
         <div class="mb-4">

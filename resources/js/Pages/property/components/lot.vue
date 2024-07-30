@@ -90,6 +90,17 @@ const setLotGroups = () => {
 const calculateTotalAmount = (lot_group) => {
     lot_group.total_amount = lot_group.amount_per_sqr_meter * lot_group.sqr_meter
     lot_group.is_set = true
+    calculateMonthly(lot_group)
+}
+
+const calculateMonthly = (lot_group) => {
+    // const monthly = (useProperty.property.down_payment / useProperty.property.balance_payable)
+    // useProperty.property.lot_groups.forEach(lot => {
+    //     lot.monthly_amortizations = monthly
+    // })
+
+    lot_group.monthly_amortizations = lot_group.total_amount / useProperty.property.balance_payable
+
 }
 </script>
 
@@ -103,8 +114,8 @@ const calculateTotalAmount = (lot_group) => {
         </div>
         <div class="mb-2">
             <label for="purok" class="block text-gray-700 font-semibold mb-2">Balance Payable in</label>
-            <input v-model="useProperty.property.balance_payable" type="text"  class="block appearance-none w-full px-3 py-2 border rounded-md focus:outline-none focus:ring focus:border-blue-300" />
-            
+            <!-- <input v-model="useProperty.property.balance_payable" type="text"  class="block appearance-none w-full px-3 py-2 border rounded-md focus:outline-none focus:ring focus:border-blue-300" /> -->
+            <InputNumber v-model="useProperty.property.balance_payable" inputId="expiry" suffix=" Month(s)" fluid class="w-full" />
         </div>
 
         <div class="mb-2">
@@ -145,13 +156,14 @@ const calculateTotalAmount = (lot_group) => {
             <input v-model="lot_group.amount_per_sqr_meter" @blur="calculateTotalAmount(lot_group)" type="number" class="block appearance-none w-full px-3 py-2 border rounded-md focus:outline-none focus:ring focus:border-blue-300" />
         </div>
         <div class="mb-4">
-            <label for="purok" class="block text-gray-700 font-semibold mb-2" style="white-space: nowrap;">Monthly Amortization</label>
-            <input v-model="lot_group.monthly_amortizations" type="number" class="block appearance-none w-full px-3 py-2 border rounded-md focus:outline-none focus:ring focus:border-blue-300" />
-        </div>
-        <div class="mb-4">
             <label for="purok" class="block text-gray-700 font-semibold mb-2">Total Amount</label>
             <input disabled v-model="lot_group.total_amount" type="text" class="block appearance-none w-full px-3 py-2 border rounded-md focus:outline-none focus:ring focus:border-blue-300" />
         </div>
+        <div class="mb-4">
+            <label for="purok" class="block text-gray-700 font-semibold mb-2" style="white-space: nowrap;">Monthly Amortization</label>
+            <input disabled v-model="lot_group.monthly_amortizations" type="number" class="block appearance-none w-full px-3 py-2 border rounded-md focus:outline-none focus:ring focus:border-blue-300" />
+        </div>
+       
       
         <hr class="w-[950px]"/>
     </div>

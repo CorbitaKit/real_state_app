@@ -32,6 +32,13 @@ import { createVuetify } from 'vuetify'
 import * as components from 'vuetify/components'
 import * as directives from 'vuetify/directives'
 import '@mdi/font/css/materialdesignicons.css'
+import Password from 'primevue/password';
+import Tooltip from 'primevue/tooltip';
+
+import ProgressBar from 'primevue/progressbar';
+
+
+
 // import 'vuetify/styles'
 
 const vuetify = createVuetify({
@@ -50,6 +57,7 @@ createInertiaApp({
   },
   setup({ el, App, props, plugin }) {
     createApp({ render: () => h(App, props) })
+      .directive('tooltip', Tooltip)
       .use(plugin)
       .use(PrimeVue)
       .use(vuetify)
@@ -76,6 +84,8 @@ createInertiaApp({
       .component('Tag', Tag)
       .component('Dialog', Dialog)
       .component('Chart', Chart)
+      .component('Password', Password)
+      .component('ProgressBar', ProgressBar)
       .mount(el)
   },
 })
