@@ -34,6 +34,7 @@
         "vue-chart-3": "^3.1.8",
         "vue-toast-notification": "^3.1.2",
         "vue3-charts": "^1.1.33",
-        "vue3-form-wizard": "^0.2.4"
+        "vue3-form-wizard": "^0.2.4",
+        "vue3-print-nb": "^0.1.4"
     }
 }

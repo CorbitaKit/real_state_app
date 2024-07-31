@@ -40,9 +40,7 @@ const submit = () => {
         <v-table>
             <thead>
             <tr>
-                <th class="text-left">
-                Amount
-                </th>
+               
                 <th class="text-left">
                 Mode Of Payment
                 </th>
@@ -55,24 +53,29 @@ const submit = () => {
                 <th class="text-left">
                 Invoice Number
                 </th>
+                <th class="text-left">
+                Amount
+                </th>
 
             </tr>
             </thead>
             <tbody>
             <tr >
-                <td>3,000</td>
+                
                 <td>G-cash</td>
                 <td>2024-09-09</td>
                 <td>Staff Name</td>
                 <td>123455667</td>
+                <td>3,000</td>
             
             </tr>
             <tr >
-                <td>3,000</td>
+               
                 <td>Over the Counter</td>
                 <td>2024-10-09</td>
                 <td>Staff Name 2</td>
                 <td>12345asd7</td>
+                <td>3,000</td>
             
             </tr>
             <tr >

@@ -6,6 +6,7 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\LotController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\PropertyController;
+use App\Http\Controllers\ReportController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
 use Illuminate\Http\Request;
@@ -47,6 +48,7 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
     Route::resource('users', ClientController::class);
     Route::resource('applications', ApplicationController::class);
     Route::resource('payments', PaymentController::class);
+    Route::resource('reports', ReportController::class);
 
 
 

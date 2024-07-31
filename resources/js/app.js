@@ -34,7 +34,6 @@ import * as directives from 'vuetify/directives'
 import '@mdi/font/css/materialdesignicons.css'
 import Password from 'primevue/password';
 import Tooltip from 'primevue/tooltip';
-
 import ProgressBar from 'primevue/progressbar';
 
 
