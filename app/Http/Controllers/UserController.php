@@ -17,7 +17,10 @@ class UserController extends Controller
 
     public function index()
     {
-        return Inertia::render('user/index');
+        $staffs = $this->service->getStaffs();
+        return Inertia::render('user/index', [
+            'staffs' => $staffs
+        ]);
     }
 
     public function create()

@@ -5,7 +5,7 @@ import Wizard from './components/wizard.vue'
 import { usePropertyStore } from './store/store'
 import { router, useForm } from '@inertiajs/vue3'
 import { useToaster } from '../composables/toast'
-
+import Swal from 'sweetalert2'
 
 const { show } = useToaster()
 const useProperty = usePropertyStore()
@@ -25,7 +25,11 @@ const submit = () => {
         };
     }).post('/properties', {
         onSuccess: (() => {
-            show('success', 'Success', 'Property created successfully!')
+            Swal.fire({
+                title: "Success!",
+                text: "Property Created Successfully!",
+                icon: "success"
+            });
             useProperty.resetProperty()
             router.get('/properties')
         })

@@ -50,7 +50,6 @@ const validatePersonalAddressData = () => {
     return validateData(form.personal_address)
 }
 const validateData = (field) => {
-    console.log(field)
     const hasEmptyField = Object.values(field).some(value => value === '');
     if (hasEmptyField) {
         show('error','Ooppss!','Please check all the fields')

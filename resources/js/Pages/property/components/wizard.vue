@@ -86,7 +86,6 @@ const handleFileUpdate = (file) => {
 </script>
 
 <template>
-    <Toast />
     <form-wizard step-size="xs" @on-complete="submit">
         <tab-content title="Property Layout image upload" :before-change="checkIfFileUploaded" @update:file="handleFileUpdate">
             <FileUpload :file="useProperty.property.file"/>

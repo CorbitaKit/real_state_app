@@ -20,6 +20,7 @@ const setButton = () => {
     return true
 }
 const submit = () => {
+    
     router.get('/properties/create')
 }
 defineOptions({layout: Layout})

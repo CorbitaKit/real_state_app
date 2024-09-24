@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\DB;
 use App\Services\AddressService;
 use App\Services\EmployeeService;
 use App\Services\WorkDetailService;
+use Illuminate\Database\Eloquent\Collection;
 
 class UserService extends Service
 {
@@ -48,5 +49,10 @@ class UserService extends Service
             $this->addressSerivce->doCreate($convertedData['personal_address']);
             $this->workService->doCreate($convertedData['work_details']);
         });
+    }
+
+    public function getStaffs(): Collection
+    {
+        return $this->repo->getStaffs();
     }
 }

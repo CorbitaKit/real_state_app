@@ -22,51 +22,37 @@ const submit = async () => {
 }
 </script>
 
-
 <template>
-      <div class="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8" >
-        <div class="sm:mx-auto sm:w-full sm:max-w-sm">
-            <h2 class="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900" >
-               Create your account
-            </h2>
+    <div class="bg-sky-100 flex justify-center items-center h-screen">
+        <Toast />
+        <div class="w-1/2 h-screen hidden lg:block">
+            <img src="https://img.freepik.com/fotos-premium/imagen-fondo_910766-187.jpg?w=826" alt="Placeholder Image" class="object-cover w-full h-full">
         </div>
-        <div class="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
-            <form class="space-y-6" action="#" method="POST">
-                <div>
-                    <label  for="email" class="block text-sm font-medium leading-6 text-gray-900" >Email address</label >
-                    <div class="mt-2">
-                        <input id="email" v-model="form.email"  name="email" type="email" autocomplete="email" required="" class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"/>
-                    </div>
-                </div>
-                <div>
-                    <div class="flex items-center justify-between">
-                        <label for="password" class="block text-sm font-medium leading-6 text-gray-900">Password</label>
-                    </div>
-                    <div class="mt-2">
-                        <input id="password" v-model="form.password" name="password" type="password" autocomplete="current-password" @keyup.enter="submit" required="" class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"/>
-                    </div>
-                </div>
-                <div>
-                    <div class="flex items-center justify-between">
-                        <label for="password" class="block text-sm font-medium leading-6 text-gray-900">Confirm Password</label>
-                    </div>
-                    <div class="mt-2">
-                        <input id="password_confirm" v-model="form.password_confirmation" name="password" type="password" autocomplete="current-password" @keyup.enter="submit" required="" class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"/>
-                    </div>
-                </div>
-                
-                <div>
-                    <button @click="submit" type="button" class="flex w-full justify-center rounded-md bg-green-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-green-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-green-600">
-                        Create Account
-                    </button>
-                </div>
-                <div v-if="error">
-                    <Message  v-for="(e, i) in error" :key="i" severity="error">
-                        {{ e }}
-                    </Message>
-                </div>
-                
-            </form>
+        <div class= "lg:p-36 md:p-52 sm:20 p-8 w-full lg:w-1/2">
+            <h1 class="text-2xl font-semibold mb-4">Enter your credential details to Register</h1>
+            <div v-if="error">
+                <Message  v-for="(e, i) in error" :key="i" severity="error">
+                    {{ e }}
+                </Message>
+            </div>
+            <div class="mb-4 bg-sky-100">
+                <label for="email" class="block text-gray-600">Email</label>
+                <input type="email" v-model="form.email" id="email" name="email" class="w-full border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:border-blue-500" autocomplete="off">
+            </div>
+            <div class="mb-4">
+                <label for="password" class="block text-gray-800">Password</label>
+                <!-- <input type="password" v-model="form.password" id="password" name="password" class="w-full border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:border-blue-500" autocomplete="off"> -->
+                <Password class="w-full" v-model="form.password" variant="filled" toggleMask />
+            </div>
+            <div class="mb-4">
+                <label for="password" class="block text-gray-800">Confirm Password</label>
+                <!-- <input type="password" v-model="form.password" id="password" name="password" class="w-full border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:border-blue-500" autocomplete="off"> -->
+                <Password class="w-full" v-model="form.password_confirmation" variant="filled" toggleMask />
+            </div>
+           
+            <button type="button" @click="submit" class="bg-red-500 hover:bg-blue-600 text-white font-semibold rounded-md py-2 px-4 w-full">Register</button>
+
+         
         </div>
     </div>
 </template>
