@@ -81,8 +81,8 @@ defineOptions({layout: Layout})
         </div>
     </Dialog>
     <div class="relative overflow-x-auto mt-5">
-        <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
-            <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+        <v-table>
+            <thead>
                 <tr>
                     <th v-if="user.role_id != 3" scope="col" class="px-6 py-3">
                        Applicant
@@ -105,11 +105,11 @@ defineOptions({layout: Layout})
                 </tr>
             </thead>
             <tbody>
-                <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700" v-for="application in applications" :key="application.id">
-                    <th v-if="user.role_id != 3" scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                <tr v-for="application in applications" :key="application.id">
+                    <th v-if="user.role_id != 3" scope="row" >
                         <a class="text-blue" style="color:blue;" :href="`/users/${application.user.id}`">{{ application.user.personal_info.first_name }} {{ application.user.personal_info.last_name }} </a>
                     </th>
-                    <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                    <th scope="row">
                         {{ application.application_type }}
                     </th>
                     <td class="px-6 py-4">
@@ -138,7 +138,7 @@ defineOptions({layout: Layout})
                     </td>
                 </tr>
             </tbody>
-        </table>
+        </v-table>
     </div>
 
 </template>

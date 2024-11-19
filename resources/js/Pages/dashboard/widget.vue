@@ -1,5 +1,12 @@
 <script setup>
-
+const props = defineProps(
+    {
+        clients: Object,
+        applications: Object,
+        payments: Number,
+        properties: Number
+    },
+)
 </script>
 
 
@@ -12,7 +19,7 @@
                     Clients
                 </h2>
                 <span>
-                    <Tag :value="10" />
+                    <Tag :value="clients.length" />
                 </span>
             </div>
           
@@ -26,7 +33,7 @@
                 </span>
 
                 <span>
-                    <Tag :value="40" />
+                    <Tag :value="applications.length" />
                 </span>
             </div>
         </div>
@@ -37,7 +44,7 @@
                     Payments
                 </span>
                 <span>
-                    <Tag :value="20" />
+                    <Tag :value="payments" />
                 </span>
             </div>
         </div>
@@ -48,7 +55,7 @@
                     Properties
                 </span>
                 <span>
-                    <Tag :value="40" />
+                    <Tag :value="properties" />
                 </span>
             </div>
         </div>

@@ -3,22 +3,11 @@
 </script>
 
 <template>
-    <!-- <div class="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8" >
-        <div class="sm:mx-auto sm:w-full sm:max-w-sm">
-            <h2 class="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900" >
-                Please check your inbox to verify your email
-            </h2>
-        </div>
-        
-    </div> -->
-    <!-- component -->
-<!-- https://play.tailwindcss.com/PLrIiZQn2n -->
-
-<div class="relative flex min-h-screen flex-col items-center justify-center overflow-hidden py-6 sm:py-12 bg-white">
-  <div class="max-w-xl px-5 text-center">
-    <h2 class="mb-2 text-[42px] font-bold text-zinc-800">Check your inbox</h2>
-    <p class="mb-2 text-lg text-zinc-500">We are glad, that you’re with us ? We’ve sent you a verification link to the email address <span class="font-medium text-indigo-500">mail@yourdomain.com</span>.</p>
-    <a href="/login" class="mt-3 inline-block w-96 rounded bg-indigo-600 px-5 py-3 font-medium text-white shadow-md shadow-indigo-500/20 hover:bg-indigo-700">Open the App →</a>
+  <div class="relative flex min-h-screen flex-col items-center justify-center overflow-hidden py-6 sm:py-12 bg-white">
+    <div class="max-w-xl px-5 text-center">
+      <h2 class="mb-2 text-[42px] font-bold text-zinc-800">Check your inbox</h2>
+      <p class="mb-2 text-lg text-zinc-500">We are glad, that you’re with us ? We’ve sent you a verification link to the email address <span class="font-medium text-indigo-500">mail@yourdomain.com</span>.</p>
+      <a href="/login" class="mt-3 inline-block w-96 rounded bg-indigo-600 px-5 py-3 font-medium text-white shadow-md shadow-indigo-500/20 hover:bg-indigo-700">Open the App →</a>
+    </div>
   </div>
-</div>
 </template>

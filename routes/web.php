@@ -7,6 +7,7 @@ use App\Http\Controllers\LotController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\PropertyController;
 use App\Http\Controllers\ReportController;
+use App\Http\Controllers\LandingPageController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
 use Illuminate\Http\Request;
@@ -14,7 +15,9 @@ use App\Http\Controllers\UserController as ClientController;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
 
-Route::inertia('/', 'auth/index')->middleware('redirect');
+Route::get('/', [LandingPageController::class, 'index']);
+Route::get('view-property/{id}', [LandingPageController::class, 'show']);
+Route::get('login', [UserController::class, 'index'])->name('login');
 Route::post('login', [UserController::class, 'login']);
 Route::get('/register', [UserController::class, 'register']);
 Route::post('/register', [UserController::class, 'doRegister']);
@@ -34,9 +37,9 @@ Route::post('/email/verification-notification', function (Request $request) {
 
     return back()->with('message', 'Verification link sent!');
 })->middleware(['auth', 'throttle:6,1'])->name('verification.send');
-Route::get('login', [UserController::class, 'index'])->name('login')->middleware('redirect');
 
-Route::middleware(['auth:sanctum', 'verified'])->group(function () {
+
+Route::middleware(['auth:sanctum'])->group(function () {
     Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard');
     Route::get('payments/get-by-user', [PaymentController::class, 'getUserPayment']);
     Route::post('payments/update/{id}', [PaymentController::class, 'update']);

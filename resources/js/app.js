@@ -6,6 +6,8 @@ import Message from 'primevue/message';
 import Menu from 'primevue/menu';
 import { OhVueIcon } from "oh-vue-icons";
 import DataTable from 'primevue/datatable';
+import ColumnGroup from 'primevue/columngroup';
+import Row from 'primevue/row';
 import Column from 'primevue/column';
 import Card from 'primevue/card';
 import './Pages/plugins/icon-plugin'
@@ -85,6 +87,8 @@ createInertiaApp({
       .component('Chart', Chart)
       .component('Password', Password)
       .component('ProgressBar', ProgressBar)
+      .component('ColumnGroup', ColumnGroup)
+      .component('Row', Row)
       .mount(el)
   },
 })

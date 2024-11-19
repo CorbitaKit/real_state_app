@@ -7,6 +7,8 @@ use App\Http\Requests\UserRequest;
 use App\Services\Auth\UserService;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
+use Illuminate\Support\Facades\Auth;
+
 
 class UserController extends Controller
 {
@@ -33,8 +35,10 @@ class UserController extends Controller
 
     public function doRegister(UserRequest $request)
     {
-        $this->userService->doCreate($request->all());
-        return Inertia::render('auth/index');
+        $user = $this->userService->doCreate($request->all());
+        Auth::login($user);
+        $request->session()->regenerate();
+        return redirect()->route('properties.index');
     }
 
     public function store(UserRequest $request)

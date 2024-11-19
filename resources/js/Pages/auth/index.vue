@@ -27,7 +27,7 @@ const submit = async () => {
 <template>
     <div class="bg-sky-100 flex justify-center items-center h-screen">
         <div class="w-1/2 h-screen hidden lg:block">
-            <img src="https://img.freepik.com/fotos-premium/imagen-fondo_910766-187.jpg?w=826" alt="Placeholder Image" class="object-cover w-full h-full">
+            <img src="/logo.jpeg" alt="Placeholder Image" class="object-cover w-full h-full">
         </div>
         <div class= "lg:p-36 md:p-52 sm:20 p-8 w-full lg:w-1/2">
             <h1 class="text-2xl font-semibold mb-4">Enter your credentials to Login</h1>
@@ -53,7 +53,7 @@ const submit = async () => {
             <div class="mb-6 text-blue-500">
                 <a href="#" class="hover:underline">Forgot Password?</a>
             </div>
-            <button type="button" @click="submit" class="bg-red-500 hover:bg-blue-600 text-white font-semibold rounded-md py-2 px-4 w-full">Login</button>
+            <button type="button" @click="submit" class="bg-lime-500 hover:lime-blue-600 text-white font-semibold rounded-md py-2 px-4 w-full">Login</button>
 
             <div class="mt-6 text-green-500 text-center">
                 <a href="/register" class="hover:underline">Sign up Here</a>

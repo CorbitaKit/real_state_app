@@ -71,11 +71,11 @@ const admin_side_bar_menus = [
         icon: 'fa-receipt',
         link: '/payments',
     },
-    {
-        name: 'Reports',
-        icon: 'fa-file-alt',
-        link: '/reports',
-    },
+    // {
+    //     name: 'Reports',
+    //     icon: 'fa-file-alt',
+    //     link: '/reports',
+    // },
 ]
 
 

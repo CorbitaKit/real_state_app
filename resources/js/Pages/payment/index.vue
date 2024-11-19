@@ -70,8 +70,8 @@ const setButton = () => {
         </div>
     </Dialog>
      <div class="relative overflow-x-auto mt-5">
-        <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
-            <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+        <v-table>
+            <thead>
                 <tr>
                     <th scope="col" class="px-6 py-3">
                         Payment Proof
@@ -104,8 +104,8 @@ const setButton = () => {
             </thead>
             <tbody>
                
-                <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700" v-for="payment in payments" :key="payment.id">
-                    <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                <tr v-for="payment in payments" :key="payment.id">
+                    <th scope="row">
            
                         <Image alt="Image" preview>
                             <template #previewicon>
@@ -119,7 +119,7 @@ const setButton = () => {
                             </template>
                         </Image>
                     </th>
-                    <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                    <th scope="row">
                         {{ payment.mode_of_payment }}
                     </th>
                     <td class="px-6 py-4">
@@ -163,6 +163,6 @@ const setButton = () => {
                     </td>
                 </tr>
             </tbody>
-        </table>
+        </v-table>
     </div>
 </template>
