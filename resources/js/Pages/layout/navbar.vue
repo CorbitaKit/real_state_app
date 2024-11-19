@@ -11,7 +11,7 @@ const showDropdown = ref(false)
 </script>
 
 <template>
-    <div class="h-[60px] bg-amber-200 p-4 flex justify-between items-center ">
+    <div class="h-[60px] navbar-div p-4 flex justify-between items-center ">
         <div class="">
             <v-icon scale="1.5" name="fa-align-justify" class="cursor-pointer" @click="$emit('open')"/>
         </div>
@@ -32,3 +32,9 @@ const showDropdown = ref(false)
         
     </div>
 </template>
+
+<style scoped>
+.navbar-div{
+    background-color: red;
+}
+</style>

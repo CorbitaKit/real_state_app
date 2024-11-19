@@ -20,6 +20,10 @@ const submit = async () => {
         },
     })
 }
+
+const login = () => {
+    router.get('/login')
+}
 </script>
 
 <template>
@@ -50,9 +54,10 @@ const submit = async () => {
                 <Password class="w-full" v-model="form.password_confirmation" variant="filled" toggleMask />
             </div>
            
-            <button type="button" @click="submit" class="bg-lime-500 hover:bg-green-600 text-white font-semibold rounded-md py-2 px-4 w-full">Register</button>
-
-         
+            <button type="button" @click="submit" class="bg-lime-500 hover:bg-green-600 mb-2 text-white font-semibold rounded-md py-2 px-4 w-full">Register</button>
+            <div class="mt-6 text-green-500 text-center">
+                <a href="/login" class="hover:underline">Already have an account? Click here to login</a>
+            </div>
         </div>
     </div>
 </template>

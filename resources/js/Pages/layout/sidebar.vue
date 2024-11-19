@@ -17,7 +17,7 @@ const user = getUserInfo()
 
 
 <template>
-    <div :class="['h-screen md:h-auto lg:h-auto p-5 pt-8 bg-lime-500 relative duration-300', open ? 'w-80' : 'hidden']">
+    <div :class="['h-screen md:h-auto lg:h-auto p-5 pt-8 sidebar-div relative duration-300', open ? 'w-80' : 'hidden']">
         <div class="flex-inline">
             <!-- <img src="/logo.jpeg" alt="RealEstateApp Logo" class="h-[100px] mx-2 my-2"> -->
             <h1 :class="['text-black origin-left font-bold text-1xl pt-2 duration-300', !open ? 'hidden': '']">Jef Aldebal Realty Service</h1>
@@ -53,3 +53,9 @@ const user = getUserInfo()
         </ul>
     </div>
 </template>
+
+<style scoped>
+.sidebar-div{
+    background-color: red;
+}
+</style>

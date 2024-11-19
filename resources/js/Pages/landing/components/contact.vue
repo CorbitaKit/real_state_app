@@ -2,7 +2,7 @@
 </script>
 
 <template>
-    <section id="contact" class="py-16 bg-lime-600 text-white">
+    <section id="contact" class="contact py-16 text-white">
         <div class="container mx-auto px-6 text-center">
         <h3 class="text-3xl font-semibold">Contact Us</h3>
         <p class="mt-4 text-lg">Have questions? Reach out to our team for more information.</p>
@@ -10,3 +10,11 @@
         </div>
     </section>
 </template>
+
+<style scoped>
+
+.contact {
+    background-color:  red;
+}
+
+</style>

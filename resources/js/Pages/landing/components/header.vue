@@ -12,7 +12,7 @@ const login = () => {
 
 
 <template>
-    <header class="bg-lime-400 text-white shadow-md h-full">
+    <header class="header text-white shadow-md h-full">
       <div class="container mx-auto px-6 py-4 flex items-center justify-between">
         <!-- Logo -->
         <div class="flex items-center space-x-4">
@@ -31,3 +31,9 @@ const login = () => {
       </div>
     </header>
 </template>
+
+<style scoped>
+.header {
+  background-color: red;
+}
+</style>
