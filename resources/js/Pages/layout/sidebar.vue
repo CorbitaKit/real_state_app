@@ -2,10 +2,7 @@
 import { Link } from '@inertiajs/vue3'
 import sidebarMenu from '../plugins/menu-plugin'
 import {getUser} from '../plugins/get-user-plugin'
-
-const props = defineProps({
-    open: Boolean
-})
+import { router } from '@inertiajs/vue3'
 
 
 const { getUserInfo } = getUser()
@@ -13,49 +10,68 @@ const { sidebar_menus, admin_side_bar_menus } = sidebarMenu
 
 const user = getUserInfo()
 
+const redirect = (route) => {
+    router.get(route)
+}
+
 </script>
 
 
 <template>
-    <div :class="['h-screen md:h-auto lg:h-auto p-5 pt-8 sidebar-div relative duration-300', open ? 'w-80' : 'hidden']">
-        <div class="flex-inline">
-            <!-- <img src="/logo.jpeg" alt="RealEstateApp Logo" class="h-[100px] mx-2 my-2"> -->
-            <h1 :class="['text-black origin-left font-bold text-1xl pt-2 duration-300', !open ? 'hidden': '']">Jef Aldebal Realty Service</h1>
+    <aside class="app-navbar">
+        <!-- begin navbar-header -->
+        <div class="navbar-header align-items-center d-lg-block d-none">
+            <a class="navbar-brand" href="index.html">
+                <img src="/assets/img/logo.png" class="img-fluid logo-desktop" alt="logo" />
+                <img src="/assets/img/logo-icon.png" class="img-fluid logo-mobile" alt="logo" />
+            </a>
         </div>
-
-        <ul class="pt-3" v-if="user.role_id == 3">
-            <li v-for="(menu, i) in sidebar_menus" :key="i" class="text-black  bold text-sm flex items-center gap-x-4 cursor-pointer p-2 hover:bg-lime-700 rounded-md mt-2">
-                <Link :href="menu.link">
-                    <div class="flex content-between gap-3 bg">
-                        <span class="text-2xl block float-left">
-                            <v-icon :name="menu.icon" />
-                        </span>
-                        <span :class="['text-base font-medium flex-1 pt-2', !open ? 'hidden' : '']">
-                            {{ menu.name }}
-                        </span>
+        <!-- begin sidebar-nav -->
+        <div class="sidebar-nav scrollbar scroll_light">
+            <div class="d-flex align-items-center text-left px-2 mb-2 user-setting">
+                <div class="position-relative">
+                    <div class="avatar">
+                        <img class="avatar-img rounded-circle" src="/assets/img/avatar/02.jpg" alt="avatar-img">
+                        <span class="bg-success user-status"></span>
                     </div>
-                </Link>
-            </li>
-        </ul>
-        <ul class="pt-3" v-else>
-            <li v-for="(menu, i) in admin_side_bar_menus" :key="i" class="text-black bold text-sm flex items-center gap-x-4 cursor-pointer p-2 hover:bg-lime-700 rounded-md mt-2">
-                <Link :href="menu.link">
-                    <div class="flex content-between gap-3">
-                        <span class="text-2xl block float-left">
-                            <v-icon :name="menu.icon" />
-                        </span>
-                        <span :class="['text-base font-medium flex-1 pt-2', !open ? 'hidden' : '']">
-                            {{ menu.name }}
-                        </span>
-                    </div>
-                </Link>
-            </li>
-        </ul>
-    </div>
+                </div>
+                <div class="ml-2">
+                    <h6 class="mb-0 text-white">{{ user.personal_info.first_name }} {{ user.personal_info.last_name }}</h6>
+                    <small class="d-block text-white">{{ user.role.name }}</small>
+                </div>
+           
+            </div>
+            <ul class="metismenu" id="sidebarNav">
+                <!-- <li class="active" v-for="menu in admin_side_bar_menus">
+                    <a :href="menu.link" aria-expanded="false">
+                        <i class="nav-icon" :class="menu.icon"></i>
+                        <span class="nav-title">{{ menu.name }}</span>
+                    </a>
+                </li> -->
+                <li class="active">
+                    <a class="has-arrow" href="javascript:void(0)" aria-expanded="false">
+                        <i class="nav-icon ti ti-home"></i>
+                        <span class="nav-title">Properties</span>
+                    </a>
+                    <ul aria-expanded="false">
+                        <li> <a href='/properties'><i class="nav-icon ti ti-list"></i> Property List</a> </li>
+                        <li> <a href='/properties/create'><i class="nav-icon ti ti-plus"></i>Add Property</a> </li>
+                        
+                    </ul>
+                </li>
+                <li>
+                    <a class="has-arrow" href="javascript:void(0)" aria-expanded="false">
+                        <i class="nav-icon ti ti-user"></i>
+                        <span class="nav-title">Clients</span>
+                    </a>
+                    <ul aria-expanded="false">
+                        <li> <a href='/clients'><i class="nav-icon ti ti-user"></i> Client List</a> </li>
+                        <li> <a href='/users/create-client'><i class="nav-icon ti ti-plus"></i>Add client</a> </li>
+                        
+                    </ul>
+                </li>
+            </ul>
+        </div>
+        <!-- end sidebar-nav -->
+    </aside>
 </template>
-
-<style scoped>
-.sidebar-div{
-    background-color: red;
-}
-</style>

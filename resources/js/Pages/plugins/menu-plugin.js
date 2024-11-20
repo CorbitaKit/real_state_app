@@ -33,22 +33,22 @@ const sidebar_menus = [
 const admin_side_bar_menus = [
     {
         name: 'Dashboard',
-        icon: 'fa-list-alt',
+        icon: 'ti ti-list',
         link: '/dashboard',
     },
     {
         name: 'Staffs',
-        icon: 'fa-users',
+        icon: 'ti ti-user',
         link: '/users'
     },
     {
         name: 'Clients',
-        icon: 'fa-users',
+        icon: 'ti ti-user',
         link: '/clients'
     },
     {
         name: 'Properties',
-        icon: 'fa-landmark',
+        icon: 'ti ti-home',
         link: '/properties',
     },
     // {
@@ -63,19 +63,19 @@ const admin_side_bar_menus = [
     // },
     {
         name: 'Applications',
-        icon: 'fa-clipboard',
+        icon: 'ti ti-write',
         link: '/applications',
     },
     {
         name: 'Billings',
-        icon: 'fa-receipt',
+        icon: 'ti ti-receipt',
         link: '/payments',
     },
-    // {
-    //     name: 'Reports',
-    //     icon: 'fa-file-alt',
-    //     link: '/reports',
-    // },
+    {
+        name: 'Reports',
+        icon: 'ti ti-folder',
+        link: '/reports',
+    },
 ]
 
 

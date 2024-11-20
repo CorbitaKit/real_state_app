@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Services\Auth\UserService;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
-
+use App\Models\User;
 class UserController extends Controller
 {
     protected $service;
@@ -35,7 +35,10 @@ class UserController extends Controller
 
     public function clients()
     {
-        return Inertia::render('user/client');
+        $clients = User::with('personal_info')->where('role_id', 3)->get();
+        return Inertia::render('user/client', [
+            'clients' => $clients
+        ]);
     }
     public function show($id)
     {

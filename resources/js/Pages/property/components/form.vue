@@ -18,6 +18,7 @@ onMounted(async () => {
 
 const handleProvinces = async () => {
     provinces.value = await handleProvince(useProperty.property.region.region_code)
+    console.log(provinces.value)
 }
 
 const handleCities = async () => {
@@ -33,7 +34,7 @@ const handleBarangays = async () => {
 
 
 <template>
-    <div class="grid grid-cols-2 gap-4 mx-9">
+    <!-- <div class="grid grid-cols-2 gap-4 mx-9">
         
         <div class="mb-4">
             <label for="region" class="block text-gray-700 font-semibold mb-2">Region</label>
@@ -60,6 +61,59 @@ const handleBarangays = async () => {
             <label for="purok" class="block text-gray-700 font-semibold mb-2">Purok</label>
             <InputText type="text" v-model="useProperty.property.purok" class="block appearance-none w-full px-3 py-2 border rounded-md"/>        
                 
+        </div>
+    </div> -->
+    <div class="row">
+        <div class="col-xl-12">
+            <div class="card card-statistics">
+                <div class="card-header">
+                    <div class="card-heading">
+                        <h5 class="card-title">Property Address</h5>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <form>
+                        <div class="form-row">
+                            <div class="form-group col-md-6">
+                                <label for="inputEmail4">Region</label>
+                                <select  class="js-basic-single form-control" name="region" v-model="useProperty.property.region" @change="handleProvinces">
+                                    <option  v-for="region in regions" :value="region">{{ region.region_name }}</option>
+                                </select>
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label for="inputPassword4">Province</label>
+                                <select  class="js-basic-single form-control" name="province" v-model="useProperty.property.province" @change="handleCities">
+                                    <option  v-for="province in provinces" :value="province">{{ province.province_name }}</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group col-md-6">
+                                <label for="inputEmail4">City</label>
+                                <select  class="js-basic-single form-control" name="city" v-model="useProperty.property.city" @change="handleBarangays">
+                                    <option  v-for="city in cities" :value="city">{{ city.city_name }}</option>
+                                </select>
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label for="inputPassword4">Barangay</label>
+                                <select  class="js-basic-single form-control" name="province" v-model="useProperty.property.barangay" @change="handleCities">
+                                    <option  v-for="brgy in barangays" :value="brgy">{{ brgy.brgy_name }}</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group col-md-6">
+                                <label for="inputCity">Phase</label>
+                                <input type="text" class="form-control" id="phase" v-model="useProperty.property.phase">
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label for="inputCity">Purok</label>
+                                <input type="text" class="form-control" id="phase" v-model="useProperty.property.purok">
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
         </div>
     </div>
 </template>

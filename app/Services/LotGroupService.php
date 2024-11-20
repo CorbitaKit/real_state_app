@@ -17,7 +17,7 @@ class LotGroupService extends Service
     public function storeLotGroups(array $lotGroups, int $propertyId, array $lots): void
     {
         foreach ($lotGroups as $lotGroup) {
-            $lotGroup['color_label'] = $lotGroup['color_label']['color'];
+            $lotGroup['color_label'] = $lotGroup['color_label'];
             $lotGroup['property_id'] = $propertyId;
             $newLotGroup = parent::doCreate($lotGroup);
 

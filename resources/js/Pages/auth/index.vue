@@ -25,7 +25,57 @@ const submit = async () => {
 </script>
 
 <template>
-    <div class="bg-sky-100 flex justify-center items-center h-screen">
+    <div class="app-contant">
+        <div class="container">
+            <div class="row justify-content-center align-items-center h-100-vh">
+                <div class="col-lg-4">
+                    <div class="d-flex align-items-center">
+                        <div class="login pt-4">
+                            <h1 class="mb-2">Jef Aldebal Real State Service </h1>
+                            <p>Welcome back, please login to your account.</p>
+                            <form action="#" class="mt-3 mt-sm-5">
+                                <div class="row">
+                                    <div class="col-12">
+                                        <div class="form-group">
+                                            <label class="control-label">Email*</label>
+                                            <input type="email" v-model="form.email" class="form-control" placeholder="Email" />
+                                        </div>
+                                    </div>
+                                    <div class="col-12">
+                                        <div class="form-group">
+                                            <label class="control-label">Password*</label>
+                                            <input type="password"  @keyup.enter="submit" v-model="form.password" class="form-control" placeholder="Password" />
+                                        </div>
+                                    </div>
+                                    <div class="col-12">
+                                        <div class="d-block d-sm-flex  align-items-center">
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="checkbox" id="gridCheck">
+                                                <label class="form-check-label" for="gridCheck">
+                                                    Remember Me
+                                                </label>
+                                            </div>
+                                            <a href="javascript:void(0);" class="ml-auto">Forgot Password ?</a>
+                                        </div>
+                                    </div>
+                                    <div class="col-12 mt-3">
+                                        <a href="#" @click.prevent="submit" class="btn btn-light text-uppercase">Sign In</a>
+                                    </div>
+                                    <div class="col-12 mt-3">
+                                        <p>Don't have an account ?<a href="auth-register.html"> Sign Up</a></p>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <img class="img-fluid" src="assets/img/bg/login.svg" alt="">
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- <div class="bg-sky-100 flex justify-center items-center h-screen">
         <div class="w-1/2 h-screen hidden lg:block">
             <img src="/logo.jpeg" alt="Placeholder Image" class="object-cover w-full h-full">
         </div>
@@ -42,7 +92,7 @@ const submit = async () => {
             </div>
             <div class="mb-4">
                 <label for="password" class="block text-gray-800">Password</label>
-                <!-- <input type="password" v-model="form.password" id="password" name="password" class="w-full border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:border-blue-500" autocomplete="off"> -->
+               
                 <Password class="w-full" @keyup.enter="submit" v-model="form.password" variant="filled" :feedback="false" toggleMask />
             </div>
             <div class="mb-4 flex items-center">
@@ -59,7 +109,7 @@ const submit = async () => {
                 <a href="/register" class="hover:underline">Sign up Here</a>
             </div>
         </div>
-    </div>
+    </div> -->
 </template>
 
 <style>

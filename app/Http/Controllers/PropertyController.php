@@ -42,4 +42,15 @@ class PropertyController extends Controller
     {
         $this->service->doStore($request);
     }
+
+    public function destroy($property_id)
+    {
+        $this->service->doDestroy($property_id);
+        return Inertia::render(
+            'property/index',
+            [
+                'properties' => $this->service->doGet()
+            ]
+        );
+    }
 }

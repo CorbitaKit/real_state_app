@@ -5,6 +5,10 @@ import FileUpload from '../components/fileupload.vue'
 import { router, useForm } from '@inertiajs/vue3'
 import { ref } from 'vue'
 
+
+const props = defineProps({
+    clients: Object
+})
 const visible = ref(false)
 const payment = ref(false)
 const form = useForm({
@@ -18,7 +22,7 @@ const submit = () => {
 </script>
 
 <template>
-    <Header @submit="submit" :title="'Clients Page'"  :btnTxt="'Create Client'" />
+    <!-- <Header @submit="submit" :title="'Clients Page'"  :btnTxt="'Create Client'" />
     <Dialog v-model:visible="payment" modal header="Make Payment" :style="{ width: '50rem' }">
         <span class="text-surface-500 dark:text-surface-400 block mb-8">Please input invoice # number and attach the actual invoice</span>
         <div class="flex items-center gap-4 mb-4">
@@ -143,5 +147,87 @@ const submit = () => {
             
             </tbody>
     </v-table>
+    </div> -->
+    <div class="row">
+        <div class="col-md-12 mb-2">
+            <!-- begin page title -->
+            <div class="d-block d-sm-flex flex-nowrap align-items-center">
+                <div class="page-title mb-2 mb-sm-0">
+                    <h1>Clients</h1>
+                </div>
+                
+                <div class="ml-auto d-flex align-items-center">
+                    
+                    <nav>
+                        <ol class="breadcrumb p-0 m-b-0">
+                            <li class="breadcrumb-item">
+                                <a href="#" @click="home('/dashboard')"><i class="ti ti-home"></i></a>
+                            </li>
+                            
+                            <li class="breadcrumb-item active text-primary" aria-current="page">Clients</li>
+                        </ol>
+                    </nav>
+                </div>
+            </div>
+            <!-- end page title -->
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-xl-12">
+            <div class="card card-statistics clients-contant">
+                <div class="card-header">
+                    <div class="d-xxs-flex justify-content-between align-items-center">
+                        <div class="card-heading">
+                            <h5 class="card-title">Client Lists</h5>
+                        </div>
+                       
+                    </div>
+                </div>
+                <div class="card-body table-responsive">
+                    
+                    <table class="table mb-0 table-border-3">
+                        <thead>
+                            <tr>
+                                <th class="text-left">
+                                    Name
+                                </th>
+                                <th class="text-left">
+                                    Email
+                                </th>
+                                <th class="text-left">
+                                    Phone Number
+                                </th>
+                                <th class="text-left">
+                                    Gross Monthly Income
+                                </th>
+                                <th class="text-left">
+                                    Actions
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            
+                            <tr v-for="client in clients">
+                                <td>
+                                    <div class="d-flex align-items-center">
+                                        <div class="avatar avatar-lg mr-2">
+                                            <img src="assets/img/avatar/01.jpg" class="img-fluid avatar-img rounded-circle" alt="Clients-01">
+                                        </div>
+                                        <p class="font-weight-bold text-dark">Adrian Demiandro</p>
+                                    </div>
+                                </td>
+                                <td> <i class="far fa-calendar-alt mr-1 text-success"></i> 20/07/2020</td>
+                                <td>$230.00</td>
+                                <td><a href="javascript:void(0)"></a> <label class="badge badge-success-inverse">Paid</label></td>
+                                <td>
+                                    <a href="javascript:void(0)" class="btn btn-icon btn-outline-primary btn-round mr-1 mb-0 mb-sm-0 "><i class="ti ti-pencil"></i></a>
+                                    <a href="javascript:void(0)" class="btn btn-icon btn-outline-danger btn-round"><i class="ti ti-close"></i></a>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
     </div>
 </template>
