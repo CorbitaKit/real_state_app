@@ -21,7 +21,7 @@ class LotService extends Service
     {
         foreach ($lots as $lot) {
             parent::doCreate([
-                'color_label' => $lot['color_label']['color'],
+                'color_label' => $lot['color_label'],
                 'status' => $lot['status'],
                 'property_id' => $propertyId,
                 'name' => $lot['name']

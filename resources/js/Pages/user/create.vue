@@ -1,6 +1,5 @@
 <script setup>
 import Layout from '../layout/main.vue'
-import Header from '../components/header.vue'
 import PersonalInfoForm from './components/personal-info-form.vue'
 import PersonalAddressForm from './components/personal-address-form.vue'
 import WorkInfoForm from './components/work-info-form.vue'
@@ -45,10 +44,12 @@ const form = useForm({
     },
 })
 
+const submit = () => {
+    form.post()
+}
 </script>
 
 <template>
-    <Header :title="'Staff Page'" :displayBtn="false"  :btnTxt="'Create Staff Account'" />
     <div class="mx-auto bg-white p-8 my-8 rounded shadow-md">
         <form-wizard step-size="xs" @on-complete="submit">
             <tab-content title="Account Information" :before-change="validatePersonalAddressData">

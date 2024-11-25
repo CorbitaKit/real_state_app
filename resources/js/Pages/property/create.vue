@@ -35,13 +35,50 @@ const submit = () => {
         })
     });
 }
+
+const redirect = (route) => {
+    router.get(route)
+}
 </script>
 
 
 <template>
-    <Header  :displayBtn="false" :title="'Property Creation Page'" />
+    <!-- <Header  :displayBtn="false" :title="'Property Creation Page'" />
     <Toast />
     <div class="mx-auto bg-white p-8 my-8 rounded shadow-md">
         <Wizard @submit="submit"/>
+    </div> -->
+    <div class="row">
+        <div class="col-md-12 mb-2">
+            <!-- begin page title -->
+            <div class="d-block d-sm-flex flex-nowrap align-items-center">
+                <div class="page-title mb-2 mb-sm-0">
+                    <h1>Properties</h1>
+                </div>
+                
+                <div class="ml-auto d-flex align-items-center">
+                    
+                    <nav>
+                        <ol class="breadcrumb p-0 m-b-0">
+                            <li class="breadcrumb-item">
+                                <a href="#" @click.prevent="redirect('/dashboard')"><i class="ti ti-home"></i></a>
+                            </li>
+                            <li class="breadcrumb-item">
+                                <a href="#" @click.prevent="redirect('/properties')">Properties</a>
+                            </li>
+                        
+                            <li class="breadcrumb-item active text-primary" aria-current="page">Create Property</li>
+                        </ol>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12 mb-2">
+            <div class="mx-auto bg-white p-8 my-8 rounded shadow-md">
+                <Wizard @submit="submit"/>
+            </div>
+        </div>
     </div>
 </template>

@@ -5,7 +5,7 @@ import Lot from './lot.vue'
 import Map from './map.vue'
 import { usePropertyStore } from '../store/store'
 import { useToaster } from '../../composables/toast'
-
+import Swal from 'sweetalert2'
 
 const { show } = useToaster()
 const useProperty = usePropertyStore()
@@ -14,11 +14,11 @@ const emits = defineEmits(['submit'])
 
 const checkIfFileUploaded = () => {
     if (useProperty.property.file.value === undefined) {
-        show(
-            'error', 
-            'Opps!', 
-            'Please upload a file first before proceeding'
-        )
+        Swal.fire({
+            icon: "error",
+            title: "Oops...",
+            text: "Please upload a select an image first",
+        });
         return false
     }
     return true
@@ -40,7 +40,11 @@ const checkIfFieldsAreFilled = () => {
     });
 
     if (hasEmptyField) {
-        show('error', 'Opps!', 'Please fill out all the fields');
+        Swal.fire({
+            icon: "error",
+            title: "Oops...",
+            text: "Please fill out all fields",
+        });
         return false;
     }
         return true;

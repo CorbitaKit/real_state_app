@@ -9,15 +9,12 @@ const open = ref(true)
 
 
 <template>
-    <div class="flex">
-        <SideBar :open="open"/>
-
-        <div class="w-screen h-screen bg-gray-100 flex flex-col">
-            <Navbar @open="open = !open" class="flex-shrink-0"/>
-            <div class="bg-slate-100 p-4 flex-grow overflow-auto">
-                <div class="container">
-                    <slot />
-                </div>
+    <Navbar />
+    <div class="app-container">
+        <SideBar />
+        <div class="app-main" id="main">
+            <div class="container-fluid">
+                <slot />
             </div>
         </div>
     </div>
