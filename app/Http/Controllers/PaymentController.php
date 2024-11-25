@@ -6,6 +6,7 @@ use App\Services\PaymentService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
+use App\Models\Lot;
 
 class PaymentController extends Controller
 {
@@ -24,7 +25,8 @@ class PaymentController extends Controller
     }
     public function create()
     {
-        return Inertia::render('payment/create', ['lots' => Auth::user()->lots]);
+        $lots = Lot::where('user_id', Auth::user()->id)->where('status', 'Occupied')->get();
+        return Inertia::render('payment/create', ['lots' => $lots]);
     }
 
     public function store(Request $request)

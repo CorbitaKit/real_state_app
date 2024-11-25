@@ -9,6 +9,7 @@ import { useForm, router } from '@inertiajs/vue3';
 import moment from 'moment';
 import { useToaster } from '../composables/toast'
 import { ref } from 'vue';
+import Swal from 'sweetalert2'
 
 const { show } = useToaster()
 const { getUserInfo } = getUser()
@@ -83,7 +84,12 @@ const siteVisit = () => {
 const sendApplication = () => {
     form.post('/applications', {
         onSuccess: (() => {
-            show('success', 'Application Sent!', 'We will review your application, and will send an email after reviewing')
+            // show('success', 'Application Sent!', 'We will review your application, and will send an email after reviewing')
+            Swal.fire({
+                title: "Success!",
+                text: "We will review your application, and will send an email after reviewing",
+                icon: "success"
+            });
         })
     })
 }
@@ -105,6 +111,11 @@ const home = (route) => {
     router.get(route)
 }
 
+const showPayments = (lotPayments) => {
+    payments.value = lotPayments
+    payment_view.value = true
+}
+
 defineOptions({layout: Layout})
 </script>
 
@@ -114,7 +125,7 @@ defineOptions({layout: Layout})
             <!-- begin page title -->
             <div class="d-block d-sm-flex flex-nowrap align-items-center">
                 <div class="page-title mb-2 mb-sm-0">
-                    <h1>Properties</h1>
+                    <h1>Applications</h1>
                 </div>
                 
                 <div class="ml-auto d-flex align-items-center">
@@ -125,7 +136,7 @@ defineOptions({layout: Layout})
                                 <a href="#" @click="home('/dashboard')"><i class="ti ti-home"></i></a>
                             </li>
                             <li class="breadcrumb-item">
-                                <a href="#" @click="home('/properties')">Properties</a>
+                                <a href="#" @click="home('/applications')">Applicaitons</a>
                             </li>
                         
                             <li class="breadcrumb-item active text-primary" aria-current="page">Property</li>
@@ -136,9 +147,8 @@ defineOptions({layout: Layout})
             <!-- end page title -->
         </div>
     </div>
-    <!-- <ConfirmDialog />
-    <Toast /> -->
-    <!-- <Dialog v-model:visible="payment_view" modal header="Payment History" :style="{ width: '50rem' }">
+    <ConfirmDialog />
+    <Dialog v-model:visible="payment_view" modal header="Payment History" :style="{ width: '50rem' }">
         <v-table>
             <thead>
             <tr>
@@ -166,17 +176,17 @@ defineOptions({layout: Layout})
             </tr>
             </tbody>
         </v-table>
-    </Dialog> -->
-    <!-- <Dialog v-model:visible="visible" modal header="Site visit" :style="{ width: '50rem' }">
+    </Dialog>
+    <Dialog v-model:visible="visible" modal header="Site visit" :style="{ width: '50rem' }">
         <span class="tw-text-surface-500 tw-dark:text-surface-400 tw-block mb-8">Set a date for your site visit.</span>
         <div class="tw-flex items-center tw-gap-4 tw-mb-4">
             <label for="username" class="tw-font-semibold tw-w-24">Date</label>
             <Calendar v-model="form.reserved_date" class="tw-w-full tw-rounded-md"/>
         </div>
-        <div class="flex justify-end gap-2">
+        <div class="tw-flex tw-justify-end tw-gap-2">
             <Button type="button" label="Save" @click="siteVisit"></Button>
         </div>
-    </Dialog> -->
+    </Dialog>
     <!-- <div class="tw-mx-auto tw-bg-white tw-p-8 tw-my-8 tw-rounded tw-shadow-md">
         
         <p class="tw-text-black tw-font-medium tw-text-1xl tw-pt-2 tw-mb-2" v-if="user.role_id == 3">
@@ -271,6 +281,7 @@ defineOptions({layout: Layout})
                                 <tr v-for="lot in property.lots">
                                     <td>
                                         {{ lot.name }}
+                                        
                                     </td>
                                     <td>
                                         {{ lot.lot_group.sqr_meter }} m&sup2;
@@ -285,7 +296,7 @@ defineOptions({layout: Layout})
                                         <span class="badge badge-info" v-if="lot.status === 'Available'">
                                             {{ lot.status }}
                                         </span>
-                                        <span class="badge badge-warning" v-else-if="lot.status === 'Reserve'">
+                                        <span class="badge badge-warning" v-else-if="lot.status === 'Pending'">
                                             {{ lot.status }}
                                         </span>
                                         <span class="badge badge-success" v-else-if="lot.status === 'Occupied'">
@@ -293,7 +304,12 @@ defineOptions({layout: Layout})
                                         </span>
                                     </td>
                                         
-                                    <td v-if="user.role.name !== 'Client'">Rent</td>
+                                    <td v-if="user.role.name !== 'Client'">
+                                        <span v-if="lot.user">
+                                            {{ lot.user.personal_info.first_name }}
+                                            {{ lot.user.personal_info.last_name }} 
+                                        </span>
+                                    </td>
                                     <td>
                                         <div class="dropdown">
                                             <a class="p-2" href="#!" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -301,9 +317,9 @@ defineOptions({layout: Layout})
                                             </a>
                                             <div class="dropdown-menu custom-dropdown dropdown-menu-right p-4">
                                                 <h6 class="mb-1">Action</h6>
-                                                <a class="dropdown-item" href="#!"><i class="fa-fw far fa-file-alt pr-2"></i>View Payment History</a>
-                                                <a v-if="user.role.name === 'Client'" class="dropdown-item" href="#!"><i class="fa-fw far fa-file-pdf pr-2"></i>Apply</a>
-                                                <a v-if="user.role.name === 'Client'" class="dropdown-item" href="#!"><i class="fa-fw far fa-calendar pr-2"></i>Request a site visit</a>
+                                                <a v-if="user.role.name !=='Client'" @click="showPayments(lot.payments)" class="dropdown-item" href="#"><i class="fa-fw far fa-file-alt pr-2"></i>View Payment History</a>
+                                                <a v-if="user.role.name === 'Client' && lot.status === 'Available'" @click.prevent="checkUser(lot)" class="dropdown-item" href="#!"><i class="fa-fw far fa-file-pdf pr-2"></i>Apply</a>
+                                                <a v-if="user.role.name === 'Client'" @click.prevent="visible = true" class="dropdown-item" href="#!"><i class="fa-fw far fa-calendar pr-2"></i>Request a site visit</a>
                                             </div>
                                         </div>
                                     </td>

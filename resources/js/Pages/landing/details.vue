@@ -16,11 +16,11 @@
 
 <template>
   <Header />
-  <div class="container mx-auto px-6 py-10">
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-10">
+  <div class="tw-container tw-mx-auto tw-px-6 tw-py-10">
+    <div class="tw-grid tw-grid-cols-1 md:tw-grid-cols-2 tw-gap-10">
       <!-- Property Image -->
       <div>
-        <img :src="'/storage/' + property.file.url" alt="Property Image" class="w-full h-64 object-cover rounded-lg shadow-lg mb-6">
+        <img :src="'/storage/' + property.file.url" alt="Property Image" class="tw-w-full tw-h-64 tw-object-cover tw-rounded-lg tw-shadow-lg tw-mb-6">
           <DataTable showGridlines  :value="property.lot_groups" tableStyle="min-width: 30rem">
             <Column field="sqr_meter" header="Square Meter">
               <template #body="slotProps">
@@ -40,25 +40,12 @@
         </DataTable>
       </div>
 
-      <!-- Map Section -->
-      <div class="relative w-full h-64">
-        <iframe 
-          width="100%" 
-          height="100%" 
-          class="rounded-lg shadow-lg" 
-          :src="mapSrc" 
-          frameborder="0" 
-          style="border:0;" 
-          allowfullscreen
-          aria-hidden="false"
-          tabindex="0"
-        ></iframe>
-      </div>
+      
     </div>
     
-    <div class="mt-8">
-      <h3 class="text-2xl font-semibold text-green-600">Location</h3>
-      <p class="text-gray-700">Phase {{ property.phase }}, Purok {{ property.purok }}, Barangay {{ property.barangay }}, {{ property.city }}, {{ property.province }}</p>
+    <div class="tw-mt-8">
+      <h3 class="tw-text-2xl tw-font-semibold tw-text-green-600">Location</h3>
+      <p class="tw-text-gray-700">Phase {{ property.phase }}, Purok {{ property.purok }}, Barangay {{ property.barangay }}, {{ property.city }}, {{ property.province }}</p>
     </div>
   </div>
   

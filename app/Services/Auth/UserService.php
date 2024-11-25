@@ -43,7 +43,14 @@ class UserService extends Service
     public function doStore(object $data)
     {
         return DB::transaction(function () use ($data) {
+
             $convertedData = $data->all();
+            if (!isset($convertedData['user_id'])) {
+                $user = $this->doCreate($convertedData['account_info']);
+                $convertedData['personal_info']['user_id'] = $user->id;
+                $convertedData['personal_address']['user_id'] = $user->id;
+                $convertedData['work_details']['user_id'] = $user->id;
+            }
             $convertedData['personal_info']['address'] = 'custom address';
             $this->employeeService->doCreate($convertedData['personal_info']);
             $this->addressSerivce->doCreate($convertedData['personal_address']);

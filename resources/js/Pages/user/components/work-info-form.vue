@@ -1,7 +1,8 @@
 <script setup>
 
 const props = defineProps({
-    work_details: Object
+    work_details: Object,
+    is_client: Boolean
 })
 
 const statuses = [
@@ -65,7 +66,7 @@ const statuses = [
             </select>
         </div>
 
-        <div class="mb-4">
+        <div class="mb-4" v-if="is_client">
             <label for="purok" class="tw-block tw-text-gray-700 tw-font-semibold tw-mb-2">Gorss monthly income</label>
             <InputNumber v-model="work_details.gross_monthly_income" inputId="currency-ph" mode="currency" currency="PHP" locale="en-PH" fluid  class="tw-w-full"/>
         </div>

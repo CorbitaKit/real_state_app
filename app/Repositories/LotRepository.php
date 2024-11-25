@@ -20,6 +20,6 @@ class LotRepository extends Repository
 
     public function doFetchClientLots(int $clientId): Collection
     {
-        return $this->model->where('user_id', $clientId)->with(['user', 'property', 'lotGroup', 'payments'])->get();
+        return $this->model->where('user_id', $clientId)->with(['user', 'property', 'lotGroup', 'payments', 'paymentPlans.payment', 'paymentPlans.lot.lotGroup'])->get();
     }
 }

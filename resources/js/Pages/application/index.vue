@@ -6,6 +6,7 @@ import { useForm } from '@inertiajs/vue3'
 import { useConfirm } from "primevue/useconfirm";
 import { ref } from 'vue';
 import { useToaster } from '../composables/toast'
+import Swal from 'sweetalert2'
 
 
 const { getUserInfo } = getUser()
@@ -58,7 +59,11 @@ const rejectApplication = () => {
 const sendRequest = () => {
     form.patch('/applications/' + application_id.value, {
         onSuccess: (() => {
-            show('success', 'Application update!', 'Email sent to the client')
+            Swal.fire({
+                title: "Success!",
+                text: "Application update!, Email sent to the client",
+                icon: "success"
+            });
         })
     })
 }
@@ -67,7 +72,30 @@ defineOptions({layout: Layout})
 </script>
 
 <template>
-    <Header  :displayBtn="false" :title="'Application List'" />
+    <div class="row">
+        <div class="col-md-12 mb-2">
+            <!-- begin page title -->
+            <div class="d-block d-sm-flex flex-nowrap align-items-center">
+                <div class="page-title mb-2 mb-sm-0">
+                    <h1>Applications</h1>
+                </div>
+                
+                <div class="ml-auto d-flex align-items-center">
+                    
+                    <nav>
+                        <ol class="breadcrumb p-0 m-b-0">
+                            <li class="breadcrumb-item">
+                                <a href="#" @click="home('/dashboard')"><i class="ti ti-home"></i></a>
+                            </li>
+                 
+                            <li class="breadcrumb-item active text-primary" aria-current="page">Applications</li>
+                        </ol>
+                    </nav>
+                </div>
+            </div>
+            <!-- end page title -->
+        </div>
+    </div>
     <ConfirmDialog />
     <Toast />
     <Dialog v-model:visible="visible" modal header="Reject Application" :style="{ width: '50rem' }">
@@ -80,7 +108,7 @@ defineOptions({layout: Layout})
             <Button type="button" label="Save" @click="rejectApplication"></Button>
         </div>
     </Dialog>
-    <div class="relative overflow-x-auto mt-5">
+    <!-- <div class="relative overflow-x-auto mt-5">
         <v-table>
             <thead>
                 <tr>
@@ -139,6 +167,89 @@ defineOptions({layout: Layout})
                 </tr>
             </tbody>
         </v-table>
+    </div> -->
+
+    <div class="row">
+        <div class="col-xl-12">
+            <div class="card card-statistics border-0 shadow-none mb-0">
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table mb-0 table-border-3">
+                            <thead>
+                                <tr>
+                                    <th v-if="user.role_id != 3" scope="col" class="px-6 py-3">
+                                        Applicant
+                                    </th>
+                                    <th scope="col" class="px-6 py-3">
+                                        Application Type
+                                    </th>
+                                    <th scope="col" class="px-6 py-3">
+                                        Reserved Date
+                                    </th>
+                                    <th scope="col" class="px-6 py-3">
+                                        Lot Address
+                                    </th>
+                                    <th scope="col" class="px-6 py-3">
+                                        Status
+                                    </th>
+                                    <th v-if="user.role_id != 3" scope="col" class="px-6 py-3">
+                                        Actions
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody class="mb-0">
+                                <tr v-for="application in applications" :key="application.id">
+                                    <td v-if="user.role_id != 3" scope="row" >
+                                        <a class="text-blue" style="color:blue;" :href="`/users/${application.user.id}`">{{ application.user.personal_info.first_name }} {{ application.user.personal_info.last_name }} </a>
+                                    </td>
+                                    <td>
+                                        {{ application.application_type }}
+                                    </td>
+                                    <td>
+                                        {{ application.reserved_date }}
+                                    </td>
+                                    <td>
+                                        Phase {{ application.lot.property.phase }},
+                                        purok {{ application.lot.property.purok }},
+                                        barangay {{ application.lot.property.barangay }},<br>
+                                        {{ application.lot.property.city }},
+                                        {{ application.lot.property.province }},
+                                        <span v-if="application.type === 'Lot Application'">Lot {{ application.lot.id }} </span> 
+                                    </td>
+                                    <td >
+                                        <span class="badge badge-info" v-if="application.status === 'For Review'">
+                                            {{ application.status }}
+                                        </span>
+                                        <span class="badge badge-danger" v-if="application.status === 'Rejected'">
+                                            {{ application.status }}
+                                        </span>
+                                        <span class="badge badge-success" v-if="application.status === 'Approved'" severity="success">
+                                            {{ application.status }}
+                                        </span>
+                                        
+                                    </td>
+                                        
+                                  
+                                    <td v-if="user.role_id != 3">
+                                        <div class="dropdown">
+                                            <a class="p-2" href="#!" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                <i class="fe fe-more-horizontal"></i>
+                                            </a>
+                                            <div class="dropdown-menu custom-dropdown dropdown-menu-right p-4">
+                                                <h6 class="mb-1">Action</h6>
+                                                <a  @click="handleStatusChange('Approved', application.id)" class="dropdown-item" href="#"><i class="fa-fw far fa-check-circle pr-2"></i>Approve</a>
+                                                <a  @click="handleStatusChange('Rejected', application.id)" class="dropdown-item" href="#!"><i class="fa-fw fas fa-minus-circle pr-2"></i>Reject</a>
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                              
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 
 </template>

@@ -15,7 +15,7 @@ const submit = async () => {
     await axios.get("/sanctum/csrf-cookie");
     await form.post("/login", {
         onSuccess: (res) => {
-            router.get("/properties");
+            window.location.href ='/properties'
         },
         onError: (res) => {
             error.value = res;
@@ -62,7 +62,7 @@ const submit = async () => {
                                         <a href="#" @click.prevent="submit" class="btn btn-light text-uppercase">Sign In</a>
                                     </div>
                                     <div class="col-12 mt-3">
-                                        <p>Don't have an account ?<a href="auth-register.html"> Sign Up</a></p>
+                                        <p>Don't have an account ?<a href="/register"> Sign Up</a></p>
                                     </div>
                                 </div>
                             </form>

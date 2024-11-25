@@ -2,169 +2,184 @@
 import Layout from '../layout/main.vue'
 import Header from '../components/header.vue'
 import { ref } from 'vue'
+import { useForm, router } from '@inertiajs/vue3'
+import Swal from 'sweetalert2'
 
+import axios from 'axios'
 const props = defineProps({
     userInfo: Object
 })
 
+
 const tab = ref('option-1')
+const form = useForm(props.userInfo)
+
+const updatePersonalInfo = () => {
+    axios.patch('/update-personal-info/' + props.userInfo.id, form.personal_info)
+    .then(request => {
+        Swal.fire({
+            title: "Success!",
+            text: "Profile Updated Successfully!",
+            icon: "success"
+        });
+        window.location.reload()
+    })
+}
 defineOptions({layout: Layout})
 </script>
 
 <template>
-    <Header  :displayBtn="false" :title="'Profile Details'" />
-    <div class="mx-auto bg-white p-8 my-8 rounded shadow-md">
-        <div class="flex content-between gap-4">
-            <div class="card bg-white">
-                <v-img
-                :width="300"
-                aspect-ratio="16/9"
-                cover
-                src="https://cdn.vuetifyjs.com/images/parallax/material.jpg"
-                ></v-img>
-                <v-table>
-              
-                    <tbody>
-                        <tr>
-                            <td>Name</td>
-                            <td>
-                                {{ userInfo.personal_info.first_name }}
-                                
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>Email</td>
-                            <td>
-                                {{ userInfo.email }}
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>Gender</td>
-                            <td>
-                                {{ userInfo.personal_info.gender }} 
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>Birth Day</td>
-                            <td>
-                                {{ userInfo.personal_info.birth_day }} 
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>Phone Number</td>
-                            <td>
-                                {{ userInfo.personal_info.phone_number }} 
-                            </td>
-                        </tr>
-                    </tbody>
-                </v-table>
+   <div class="row">
+      <div class="col-md-12 mb-2">
+          <!-- begin page title -->
+          <div class="d-block d-sm-flex flex-nowrap align-items-center">
+              <div class="page-title mb-2 mb-sm-0">
+                  <h1>Account Settings</h1>
+              </div>
+              <div class="ml-auto d-flex align-items-center">
+                  <nav>
+                      <ol class="breadcrumb p-0 m-b-0">
+                          <li class="breadcrumb-item">
+                              <a href="index.html"><i class="ti ti-home"></i></a>
+                          </li>
+                          <li class="breadcrumb-item">
+                              Pages
+                          </li>
+                          <li class="breadcrumb-item active text-primary" aria-current="page">Profile</li>
+                      </ol>
+                  </nav>
+              </div>
+          </div>
+          <!-- end page title -->
+      </div>
+  </div>
+  <div class="account-contant">
+    <div class="card card-statistics">
+        <div class="card-body py-0">
+            <div class="row align-items-center">
+                <div class="col-lg-4 col-xl-2 col-xxl-3">
+                    <div class="page-account-profil pl-0 py-2  py-lg-3">
+                        <div class="profile-img rounded-circle">
+                            <div class="d-flex">
+                                <div class="avatar avatar-xl">
+                                    <img src="/assets/img/avatar/01.jpg" class="img-fluid avatar-img rounded-circle" alt="users-avatar">
+                                </div>
+                                <div class="profile ml-2">
+                                    <h5 class="mb-0">{{ userInfo.personal_info.first_name }} {{ userInfo.personal_info.last_name }}</h5>
+                                    <p>{{ userInfo.role.name }}</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-8 col-xl-6 col-xxl-6">
+                    <div class="py-2 py-lg-3 profile-counter">
+                       
+                    </div>
+                </div>
+                <div class="col-xl-4 col-xxl-3">
+                    <div class="profile-btn text-center d-flex py-2  py-lg-3 justify-content-xl-end">
+                        <!-- <div><button class="btn btn-light text-primary mr-2">Upload New Avatar</button></div> -->
+                    </div>
+                </div>
             </div>
-            <div class="card bg-white w-full">
-                <v-card>
-                    <v-tabs
-      v-model="tab"
-      bg-color="primary"
-    >
-      <v-tab value="one">Address</v-tab>
-      <v-tab value="two">Work Details</v-tab>
-      <!-- <v-tab value="three">Proof Of Income</v-tab> -->
-    </v-tabs>
-
-    <v-card-text>
-      <v-tabs-window v-model="tab">
-        <v-tabs-window-item value="one">
-            <v-table>
-              <tbody>
-                  <tr>
-                      <td>Province</td>
-                      <td>
-                        {{ userInfo.address.province }}
-                      </td>
-                  </tr>
-                  <tr>
-                      <td>City</td>
-                      <td>
-                        {{ userInfo.address.city }}
-
-                      </td>
-                  </tr>
-                  <tr>
-                      <td>Barangay</td>
-                      <td>
-                        {{ userInfo.address.barangay }}
-
-                      </td>
-                  </tr>
-                  <tr>
-                      <td>Purok</td>
-                      <td>
-                        {{ userInfo.address.purok }}
-
-                      </td>
-                  </tr>
-              </tbody>
-          </v-table>
-        </v-tabs-window-item>
-       
-        <v-tabs-window-item value="two">
-            <v-table>
-              <tbody>
-                  <tr>
-                      <td>Company</td>
-                      <td>
-                        {{ userInfo.work_details.company_name }}
-                      </td>
-                  </tr>
-                  <tr>
-                      <td>Company Address</td>
-                      <td>
-                        {{ userInfo.work_details.company_address }}
-                      </td>
-                  </tr>
-                  <tr>
-                      <td>Company Email</td>
-                      <td>
-                        {{ userInfo.work_details.company_address }}
-                      </td>
-                  </tr>
-                  <tr>
-                      <td>Company Number</td>
-                      <td>
-                        {{ userInfo.work_details.company_number }}
-                      </td>
-                  </tr>
-                  <tr>
-                      <td>Length of stay</td>
-                      <td>
-                        {{ userInfo.work_details.length_of_stay }}
-                      </td>
-                  </tr>
-                  <tr>
-                      <td>Employment Status</td>
-                      <td>
-                        {{ userInfo.work_details.status }}
-
-
-                      </td>
-                  </tr>
-                  <tr>
-                      <td>Gross Monthly Income</td>
-                      <td>
-                        {{ userInfo.work_details.gross_monthly_income }}
-                      </td>
-                  </tr>
-              </tbody>
-          </v-table>
-        </v-tabs-window-item>
-
-        <!-- <v-tabs-window-item value="three">
-          Three
-        </v-tabs-window-item> -->
-      </v-tabs-window>
-    </v-card-text>
-                    
-                </v-card>
+            <div class="row">
+                <div class="col-xl-4 col-md-4 col-12 border-top border-lg-right">
+                    <div class="page-account-form">
+                        <div class="form-titel border-bottom p-1">
+                            <h5 class="mb-0 py-2">Edit Your Personal Information</h5>
+                        </div>
+                        <div class="p-2">
+                            <form>
+                                <div class="form-row">
+                                    <div class="form-group col-md-12">
+                                        <label for="name1">First Name</label>
+                                        <input type="text" v-model="form.personal_info.first_name" class="form-control" id="name1" >
+                                    </div>
+                                    <div class="form-group col-md-12">
+                                        <label for="title1">Last Name</label>
+                                        <input type="text" v-model="form.personal_info.last_name" class="form-control" id="title1">
+                                    </div>
+                                    <div class="form-group col-md-12">
+                                        <label for="phone1">Phone Number</label>
+                                        <input type="text" v-model="form.personal_info.phone_number" class="form-control" id="phone1" >
+                                    </div>
+                                    <div class="form-group col-md-12">
+                                        <label for="email1">Email</label>
+                                        <input type="email" v-model="form.email" class="form-control" id="email1" >
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="add1">Address</label>
+                                    <input type="text" v-model="form.personal_info.address" class="form-control" id="add1" >
+                                </div>
+                                <button type="button" @click="updatePersonalInfo" class="btn btn-primary">Save and Update</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xl-4 col-md-4 col-12 border-top border-lg-right">
+                    <div class="page-account-form">
+                        <div class="form-titel border-bottom p-1">
+                            <h5 class="mb-0 py-2">Edit Your Personal Address</h5>
+                        </div>
+                        <div class="p-2">
+                            <form>
+                                <div class="form-row">
+                                    <div class="form-group col-md-12">
+                                        <label for="name1">Phase</label>
+                                        <input type="text" v-model="form.address.complete_address" class="form-control" id="name1">
+                                    </div>
+                                    <div class="form-group col-md-12">
+                                        <label for="title1">Purok</label>
+                                        <input type="text" v-model="form.address.purok" class="form-control" id="title1">
+                                    </div>
+                                    <div class="form-group col-md-12">
+                                        <label for="phone1">Barangay</label>
+                                        <input type="text" v-model="form.address.barangay" class="form-control" id="phone1">
+                                    </div>
+                                    <div class="form-group col-md-12">
+                                        <label for="email1">City</label>
+                                        <input type="email" v-model="form.address.city" class="form-control" id="email1" >
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="add1">Province</label>
+                                    <input type="text" v-model="form.address.province" class="form-control" id="add1" >
+                                </div>
+                                <button type="submit" class="btn btn-primary">Save and Update</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xl-4 col-md-4 col-12 border-top border-lg-right">
+                    <div class="page-account-form">
+                        <div class="form-titel border-bottom p-1">
+                            <h5 class="mb-0 py-2">Edit Your Account Information</h5>
+                        </div>
+                        <div class="p-2">
+                            <form>
+                                <div class="form-row">
+                                    <div class="form-group col-md-12">
+                                        <label for="name1">Email</label>
+                                        <input type="text" v-model="form.email" class="form-control" id="name1" >
+                                    </div>
+                                    <div class="form-group col-md-12">
+                                        <label for="title1">Password</label>
+                                        <input type="password" v-model="form.password" class="form-control" id="title1" >
+                                    </div>
+                                    
+                                </div>
+                               
+                                <button type="submit" class="btn btn-primary">Save and Update</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                
+                
             </div>
         </div>
     </div>
+  </div>
 </template>

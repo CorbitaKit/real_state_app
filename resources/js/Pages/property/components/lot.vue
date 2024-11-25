@@ -72,7 +72,7 @@ const setLots = () => {
 }
 
 const setLotGroups = () => {
-    const color_labels = ['tw-bg-green-600', 'tw-bg-red-600', 'tw-bg-yellow-600']
+    const color_labels = ['tw-bg-green-200', 'tw-bg-rose-300', 'tw-bg-amber-200']
     useProperty.property.lot_groups = []
     for (var i = 0; i < useProperty.property.number_of_lot_groups; i++) {
         useProperty.property.lot_groups.push({
@@ -89,7 +89,7 @@ const setLotGroups = () => {
 
 
 const calculateTotalAmount = (lot_group) => {
-    lot_group.total_amount = lot_group.amount_per_sqr_meter * lot_group.sqr_meter
+    lot_group.total_amount = (lot_group.amount_per_sqr_meter * lot_group.sqr_meter)
     lot_group.is_set = true
     calculateMonthly(lot_group)
 }
@@ -101,6 +101,7 @@ const calculateMonthly = (lot_group) => {
     // })
 
     lot_group.monthly_amortizations = lot_group.total_amount / useProperty.property.balance_payable
+    useProperty.property.down_payment = lot_group.monthly_amortizations
 
 }
 </script>
@@ -173,17 +174,7 @@ const calculateMonthly = (lot_group) => {
                 </div>
                 <div class="card-body">
                     <form>
-                        <div class="form-row">
-                            <div class="form-group col-md-6">
-                                <label for="downpayment">Down Payment</label>
-                                <InputNumber v-model="useProperty.property.down_payment" inputId="currency-ph" mode="currency" currency="PHP" locale="en-PH" class="w-100" />
-                                
-                            </div>
-                            <div class="form-group col-md-6">
-                                <label for="inputPassword4">Balance Payable</label>
-                                <<InputNumber v-model="useProperty.property.balance_payable" class="w-100" name="downpayment" inputId="expiry" suffix=" Month(s)" fluid />
-                            </div>
-                        </div>
+                        
                         <div class="form-row">
                             <div class="form-group col-md-6">
                                 <label for="inputEmail4">Number of Lots</label>
@@ -195,7 +186,17 @@ const calculateMonthly = (lot_group) => {
                                 <InputNumber :min="3" :max="3"  @blur="setLotGroups" v-model="useProperty.property.number_of_lot_groups" inputId="integeronly" class="w-100" />
                             </div>
                         </div>
-
+                        <div class="form-row">
+                            <!-- <div class="form-group col-md-6">
+                                <label for="downpayment">Down Payment</label>
+                                <InputNumber disabled v-model="useProperty.property.down_payment" inputId="currency-ph" mode="currency" currency="PHP" locale="en-PH" class="w-100" />
+                                
+                            </div> -->
+                            <div class="form-group col-md-6">
+                                <label for="inputPassword4">Balance Payable</label>
+                                <InputNumber disabled v-model="useProperty.property.balance_payable" class="w-100" name="downpayment" inputId="expiry" suffix=" Month(s)" fluid />
+                            </div>
+                        </div>
                     </form>
                 </div>
             </div>
@@ -230,7 +231,7 @@ const calculateMonthly = (lot_group) => {
             
         </div>
         <div class="mb-4">
-            <label for="purok" class="tw-block tw-text-gray-700 tw-font-semibold tw-mb-2" style="white-space: nowrap;">Monthly Amortization</label>
+            <label for="purok" class="tw-block tw-text-gray-700 tw-font-semibold tw-mb-2" style="white-space: nowrap;">Monthly Amortization/Downpayment</label>
             <!-- <input disabled v-model="lot_group.monthly_amortizations" type="number" class="block appearance-none w-full px-3 py-2 border rounded-md focus:outline-none focus:ring focus:border-blue-300" /> -->
             <InputNumber disabled v-model="lot_group.monthly_amortizations" inputId="integeronly" class="w-100"/>
             

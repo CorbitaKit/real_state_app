@@ -12,20 +12,20 @@ const login = () => {
 
 
 <template>
-    <header class="bg-lime-400 text-white shadow-md h-full">
-      <div class="container mx-auto px-6 py-4 flex items-center justify-between">
+    <header class="tw-bg-lime-400 tw-text-black tw-shadow-md tw-h-full">
+      <div class="container tw-mx-auto tw-px-6 tw-py-4 tw-flex tw-items-center tw-justify-between">
         <!-- Logo -->
-        <div class="flex items-center space-x-4">
-          <img src="/logo.jpeg" alt="RealEstateApp Logo" class="h-12">
-          <h1 class="text-3xl font-bold hidden md:block">Jef Aldebal Realty Service</h1>
+        <div class="tw-flex tw-items-center tw-space-x-4">
+          <img src="/logo.jpeg" alt="RealEstateApp Logo" class="tw-h-12">
+          <h1 class="tw-text-3xl tw-text-black tw-font-bold tw-hidden tw-md:block">Jef Aldebal Realty Service</h1>
         </div>
         <!-- Navigation -->
         <nav>
-          <ul class="flex space-x-6">
-            <li><a href="#" @click.prevent="home" class="hover:text-gray-300">Home</a></li>
-            <li><a href="#properties" class="hover:text-gray-300">Properties</a></li>
-            <li><a href="#contact" class="hover:text-gray-300">Contact</a></li>
-            <li><a href="#" @click.prevent="login" class="hover:text-gray-300">Login</a></li>
+          <ul class="tw-flex tw-space-x-6">
+            <li><a href="#" @click.prevent="home" class="tw-text-black tw-hover:text-gray-300">Home</a></li>
+            <li><a href="#properties" class="tw-hover:text-gray-300 tw-text-black">Properties</a></li>
+            <li><a href="#contact" class="tw-hover:text-gray-300 tw-text-black">Contact</a></li>
+            <li><a href="#" @click.prevent="login" class="tw-hover:text-gray-300 tw-text-black">Login</a></li>
           </ul>
         </nav>
       </div>

@@ -7,7 +7,8 @@ use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
 use App\Services\LotService;
-
+use Carbon\Carbon;
+use App\Models\PaymentPlan;
 class ApplicationService extends Service
 {
     protected $lotService;
@@ -27,7 +28,23 @@ class ApplicationService extends Service
     {
         $application = parent::doUpdate($data, $id);
 
-        $this->lotService->doUpdate(['status' => 'Occupied'], $application->lot->id);
+        $this->lotService->doUpdate(['status' => 'Occupied'], $application->lot_id);
+
+        $startDate = Carbon::now();
+        $endDate = $startDate->copy()->addYears(3);
+
+        while ($startDate->lessThanOrEqualTo($endDate)) {
+            $startDate->addMonth();
+            $newPaymentPlan = new PaymentPlan();
+            $newPaymentPlan->due_date = $startDate->copy();
+            $newPaymentPlan->lot_id = $application->lot_id;
+            $newPaymentPlan->user_id = $application->user_id;
+
+            $newPaymentPlan->save();
+
+            
+        }
+
         return $application;
     }
 }

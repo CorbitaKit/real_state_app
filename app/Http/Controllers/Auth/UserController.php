@@ -38,7 +38,7 @@ class UserController extends Controller
         $user = $this->userService->doCreate($request->all());
         Auth::login($user);
         $request->session()->regenerate();
-        return redirect()->route('properties.index');
+        return redirect()->route('users.show', $user->id);
     }
 
     public function store(UserRequest $request)

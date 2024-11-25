@@ -6,6 +6,7 @@ use App\Services\Auth\UserService;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use App\Models\User;
+use App\Models\Employee;
 class UserController extends Controller
 {
     protected $service;
@@ -35,7 +36,7 @@ class UserController extends Controller
 
     public function clients()
     {
-        $clients = User::with('personal_info')->where('role_id', 3)->get();
+        $clients = User::with('personal_info', 'address', 'workDetails')->where('role_id', 3)->get();
         return Inertia::render('user/client', [
             'clients' => $clients
         ]);
@@ -53,5 +54,19 @@ class UserController extends Controller
     public function store(Request $request)
     {
         return $this->service->doStore($request);
+    }
+
+    public function destroy($id)
+    {
+        $this->service->doDestroy($id);
+        $this->index();
+    }
+
+    public function updatePersonalInfo(Request $request, $user_id)
+    {
+        $personal_info = Employee::where('user_id', $user_id)->first();
+
+        $personal_info->update($request->all());
+        $this->show($user_id);
     }
 }

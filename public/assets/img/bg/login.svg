@@ -4,28 +4,30 @@
 	 viewBox="0 0 500 500" style="enable-background:new 0 0 500 500;" xml:space="preserve">
 <style type="text/css">
 	.st0{fill:#E6E6E6;}
-	.st1{fill:#E0E0E0;}
-	.st2{fill:#FAFAFA;}
-	.st3{fill:#F5F5F5;}
-	.st4{fill:#F0F0F0;}
-	.st5{fill:#FFFFFF;}
-	.st6{display:none;}
-	.st7{display:inline;}
-	.st8{fill:#E58A7B;}
-	.st9{fill:#407BFF;}
-	.st10{opacity:0.2;}
-	.st11{fill:#E8ECF1;}
-	.st12{fill:#263238;}
-	.st13{fill:#CF6F64;}
-	.st14{fill:#DF5753;}
-	.st15{opacity:0.56;fill:#FAFAFA;}
-	.st16{opacity:7.000000e-002;fill:#407BFF;}
-	.st17{opacity:0.47;fill:#407BFF;}
-	.st18{opacity:0.1;fill:#FFFFFF;}
-	.st19{opacity:0.6;}
-	.st20{opacity:0.4;}
-	.st21{opacity:0.4;fill:#FFFFFF;}
-	.st22{opacity:0.3;fill:#FFFFFF;}
+.st1{fill:#E0E0E0;}
+.st2{fill:#FAFAFA;}
+.st3{fill:#F5F5F5;}
+.st4{fill:#F0F0F0;}
+.st5{fill:#FFFFFF;}
+.st6{display:none;}
+.st7{display:inline;}
+.st8{fill:#E58A7B;}
+.st9{fill:#C7E9C0;}
+.st10{opacity:0.2;}
+.st11{fill:#E8ECF1;}
+.st12{fill:#263238;}
+.st13{fill:#CF6F64;}
+.st14{fill:#DF5753;}
+.st15{opacity:0.56;fill:#FAFAFA;}
+.st16{opacity:7.000000e-002;fill:#C7E9C0;}
+.st17{opacity:0.47;fill:#C7E9C0;}
+.st18{opacity:0.1;fill:#FFFFFF;}
+.st19{opacity:0.6;}
+.st20{opacity:0.4;}
+.st21{opacity:0.4;fill:#FFFFFF;}
+.st22{opacity:0.3;fill:#FFFFFF;}
+
+
 </style>
 <g id="Background_complete">
 	<g>

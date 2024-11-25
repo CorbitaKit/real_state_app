@@ -2,12 +2,18 @@
 import { ref } from "vue";
 import {getUser} from '../plugins/get-user-plugin'
 import profileDropdown from '../layout/dropdowns/profile-image-dropdown.vue'
+import { router } from '@inertiajs/vue3'
 
 const { getUserInfo } = getUser()
 const user = getUserInfo()
 const showDropdown = ref(false)
 
-
+const logout = () => {
+    router.post('/logout', user);
+}
+const profile = () => {
+    router.get('/users/' + user.id)
+}
 </script>
 
 <template>
@@ -92,9 +98,9 @@ const showDropdown = ref(false)
                                     </div>
                                 </div>
                                 <div class="p-3">
-                                    <a class="dropdown-item d-flex nav-link" href="javascript:void(0)">
-                                        <i class="far fa-user pr-1 text-success"></i> Profile</a>
-                                    <a class="dropdown-item d-flex nav-link" href="javascript:void(0)">
+                                    <a class="dropdown-item d-flex nav-link" @click.prevent="profile" href="javascript:void(0)">
+                                        <i class="far fa-user pr-1 text-success" ></i> Profile</a>
+                                    <a class="dropdown-item d-flex nav-link" @click.prevent="logout" href="javascript:void(0)">
                                         <i class="far fa-compass pr-1 text-warning"></i> Logout</a>
                                 </div>
                             </div>
