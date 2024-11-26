@@ -56,7 +56,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::post('upload-file', [FileController::class, 'upload']);
 
     Route::patch('/update-personal-info/{user_id}', [ClientController::class, 'updatePersonalInfo']);
-
+    Route::post('/reports/filter', [ReportController::class, 'filter']);
 
     Route::post('logout', function (Request $request) {
         Auth::guard('web')->logout();

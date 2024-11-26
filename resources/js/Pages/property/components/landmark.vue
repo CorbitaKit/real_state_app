@@ -8,10 +8,7 @@ import Show from '../show.vue'
 const defaultLatLng = [7.3151, 125.6190]
 const latLng = ref(defaultLatLng)
 const map = ref(null)
-const showModal = ref(false)
-const modalContent = ref('')
 const mapContainer = ref(null)
-const modalBtn = ref(null)
 const property = ref(null)
 const visible = ref(false)
 const props = defineProps({
@@ -49,6 +46,11 @@ const geocodeAddress = async (address) => {
   }
 }
 
+const handleLotEvent = (lot) => {
+  if (lot.status === 'Available') {
+    
+  }
+}
 
 
 onMounted(() => {
@@ -80,7 +82,6 @@ onMounted(() => {
     <div id="map" ref="mapContainer" style="height: 500px;"></div>
     <Dialog v-model:visible="visible" modal header="Lot Details" :style="{ width: '100rem' }">
       <div class="tw-grid tw-grid-cols-4 tw-gap-3">
-            
             <div class="tw-mb-4 tw-text-xl" v-for="lot in property.lots" :key="lot.id">
                 
                 <button style="white-space: nowrap;" @click="checkUser(lot)" type="button" class="tw-text-xl tw-font-medium tw-text-black tw-block tw-w-full  tw-rounded tw-p-4 tw-text-sm tw-font-medium transition hover:scale-105" :class="lot.lot_group.color_label">

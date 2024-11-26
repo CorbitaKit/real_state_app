@@ -30,29 +30,7 @@ class PaymentService extends Service
         
         $payment = parent::doCreate($data);
 
-        while (true) {
-            // Query for the current month and year
-            $paymentPlan = PaymentPlan::where('lot_id', $payment->lot_id)
-                ->whereNull('payment_id')
-                ->whereMonth('due_date', $currentDate->month)
-                ->whereYear('due_date', $currentDate->year)
-                ->first();
-            dd($paymentPlan);
-            // Break the loop if results are found
-            if ($paymentPlans) {
-                $paymentPlan->payment_id = $payment->id;
-                $paymentPlan->save();
-                break;
-
-            }
-
-            // Increment to the next month
-            $currentDate->addMonth();
-        }
-
-        $currentDate = Carbon::now(); // Start with the current date
-        $paymentPlans = null;
-
+       
         
 
         $fileUpload = $data['file']['value'];

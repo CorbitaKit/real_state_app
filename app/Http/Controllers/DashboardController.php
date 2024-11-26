@@ -8,11 +8,18 @@ use App\Models\User;
 use App\Models\Application;
 use App\Models\Payment;
 use App\Models\Property;
+use Illuminate\Support\Facades\Auth;
 
 class DashboardController extends Controller
 {
     public function index()
     {
+        $user = Auth::user();
+        $currentUser = User::with('personal_info')->where('id', $user->id)->first();
+
+        if (!$currentUser->personal_info) {
+            return redirect()->back();
+        }
         $clients = User::with('personal_info')
         ->where('role_id', 3)
         ->whereHas('personal_info')

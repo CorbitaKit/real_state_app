@@ -80,6 +80,36 @@ const submit = () => {
         })
     })
 }
+
+const validatePersonalInfoData = () => {
+    const dateToCheck = new Date(form.personal_info.birth_day);
+
+    // Get the current date
+    const today = new Date();
+
+    // Calculate the age
+    let age = today.getFullYear() - dateToCheck.getFullYear();
+    const monthDifference = today.getMonth() - dateToCheck.getMonth();
+    const dayDifference = today.getDate() - dateToCheck.getDate();
+
+    // Adjust age if the current date is before the birthdate this year
+    if (monthDifference < 0 || (monthDifference === 0 && dayDifference < 0)) {
+    age--;
+    }
+
+    if (age <= 17) {
+        Swal.fire({
+            title: "Opps!",
+            text: "The age should be 18 and up!",
+            icon: "error"
+        });
+        return false
+    }
+
+    return true
+
+    
+}
 </script>
 
 <template>
