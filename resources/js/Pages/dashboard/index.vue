@@ -1,8 +1,12 @@
 <script setup>
 import Layout from '../layout/main.vue'
-import Widget from './widget.vue'
 import QuarterlySales from './components/quarterly-sales.vue';
-
+import Widget from './components/widget.vue'
+import Sales from './components/sales.vue'
+import Profile from './components/profile.vue'
+import Property from './components/property.vue'
+import Staffs from './components/staff.vue'
+import moment from 'moment'
 const props = defineProps(
     {
         clients: Object,
@@ -14,97 +18,110 @@ const props = defineProps(
 
 
 )
+
+const convertDate = (date) => {
+    return moment(date).format("MMMM D, YYYY");
+}
 defineOptions({ layout: Layout })
 </script>
 
 
 <template>
-    <div class="row align-items-center mb-2 mb-sm-3">
-        <div class="col-xxl-5 col-xl-5 mr-auto">
-            <h3 class="mb-1">Welcome (User)!</h3>
-        </div>
-        <div class="col-xxl-6 col-xl-7 mt-4 mt-xl-0">
-            <div class="row align-items-center secondary-menu text-center justify-content-xxl-end">
-                <div class="col-6 col-sm-3 border-right text-left mb-2 mb-md-0">
-                    <h6 class="mb-0 font-md"><i class="fas fa-users text-success mr-1"></i> Clients</h6>
-                    <b class="d-block">3,3265</b>
-                </div>
-                <div class="col-6 col-sm-3 border-0 border-sm-right text-left mb-2 mb-md-0">
-                    <h6 class="mb-0 font-md"><i class="fas fa-file-alt text-danger mr-1"></i> Applications</h6>
-                    <b class="d-block">6,6484</b>
-                </div>
-                <div class="col-6 col-sm-3 border-right text-left mb-2 mb-md-0">
-                    <h6 class="mb-0 font-md"><i class="far fa-calendar-alt text-cyan mr-1"></i> Calendar</h6>
-                    <b class="d-block">2,2646</b>
-                </div>
-                <div class="col-6 col-sm-3 text-left mb-2 mb-md-0">
-                    <h6 class="mb-0 font-md"><i class="far fa-chart-bar text-pink mr-1"></i> Analytics</h6>
-                    <b class="d-block">4,6587</b>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- <Widget :clients="clients" :applications="applications" :payments="payments" :properties="properties" />
-    <div class="grid grid-cols-2 gap-2 ">
-        <div class="card bg-white items-center">
-            <div class="p-3 text-2xl semi-bold tabular-nums">
-                <h3>Clients</h3>
-            </div>
-            <div class="">
-                <DataTable :value="clients" paginator :rows="5" :rowsPerPageOptions="[5, 10, 20, 50]" >
-                    <Column field="id" header="ID"></Column>
-                    <Column header="Name">
-                        <template #body="slotProps">
-                            {{ slotProps.data.personal_info.first_name }} 
-                            {{ slotProps.data.personal_info.last_name }}  
-                        </template>
-                    </Column>
-                    <Column header="Phone Number">
-                        <template #body="slotProps">
-                            {{ slotProps.data.personal_info.phone_number }} 
-                        </template>
-                    </Column>
-                    <Column header="Address">
-                        <template #body="slotProps">
-                            {{ slotProps.data.personal_info.address }} 
-                        </template>
-                    </Column>
-                </DataTable>
-            </div>
-        </div>
-        <div class="card bg-white items-center">
-            <div class="p-3 text-2xl semi-bold tabular-nums">
-                <h3>Applications</h3>
-            </div>
-            <div class="">
-                <DataTable :value="applications" paginator :rows="5" :rowsPerPageOptions="[5, 10, 20, 50]">
-                    <Column field="application_type" header="Application Type"></Column>
-                    <Column header="Client">
-                        <template #body="slotProps">
-                            {{ slotProps.data.user.personal_info.first_name }} 
-                            {{ slotProps.data.user.personal_info.last_name }} 
-                        </template>
-                    </Column>
-                    <Column header="Lot">
-                        <template #body="slotProps">
-                            Phase {{ slotProps.data.lot.property.phase }},
-                            Purok {{ slotProps.data.lot.property.purok }},
-                            Barangay {{ slotProps.data.lot.property.barangay }},
-                            {{ slotProps.data.lot.property.region }} 
-                        </template>
-                    </Column>
-                    <Column field="status" header="Status"></Column>
-                </DataTable>
-            </div>
-        </div>
+    <div class="row">
+        <Widget :properties="properties.length" :clients="clients.length" :applications="applications.length" :sales="sales.overall"/>
+        <Sales />
+        <Profile />
+        <Property :properties="properties"/>
         
     </div>
-    <div class="grid grid-cols-1 mt-4">
-        <div class="card bg-white items-center py-4 px-4">
-            <QuarterlySales :sales="sales"/>
+    <div class="row">
+        <div class="col-lg-5 col-xl-4 col-xxl-4 mb-3">
+            <div class="card-heading">
+                <h5 class="card-title">Applications Overview</h5>
+            </div>
+            <div class="card card-statistics border-0 shadow-none mb-0">
+                
+                <div class="card-body">
+                    <ul class="activity">
+                        <li class="activity-item primary" v-for="application in applications">
+                            <div class="activity-icon text-warning">
+                                <i v-if="application.application_type === 'Lot Application'" class="fe fe-map"></i>
+                                <i v-else class="fe fe-calendar"></i>
+                            </div>
+                            <div class="activity-info">
+                                <h6 class="mb-0">{{ application.application_type }}</h6>
+                                <span>{{  convertDate(application.created_at) }}</span>
+                            </div>
+                        </li>
+                       
+                    </ul>
+                </div>
+            </div>
         </div>
-      
-    </div> -->
+        <div class="col-lg-7 col-xl-8 col-xxl-8 mb-3">
+            <div class="card-heading">
+                <h5 class="card-title">Payments Overview</h5>
+            </div>
+            <div class="scrollbar scroll_dark" style="height:436px;">
+                <div class="card card-statistics border-0 shadow-none mb-0">
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table mb-0 table-border-3">
+                                <thead>
+                                    <tr>
+                                        <th>Payment Proof</th>
+                                        <th>Payment ID</th>
+                                        <th>Mode of Payment</th>
+                                        <th>Payment Date</th>
+                                        <th>Client</th>
+                                        <th>Amount</th>
+                                        <th>Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="mb-0">
+                                    <tr v-for="payment in payments">
+                                        <td>
+                                            <div class="avatar avatar-lg">
+                                                        <Image alt="Image" preview>
+                                                <template #previewicon>
+                                                    <i class="pi pi-search"></i>
+                                                </template>
+                                                <template #image>
+                                                    <img :src="'/storage/'+payment.files[0]?.url" alt="image" class="tw-h-[50px]"/>
+                                                </template>
+                                                <template #preview="slotProps">
+                                                    <img :src="'/storage/'+payment.files[0]?.url" alt="preview" :style="slotProps.style" @click="slotProps.onClick" />
+                                                </template>
+                                            </Image>
+                                            </div>
+                                        </td>
+                                        <td> {{ payment.id }} </td>
+                                        <td> {{ payment.date_of_payment }} </td>
+                                        <td>
+                                            {{ payment.mode_of_payment }}
+                                        </td>
+                                        <td>
+                                            {{ payment.user.personal_info.first_name }} 
+                                            {{ payment.user.personal_info.last_name }}
+
+                                        </td>
+                                        <td>
+                                            {{ payment.amount }}
+                                        </td>
+                                        <td>
+                                            {{ payment.status }}
+                                        </td>
+                                       
+                                    </tr>
+                                    
+                                </tbody>
+                            </table>
+                        </div>
+                        </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </template>
 
 

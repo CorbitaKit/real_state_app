@@ -2,12 +2,18 @@
 import { ref } from "vue";
 import {getUser} from '../plugins/get-user-plugin'
 import profileDropdown from '../layout/dropdowns/profile-image-dropdown.vue'
+import { router } from '@inertiajs/vue3'
 
 const { getUserInfo } = getUser()
 const user = getUserInfo()
 const showDropdown = ref(false)
 
-
+const logout = () => {
+    router.post('/logout', user);
+}
+const profile = () => {
+    router.get('/users/' + user.id)
+}
 </script>
 
 <template>
@@ -70,7 +76,7 @@ const showDropdown = ref(false)
                             <a href="javascript:void(0)" class="nav-link dropdown-toggle " id="navbarDropdown4" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             <div class="d-flex align-items-center text-left">
                                 <div class="mr-2">
-                                    <h6 class="mb-0">{{ user.personal_info.first_name }} {{ user.personal_info.last_name }}</h6>
+                                    <h6 class="mb-0">{{ user.personal_info?.first_name }} {{ user.personal_info?.last_name }}</h6>
                                     <small class="d-block">{{ user.role.name }}</small>
                                 </div>
                                     <div class="avatar position-relative">
@@ -84,7 +90,7 @@ const showDropdown = ref(false)
                                 <div class="px-4 py-3 bg-holder bg-overlay-primary-70" style="background-image: url(assets/img/blog/05.jpg);">
                                     <div class="d-flex align-items-center justify-content-between">
                                         <div class="mr-1">
-                                            <h5 class="text-white mb-0">{{ user.personal_info.first_name }} {{ user.personal_info.last_name }}</h5>
+                                            <h5 class="text-white mb-0">{{ user.personal_info?.first_name }} {{ user.personal_info?.last_name }}</h5>
                                             <small class="text-white">{{ user.email }}</small>
                                         </div>
                                         <a href="#" class="text-white font-20 tooltip-wrapper" data-toggle="tooltip" data-placement="top" title="" data-original-title="Logout"> <i
@@ -92,9 +98,9 @@ const showDropdown = ref(false)
                                     </div>
                                 </div>
                                 <div class="p-3">
-                                    <a class="dropdown-item d-flex nav-link" href="javascript:void(0)">
-                                        <i class="far fa-user pr-1 text-success"></i> Profile</a>
-                                    <a class="dropdown-item d-flex nav-link" href="javascript:void(0)">
+                                    <a class="dropdown-item d-flex nav-link" @click.prevent="profile" href="javascript:void(0)">
+                                        <i class="far fa-user pr-1 text-success" ></i> Profile</a>
+                                    <a class="dropdown-item d-flex nav-link" @click.prevent="logout" href="javascript:void(0)">
                                         <i class="far fa-compass pr-1 text-warning"></i> Logout</a>
                                 </div>
                             </div>

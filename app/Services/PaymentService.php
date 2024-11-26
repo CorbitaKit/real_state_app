@@ -7,7 +7,8 @@ use App\Traits\FileUploadTrait;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
-
+use Carbon\Carbon;
+use App\Models\PaymentPlan;
 class PaymentService extends Service
 {
     use FileUploadTrait;
@@ -26,7 +27,11 @@ class PaymentService extends Service
 
     public function doCreate(array $data): Model
     {
+        
         $payment = parent::doCreate($data);
+
+       
+        
 
         $fileUpload = $data['file']['value'];
         $path = $this->uploadFile($fileUpload, 'files/payments');

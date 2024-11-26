@@ -18,32 +18,32 @@ const fetchProperty = (id) => {
   <Header />
 
   <!-- Hero Section -->
-  <section class="relative bg-lime-500 text-white py-20 bg-cover bg-center" style="background-image: url('/bg-logo.jpg');">
-    <div class="container mx-auto px-6 text-center">
+  <section class="tw-relative tw-bg-lime-500 tw-text-white tw-py-20 tw-bg-cover tw-bg-center" style="background-image: url('/bg-logo.jpg');">
+    <div class="tw-container tw-mx-auto tw-px-6 tw-text-center">
       <!-- Logo in Hero Section -->
-      <div class="mb-8">
-        <img src="/bg-logo.jpg" alt="RealEstateApp Logo" class="mx-auto h-20">
+      <div class="tw-mb-8">
+        <img src="/bg-logo.jpg" alt="RealEstateApp Logo" class="tw-mx-auto tw-h-20">
       </div>
-      <h2 class="text-4xl font-semibold">Find Your Dream Home</h2>
+      <h2 class="tw-text-4xl tw-font-semibold">Find Your Dream Home</h2>
       <p class="mt-4 text-xl">Browse a wide range of properties at your fingertips</p>
-      <a href="#properties" class="mt-6 inline-block bg-white text-green-600 py-3 px-8 rounded-full text-lg hover:bg-gray-200 transition">Start Searching</a>
+      <a href="#properties" class="tw-mt-6 tw-inline-block tw-bg-white tw-text-green-600 tw-py-3 tw-px-8 tw-rounded-full tw-text-lg tw-hover:bg-gray-200 tw-transition">Start Searching</a>
     </div>
   </section>
 
   <!-- Property Listings -->
-  <section id="properties" class="py-16 bg-white">
-    <div class="container mx-auto px-6 text-center">
-      <h3 class="text-3xl font-semibold text-green-600">Featured Properties</h3>
-      <div class="mt-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+  <section id="properties" class="tw-py-16 tw-bg-white">
+    <div class="tw-container tw-mx-auto tw-px-6 tw-text-center">
+      <h3 class="tw-text-3xl tw-font-semibold tw-text-green-600">Featured Properties</h3>
+      <div class="tw-mt-8 tw-grid tw-grid-cols-1 md:tw-grid-cols-2 lg:tw-grid-cols-3 tw-gap-8">
         <!-- Property Card -->
-        <div class="bg-gray-100 rounded-lg shadow-lg overflow-hidden transform transition-transform duration-300 hover:translate-y-2" v-for="property in properties" :key="property.id">
-          <img :src="'/storage/'+property.file.url" alt="Property Image" class="w-full h-56 object-cover">
-          <div class="p-6">
-            <h4 class="text-xl font-semibold text-green-600">
+        <div class="tw-bg-gray-100 tw-rounded-lg tw-shadow-lg tw-overflow-hidden tw-transform tw-transition-transform tw-duration-300 hover:tw-translate-y-2" v-for="property in properties" :key="property.id">
+          <img :src="'/storage/'+property.file.url" alt="Property Image" class="tw-w-full tw-h-56 tw-object-cover">
+          <div class="tw-p-6">
+            <h4 class="tw-text-xl tw-font-semibold tw-text-green-600">
               Phase {{ property.phase }} Purok {{ property.purok }} Barangay {{ property.barangay }} {{ property.city }} {{ property.province }}
             </h4>
            
-            <a href="#" @click.prevent="fetchProperty(property.id)" class="mt-4 inline-block text-green-600 font-semibold hover:underline">View Details</a>
+            <a href="#" @click.prevent="fetchProperty(property.id)" class="tw-mt-4 tw-inline-block tw-text-green-600 tw-font-semibold tw-hover:underline">View Details</a>
           </div>
         </div>
       </div>

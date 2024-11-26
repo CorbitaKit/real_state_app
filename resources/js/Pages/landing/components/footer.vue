@@ -4,8 +4,8 @@
 
 <template>
      <!-- Footer -->
-  <footer class="bg-lime-800 text-white py-6">
-    <div class="container mx-auto text-center">
+  <footer class="bg-lime-800 tw-text-black tw-py-6">
+    <div class="tw-container tw-mx-auto tw-text-center tw-text-black">
       <p>&copy; 2024 Jef Aldebal Realty Service. All rights reserved.</p>
     </div>
   </footer>

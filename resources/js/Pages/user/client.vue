@@ -19,27 +19,35 @@ defineOptions({layout: Layout})
 const submit = () => {
     router.get('/users/create-client')
 }
+
+const formatCurrency = (value) => {
+    return new Intl.NumberFormat('en-PH', {
+        style: 'currency',
+        currency: 'PHP',
+      }).format(value);
+}
 </script>
 
 <template>
-    <!-- <Header @submit="submit" :title="'Clients Page'"  :btnTxt="'Create Client'" />
+    
     <Dialog v-model:visible="payment" modal header="Make Payment" :style="{ width: '50rem' }">
-        <span class="text-surface-500 dark:text-surface-400 block mb-8">Please input invoice # number and attach the actual invoice</span>
-        <div class="flex items-center gap-4 mb-4">
-            <label for="username" class="font-semibold w-24">Amount</label>
-            <InputText class="w-full rounded-md"/>
+        <span class="tw-text-surface-500 tw-dark:text-surface-400 tw-block tw-mb-8">Please input invoice # number and attach the actual invoice</span>
+        <div class="tw-flex tw-items-center tw-gap-4 tw-mb-4">
+            <label for="username" class="tw-font-semibold tw-w-24">Amount</label>
+            <InputText class="tw-w-full tw-rounded-md"/>
            
         </div>
-        <div class="flex items-center gap-4 mb-4">
-            <label for="username" class="font-semibold w-24">Invoice Number</label>
-            <InputText class="w-full rounded-md"/>
+        <div class="tw-flex tw-items-center tw-gap-4 tw-mb-4">
+            <label for="username" class="tw-font-semibold tw-w-24">Invoice Number</label>
+            <InputText class="tw-w-full tw-rounded-md"/>
            
         </div>
         <FileUpload :file="form.file" />
-        <div class="flex justify-end gap-2">
+        <div class="tw-flex tw-justify-end tw-gap-2">
             <Button type="button" label="Save" @click="submitPayment"></Button>
         </div>
-    </Dialog>
+    </Dialog> 
+    <!--
     <Dialog v-model:visible="visible" modal header="Payment History" :style="{ width: '50rem' }">
         <v-table>
             <thead>
@@ -213,15 +221,27 @@ const submit = () => {
                                         <div class="avatar avatar-lg mr-2">
                                             <img src="assets/img/avatar/01.jpg" class="img-fluid avatar-img rounded-circle" alt="Clients-01">
                                         </div>
-                                        <p class="font-weight-bold text-dark">Adrian Demiandro</p>
+                                        <p class="font-weight-bold text-dark">{{ client.personal_info?.first_name }} {{ client.personal_info?.last_name }}</p>
                                     </div>
                                 </td>
-                                <td> <i class="far fa-calendar-alt mr-1 text-success"></i> 20/07/2020</td>
-                                <td>$230.00</td>
-                                <td><a href="javascript:void(0)"></a> <label class="badge badge-success-inverse">Paid</label></td>
+                                <td> {{ client.email }}</td>
+                                <td>{{ client.personal_info?.phone_number }}</td>
                                 <td>
-                                    <a href="javascript:void(0)" class="btn btn-icon btn-outline-primary btn-round mr-1 mb-0 mb-sm-0 "><i class="ti ti-pencil"></i></a>
-                                    <a href="javascript:void(0)" class="btn btn-icon btn-outline-danger btn-round"><i class="ti ti-close"></i></a>
+                                    {{ formatCurrency(client.work_details?.gross_monthly_income) }}
+                                </td>
+                                <td>
+                                    <div class="dropdown">
+                                            <a class="p-2" href="#!" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                <i class="fe fe-more-horizontal"></i>
+                                            </a>
+                                            <div class="dropdown-menu custom-dropdown dropdown-menu-right p-4">
+                                                <h6 class="mb-1">Action</h6>
+                                                <a class="dropdown-item" href="#!"><i class="fa-fw far fa-file-alt pr-2"></i>View Payment History</a>
+                                                <a class="dropdown-item" href="#!"><i class="fa-fw fas fa-eye pr-2"></i>View Profile</a>
+                                                <a class="dropdown-item" href="#!"><i class="fa-fw fas fa-trash pr-2"></i>Delete</a>
+                                                <a @click.prevent="payment = true" class="dropdown-item" href="#!"><i class="fa-fw fas fa-receipt pr-2"></i>Make Payment</a>
+                                            </div>
+                                        </div>
                                 </td>
                             </tr>
                         </tbody>

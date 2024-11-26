@@ -4,6 +4,10 @@ import { router } from '@inertiajs/vue3'
 import LandMark from './components/landmark.vue'
 import Swal from 'sweetalert2'
 import axios from 'axios'
+import {getUser} from '../plugins/get-user-plugin'
+
+const { getUserInfo } = getUser()
+const user = getUserInfo()
 
 const props = defineProps({
     properties: Object
@@ -40,7 +44,7 @@ const deleteProperty = (property_id) => {
         router.delete('/properties/' + property_id)
         Swal.fire({
             title: "Deleted!",
-            text: "Your file has been deleted.",
+            text: "Property has been deleted.",
             icon: "success"
         });
     }
@@ -96,7 +100,7 @@ defineOptions({layout: Layout})
                     </div>
                     <div>
                         <a @click.prevent="show(property.id)" data-toggle="tooltip" data-placement="top" title="" data-original-title="View Property Details" href="javascript:void(0);" class="btn btn-xs btn-icon btn-round btn-outline-info"><i class="fas fa-eye"></i></a>
-                        <a @click.prevent="deleteProperty(property.id)" data-toggle="tooltip" data-placement="top" title="" data-original-title="Delete Property" href="javascript:void(0);" class="btn btn-xs btn-icon btn-round btn-outline-danger ml-1"><i class="fas fa-trash"></i></a>
+                        <a v-if="user.role.name !== 'Client'" @click.prevent="deleteProperty(property.id)" data-toggle="tooltip" data-placement="top" title="" data-original-title="Delete Property" href="javascript:void(0);" class="btn btn-xs btn-icon btn-round btn-outline-danger ml-1"><i class="fas fa-trash"></i></a>
                     </div>
                 </div>
                 <div class="card-body">

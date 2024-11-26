@@ -13653,7 +13653,7 @@ ol.breadcrumb {
       line-height: 60px; } }
 
 .navbar-header {
-  background: #064CDB;
+  background: #238B46;
   width: 260px;
   -ms-flex-negative: 0;
   flex-shrink: 0;
@@ -13844,7 +13844,8 @@ ol.breadcrumb {
     -ms-flex-preferred-size: auto !important;
     flex-basis: auto !important;
     margin-bottom: auto;
-    background: linear-gradient(-154deg, #064CDB 8%, #012c84 90%);
+    
+    background: linear-gradient(-154deg, #238B46 8%, #C7E9C0 90%);
     height: 100%;
     overflow: hidden; }
     .app-navbar .sidebar-nav ul.metismenu {
@@ -13862,14 +13863,14 @@ ol.breadcrumb {
                 align-items: center; }
         .app-navbar .sidebar-nav ul.metismenu li a i {
           margin-right: 10px;
-          color: #3475f9;
+          color: #1E5128;
           width: 30px;
           font-size: 20px;
           -webkit-transition: all 0.3s ease-out;
           transition: all 0.3s ease-out; }
         .app-navbar .sidebar-nav ul.metismenu li a:hover, .app-navbar .sidebar-nav ul.metismenu li a:focus {
-          background: #0543c2;
-          color: #ffffff;
+          background: #238B46;
+          color: #1E5128;
           -webkit-transition: all 0.3s ease-out;
           transition: all 0.3s ease-out; }
         .app-navbar .sidebar-nav ul.metismenu li a .nav-title {
@@ -13929,7 +13930,7 @@ ol.breadcrumb {
         transform: rotate(225deg) translateY(-50%);
         -webkit-transform: rotate(225deg) translateY(-50%); }
       .app-navbar .sidebar-nav ul.metismenu li ul {
-        background-image: linear-gradient(-154deg, #064CDB 8%, #012c84 90%); }
+        background-image: linear-gradient(-154deg, #238B46 8%, #C7E9C0 90%); }
         .app-navbar .sidebar-nav ul.metismenu li ul li:first-child {
           padding-top: 10px; }
         .app-navbar .sidebar-nav ul.metismenu li ul li:last-child {

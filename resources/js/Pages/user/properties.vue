@@ -8,7 +8,8 @@ defineOptions({layout: Layout})
 
 const visible = ref(false)
 const payments = ref()
-
+const payment_plan = ref(false)
+const payment_plans = ref()
 const props = defineProps({
     client_lots: Object
 })
@@ -28,45 +29,108 @@ const viewPaymentHistory = (lot_payments) => {
     visible.value = true
     payments.value = lot_payments
 }
+
+const viewPaymentPlan = (lot_payment_plans) => {
+    payment_plan.value = true
+    payment_plans.value = lot_payment_plans
+}
 </script>
 
 <template>
-    <Header  :displayBtn="false" :title="'My Properties'" />
+
     <Dialog v-model:visible="visible" modal header="Payment History" :style="{ width: '50rem' }">
         <v-table>
-    <thead>
-      <tr>
-        <th class="text-left">
-          Amount
-        </th>
-        <th class="text-left">
-          Mode Of Payment
-        </th>
-        <th class="text-left">
-          Payment Date
-        </th>
-        <th class="text-left">
-          Invoice Number
-        </th>
+            <thead>
+            <tr>
+                <th class="text-left">
+                Amount
+                </th>
+                <th class="text-left">
+                Mode Of Payment
+                </th>
+                <th class="text-left">
+                Payment Date
+                </th>
+                <th class="text-left">
+                Invoice Number
+                </th>
 
-      </tr>
-    </thead>
-    <tbody>
-      <tr v-for="payment in payments" :key="payment.id" >
-        <td>{{ payment.amount }}</td>
-        <td>{{ payment.mode_of_payment }}</td>
-        <td>{{ payment.date_of_payment }}</td>
-        <td>{{ payment.invoice_number }}</td>
-      </tr>
-    </tbody>
-  </v-table>
+            </tr>
+            </thead>
+            <tbody>
+            <tr v-for="payment in payments" :key="payment.id" >
+                <td>{{ payment.amount }}</td>
+                <td>{{ payment.mode_of_payment }}</td>
+                <td>{{ payment.date_of_payment }}</td>
+                <td>{{ payment.invoice_number }}</td>
+            </tr>
+            </tbody>
+        </v-table>
     </Dialog>
-    <div class="mx-auto bg-white p-8 my-8 rounded shadow-md">
-        <div class="relative overflow-x-auto mt-5">
-        <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+    <Dialog v-model:visible="payment_plan" modal header="Payment Plan" :style="{ width: '60rem' }">
+        <v-table>
+            <thead>
+            <tr>
+                <th class="text-left">
+                   Due Date
+                </th>
+                <th class="text-left">
+                    Amount
+                </th>
+                
+                
+                <th class="text-left">
+                    Payment Date
+                </th>
+
+                <th class="text-left">
+                    Mode of Payment
+                </th>
+
+                <th class="text-left">
+                    Status
+                </th>
+                <th class="text-left">
+                    Invoice Number
+                </th>
+
+            </tr>
+            </thead>
+            <tbody>
+                <tr v-for="plan in payment_plans">
+                    <td>
+                        {{ plan.due_date }}
+                    </td>
+                    <td>
+                        {{ plan.lot.lot_group.monthly_amortizations }}
+                    </td>
+                    <td>
+                        <span v-if="plan.payment">{{ plan.payment.date_of_payment }}</span>
+                        <span v-else>-</span>
+                    </td>
+                    <td>
+                        <span v-if="plan.payment">{{ plan.payment.mode_of_payment }}</span>
+                        <span v-else>-</span>
+                    </td>
+                    <td>
+                        <span v-if="plan.payment">{{ plan.payment.status }}</span>
+                        <span v-else>-</span>
+                    </td>
+                    <td>
+                        <span v-if="plan.payment">{{ plan.payment.invoice_number }}</span>
+                        <span v-else>-</span>
+                    </td>
+
+                </tr>
+            </tbody>
+        </v-table>
+    </Dialog>
+    <!-- <div class="tw-mx-auto tw-bg-whitetw- tw-p-8 tw-my-8 tw-rounded tw-shadow-md">
+        <div class="tw-relative tw-overflow-x-auto tw-mt-5">
+        <table class="tw-w-full tw-text-sm tw-text-left tw-rtl:text-right tw-text-gray-500 tw-dark:text-gray-400">
             <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                 <tr>
-                    <th scope="col" class="px-6 py-3">
+                    <th scope="col">
                         Property
                     </th>
                     <th scope="col" class="px-6 py-3">
@@ -126,5 +190,107 @@ const viewPaymentHistory = (lot_payments) => {
             </tbody>
         </table>
     </div>
+    </div> -->
+
+    <div class="row">
+        <div class="col-md-12 mb-2">
+            <!-- begin page title -->
+            <div class="d-block d-sm-flex flex-nowrap align-items-center">
+                <div class="page-title mb-2 mb-sm-0">
+                    <h1>My Properties</h1>
+                </div>
+                
+                <div class="ml-auto d-flex align-items-center">
+                    
+                    <nav>
+                        <ol class="breadcrumb p-0 m-b-0">
+                            <li class="breadcrumb-item">
+                                <a href="#" @click="home('/dashboard')"><i class="ti ti-home"></i></a>
+                            </li>
+                            
+                            <li class="breadcrumb-item active text-primary" aria-current="page">My Properties</li>
+                        </ol>
+                    </nav>
+                </div>
+            </div>
+            <!-- end page title -->
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-xl-12">
+            <div class="card card-statistics border-0 shadow-none mb-0">
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table mb-0 table-border-3">
+                            <thead>
+                                <tr>
+                                    <th scope="col">
+                                        Property
+                                    </th>
+                                    <th scope="col">
+                                        Square Meter
+                                    </th>
+                                    <th scope="col">
+                                        Amount Per Square Meter
+                                    </th>
+                                    <th scope="col">
+                                        Total Amount
+                                    </th>
+                                    <th scope="col">
+                                        Remaining Balance
+                                    </th>
+                                
+                                    <th scope="col">
+                                        Actions
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody class="mb-0">
+                                <tr  v-for="lot in client_lots" :key="lot.id">
+                                    <td class="px-6 py-4">
+                      
+                                        Phase {{ lot.property.phase }},
+                                        purok {{ lot.property.purok }},
+                                        barangay {{ lot.property.barangay }},
+                                        {{ lot.property.city }},
+                                        {{ lot.property.province }},
+                                        {{ lot.name }} 
+
+                                    </td>
+                                    <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                        {{ lot.lot_group.sqr_meter }} Square Meters
+                                    </th>
+                                    <td class="px-6 py-4">
+                                        {{ lot.lot_group.amount_per_sqr_meter }}
+                                    </td>
+                                    
+                                    <td class="px-6 py-4">
+                                        {{ calculateTotalAmount(lot.lot_group) }}
+                                    </td>
+                                    <td class="px-6 py-4">
+                                        {{ calculateRemainingBalance(lot) }}
+                                    </td>
+                                    <td class="px-6 py-4">
+                                        <!-- <Button @click="viewPaymentHistory(lot.payments)" label="View Payments" severity="success" /> -->
+                                        <div class="dropdown">
+                                            <a class="p-2" href="#!" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                <i class="fe fe-more-horizontal"></i>
+                                            </a>
+                                            <div class="dropdown-menu custom-dropdown dropdown-menu-right p-4">
+                                                <h6 class="mb-1">Action</h6>
+                                                <a @click="viewPaymentHistory(lot.payment)" class="dropdown-item" href="#"><i class="fa-fw far fa-file-alt pr-2"></i>View Payment History</a>
+                                                <a @click="viewPaymentPlan(lot.payment_plans)" class="dropdown-item" href="#!"><i class="fa-fw far fa-file-pdf pr-2"></i>View Payment Breakdown</a>
+                                                
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                              
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </template>

@@ -38,4 +38,8 @@ class Lot extends Model
     {
         return $this->hasMany(Payment::class);
     }
+    public function paymentPlans(): HasMany
+    {
+        return $this->hasMany(PaymentPlan::class);
+    }
 }

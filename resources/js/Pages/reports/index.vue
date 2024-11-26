@@ -4,6 +4,9 @@ import Header from '../components/header.vue'
 import { router, useForm } from '@inertiajs/vue3'
 import { ref } from 'vue'
 
+const props = defineProps({
+    payments: Object
+})
 const form = useForm({
     date_from: '',
     date_to: '',
@@ -27,33 +30,102 @@ defineOptions({layout: Layout})
 const submit = () => {
     router.get('/users/create-client')
 }
+
+const filterReport = () => {
+    form.post('/reports/filter')
+}
+
+const printDiv = () => {
+    const printContent = document.getElementById("printMe").outerHTML;
+    const printWindow = window.open("", "_blank");
+    printWindow.document.open();
+    printWindow.document.write(`
+        <html>
+            <head>
+                <title>Print Report</title>
+                <style>
+                    body {
+                        font-family: Arial, sans-serif;
+                        margin: 20px;
+                    }
+                    table {
+                        width: 100%;
+                        border-collapse: collapse;
+                    }
+                    th, td {
+                        border: 1px solid #ddd;
+                        padding: 8px;
+                    }
+                    th {
+                        background-color: #f2f2f2;
+                        text-align: left;
+                    }
+                </style>
+            </head>
+            <body>${printContent}</body>
+        </html>
+    `);
+    printWindow.document.close();
+    printWindow.focus();
+    printWindow.print();
+    printWindow.close();
+};
 </script>
 
 <template>
-    <Header @submit="submit" :title="'Reports Page'"  :btnTxt="'Create Client'" :displayBtn="false" />
-
-    <div class="mx-auto bg-white p-8 my-8 rounded shadow-md flex content-between items-center">
-        <div class="mb-4 m-2">
-            <label for="phase" class="block text-gray-700 font-semibold mb-2">Date From</label>
-            <Calendar v-model="form.date_from" class="w-full rounded-md" style="border-radius: 7px;"/>
-        </div>
-
-        <div class="mb-4 m-2">
-            <label for="phase" class="block text-gray-700 font-semibold mb-2">Date To</label>
-            <Calendar v-model="form.date_to" class="w-full rounded-md" style="border-radius: 7px;"/>
-        </div>
-
-        <div class="mb-4 m-2">
-            <label for="phase" class="block text-gray-700 font-semibold mb-2">Clients</label>
-            <InputText type="text" v-model="form.client" class="block appearance-none w-full px-3 py-2 border " placeholder="... Search Client"/>        
-        </div>
-        <div class="mb-4 mt-3">
-            <label for="region" class="block text-gray-700 font-semibold mb-2">Mode of payment</label>
-            <Dropdown v-model="form.mode_of_payment" :options="mode_of_payments" filter optionLabel="mode_of_payment" placeholder="Select a mode of payment" class="w-full md:w-full border" />
+    <div class="row">
+        <div class="col-md-12 mb-2">
+            <!-- begin page title -->
+            <div class="d-block d-sm-flex flex-nowrap align-items-center">
+                <div class="page-title mb-2 mb-sm-0">
+                    Reports
+                </div>
+                
+                <div class="ml-auto d-flex align-items-center">
+                    
+                    <nav>
+                        <ol class="breadcrumb p-0 m-b-0">
+                            <li class="breadcrumb-item">
+                                <a href="#" @click="home('/dashboard')"><i class="ti ti-home"></i></a>
+                            </li>
+                            
+                            <li class="breadcrumb-item active text-primary" aria-current="page">Reports</li>
+                        </ol>
+                    </nav>
+                </div>
+            </div>
+            <!-- end page title -->
         </div>
     </div>
 
-    <div class="mx-auto bg-white p-8 my-8 rounded shadow-md"  >
+    <div class="tw-mx-auto tw-bg-white tw-p-8 tw-my-8 tw-rounded tw-shadow-md tw-flex tw-content-between tw-items-center">
+        <div class="tw-mb-4 tw-m-2">
+            <label for="phase" class="tw-block tw-text-gray-700 tw-font-semibold tw-mb-2">Date From</label>
+            <Calendar v-model="form.date_from" class="tw-w-full tw-rounded-md" style="border-radius: 7px;"/>
+        </div>
+
+        <div class="tw-mb-4 tw-m-2">
+            <label for="phase" class="tw-block tw-text-gray-700 tw-font-semibold tw-mb-2">Date To</label>
+            <Calendar v-model="form.date_to" class="tw-w-full tw-rounded-md" style="border-radius: 7px;"/>
+        </div>
+
+        <div class="tw-mb-4 tw-m-2">
+            <label for="phase" class="tw-block tw-text-gray-700 tw-font-semibold tw-mb-2">Clients</label>
+            <InputText type="text" v-model="form.client" class="tw-block tw-appearance-none tw-w-full tw-px-3 tw-py-2 tw-border " placeholder="... Search Client"/>        
+        </div>
+        <div class="tw-mb-4 tw-mt-3">
+            <label for="region" class="tw-block tw-text-gray-700 tw-font-semibold tw-mb-2">Mode of payment</label>
+            <select  class="js-basic-single form-control tw-w-full" name="region" v-model="form.mode_of_payment">
+                <option  v-for="mode_of_payment in mode_of_payments" :value="mode_of_payment.mode_of_payment">{{ mode_of_payment.mode_of_payment }}</option>
+            </select>
+        </div>
+        <div class="tw-mb-4 tw-mt-3 tw-ml-3">
+            <label for="region" class="tw-block tw-text-gray-700 tw-font-semibold tw-mb-2 tw-text-white">Filter</label>
+            <button @click="filterReport" type="button" class="btn btn-secondary">Filter</button>
+        </div>
+    </div>
+    <div class="tw-mx-auto tw-bg-white tw-p-8 tw-my-8 tw-rounded tw-shadow-md"  >
+      
         <v-table id="printMe">
             <thead>
             <tr>
@@ -78,44 +150,20 @@ const submit = () => {
             </tr>
             </thead>
             <tbody>
-            <tr >
-                <td>Test Client Name</td>
+            <tr v-for="payment in payments">
+                <td>{{payment.user.personal_info.first_name}} {{payment.user.personal_info.last_name}}</td>
                 
-                <td>G-cash</td>
-                <td>2024-09-09</td>
-                <td>123455667</td>
-                <td>3,000</td>
+                <td>{{ payment.mode_of_payment }}</td>
+                <td>{{ payment.date_of_payment }}</td>
+                <td>{{ payment.invoice_number }}</td>
+                <td>{{ payment.amount }}</td>
             
             </tr>
-            <tr >
-                <td>Test Client Name 2</td>
-
-                
-                <td>Over the Counter</td>
-                <td>2024-10-09</td>
-                <td>12345asd7</td>
-                <td>3,000</td>
             
-            </tr>
-            <tr >
-                <td></td>
-                <td></td>
-                <td></td>
-                <td>Total Amount:</td>
-                <td>16,000</td>
-            
-            </tr>
             </tbody>
         </v-table>
-        <div class="flex float-right mt-4">
-            <button class="block float-right rounded-lg bg-gray-600 px-5 py-3 text-sm font-medium text-white transition hover:bg-gray-700 focus:outline-none focus:ring"
-                type="button"
-                >
-                <v-icon name="fa-print" />
-                </button>
-        </div>
-        <br><br>
     </div>
+    <button @click="printDiv" type="button" class="btn btn-secondary pull-right">Print</button>
 </template>
 
 <style scoped>

@@ -14,6 +14,10 @@ const redirect = (route) => {
     router.get(route)
 }
 
+const isActive = (path) => {
+    return window.location.pathname === path;
+};
+
 </script>
 
 
@@ -21,26 +25,14 @@ const redirect = (route) => {
     <aside class="app-navbar">
         <!-- begin navbar-header -->
         <div class="navbar-header align-items-center d-lg-block d-none">
-            <a class="navbar-brand" href="index.html">
-                <img src="/assets/img/logo.png" class="img-fluid logo-desktop" alt="logo" />
+            <a class="navbar-brand" href="/dashboard">
+                <img src="/logo-6.png" class="img-fluid logo-desktop tw-p-6" alt="logo" />
                 <img src="/assets/img/logo-icon.png" class="img-fluid logo-mobile" alt="logo" />
             </a>
         </div>
         <!-- begin sidebar-nav -->
         <div class="sidebar-nav scrollbar scroll_light">
-            <div class="d-flex align-items-center text-left px-2 mb-2 user-setting">
-                <div class="position-relative">
-                    <div class="avatar">
-                        <img class="avatar-img rounded-circle" src="/assets/img/avatar/02.jpg" alt="avatar-img">
-                        <span class="bg-success user-status"></span>
-                    </div>
-                </div>
-                <div class="ml-2">
-                    <h6 class="mb-0 text-white">{{ user.personal_info.first_name }} {{ user.personal_info.last_name }}</h6>
-                    <small class="d-block text-white">{{ user.role.name }}</small>
-                </div>
-           
-            </div>
+            
             <ul class="metismenu" id="sidebarNav">
                 <!-- <li class="active" v-for="menu in admin_side_bar_menus">
                     <a :href="menu.link" aria-expanded="false">
@@ -48,18 +40,35 @@ const redirect = (route) => {
                         <span class="nav-title">{{ menu.name }}</span>
                     </a>
                 </li> -->
-                <li class="active">
+                <li  v-if="user.role.name === 'Admin'" :class="{active: isActive('/dashboard')}">
+                    <a href="/dashboard" aria-expanded="false">
+                        <i class="nav-icon ti ti-rocket"></i>
+                        <span class="nav-title">Dashboard</span>
+                    </a> 
+                </li>
+                <li :class="{active: isActive('/properties') || isActive('/properties/create')}">
                     <a class="has-arrow" href="javascript:void(0)" aria-expanded="false">
                         <i class="nav-icon ti ti-home"></i>
                         <span class="nav-title">Properties</span>
                     </a>
                     <ul aria-expanded="false">
                         <li> <a href='/properties'><i class="nav-icon ti ti-list"></i> Property List</a> </li>
-                        <li> <a href='/properties/create'><i class="nav-icon ti ti-plus"></i>Add Property</a> </li>
+                        <li v-if="user.role.name === 'Admin'"> <a href='/properties/create'><i class="nav-icon ti ti-plus"></i>Add Property</a> </li>
                         
                     </ul>
                 </li>
-                <li>
+                <li v-if="user.role.name === 'Admin'" :class="{active: isActive('/clients') || isActive('/users/create')}">
+                    <a class="has-arrow" href="javascript:void(0)" aria-expanded="false">
+                        <i class="nav-icon ti ti-user"></i>
+                        <span class="nav-title">Staffs</span>
+                    </a>
+                    <ul aria-expanded="false">
+                        <li> <a href='/users'><i class="nav-icon ti ti-user"></i> Staff List</a> </li>
+                        <li> <a href='/users/create'><i class="nav-icon ti ti-plus"></i>Add Staff</a> </li>
+                        
+                    </ul>
+                </li>
+                <li v-if="user.role.name === 'Admin' || user.role.name === 'Staff'" :class="{active: isActive('/clients') || isActive('/users/create-client')}">
                     <a class="has-arrow" href="javascript:void(0)" aria-expanded="false">
                         <i class="nav-icon ti ti-user"></i>
                         <span class="nav-title">Clients</span>
@@ -70,8 +79,56 @@ const redirect = (route) => {
                         
                     </ul>
                 </li>
+                <li :class="{active: isActive('/applications')}" v-if="user.role.name === 'Admin' || user.role.name === 'Staff'">
+                    <a class="has-arrow" href="javascript:void(0)" aria-expanded="false">
+                        <i class="nav-icon ti ti-file"></i>
+                        <span class="nav-title">Applications</span>
+                    </a>
+                    <ul aria-expanded="false">
+                        <li> <a href='/applications'><i class="nav-icon ti ti-file"></i> Application List</a> </li>
+                        
+                    </ul>
+                </li>
+                <li :class="{active: isActive('/payments')}" v-if="user.role.name === 'Admin' || user.role.name === 'Staff'">
+                    <a href="/payments" aria-expanded="false">
+                        <i class="nav-icon ti ti-receipt"></i>
+                        <span class="nav-title">Billings</span>
+                    </a> 
+                </li>
+                <li :class="{active: isActive('/payments/get-by-user') || isActive('/payments/create')}" v-if="user.role.name === 'Client'">
+                    <a class="has-arrow" href="javascript:void(0)" aria-expanded="false">
+                        <i class="nav-icon ti ti-receipt"></i>
+                        <span class="nav-title">My Payments</span>
+                    </a>
+                    <ul aria-expanded="false">
+                        <li> <a href='/payments/get-by-user'><i class="nav-icon ti ti-receipt"></i> Payment List</a> </li>
+                        <li> <a href='/payments/create'><i class="nav-icon ti ti-receipt"></i> Make A Payment</a> </li>
+                        
+                    </ul>
+                </li>
+                <li :class="{active: isActive('/application/get-by-user')}"  v-if="user.role.name === 'Client'">
+                    <a href="/application/get-by-user" aria-expanded="false">
+                        <i class="nav-icon ti ti-file"></i>
+                        <span class="nav-title">My Application</span>
+                    </a> 
+                </li>
+                <li :class="{active: isActive('/lots/get-client-lots')}" v-if="user.role.name === 'Client'">
+                    <a href="/lots/get-client-lots" aria-expanded="false">
+                        <i class="nav-icon ti ti-file"></i>
+                        <span class="nav-title">My Properties</span>
+                    </a> 
+                </li>
+
+                <li :class="{active: isActive('/reports')}"  v-if="user.role.name === 'Admin' || user.role.name === 'Staff'">
+                    <a href="/reports" aria-expanded="false">
+                        <i class="nav-icon ti ti-folder"></i>
+                        <span class="nav-title">Reports</span>
+                    </a> 
+                </li>
+
             </ul>
         </div>
         <!-- end sidebar-nav -->
     </aside>
 </template>
+
