@@ -2,7 +2,7 @@
   import Header from './components/header.vue'
   import Contact from './components/contact.vue'
   import Footer from './components/footer.vue'
-
+  import LandMark from '../property/components/landmark.vue'
   const props = defineProps({
     property: Object,
     required: true
@@ -11,6 +11,9 @@
   const formatPrice = (price) => {
     return price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
   }
+  const setLocation = (property) => {
+    return property.purok + ', ' + property.barangay + ', ' + property.city
+}
 </script>
 
 
@@ -39,9 +42,13 @@
             </Column>
         </DataTable>
       </div>
+      <div>
+        <LandMark :address="setLocation(property)" :key="property.id" :map="property.id" :property="property"/>
+      </div>
 
       
     </div>
+    
     
     <div class="tw-mt-8">
       <h3 class="tw-text-2xl tw-font-semibold tw-text-green-600">Location</h3>
