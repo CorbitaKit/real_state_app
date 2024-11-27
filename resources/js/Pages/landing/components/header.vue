@@ -12,7 +12,7 @@ const login = () => {
 
 
 <template>
-    <header class="tw-bg-lime-400 tw-text-black tw-shadow-md tw-h-full">
+    <header class="tw-bg-lime-400 tw-text-black tw-shadow-md tw-h-full app-style">
       <div class="container tw-mx-auto tw-px-6 tw-py-4 tw-flex tw-items-center tw-justify-between">
         <!-- Logo -->
         <div class="tw-flex tw-items-center tw-space-x-4">
@@ -31,3 +31,11 @@ const login = () => {
       </div>
     </header>
 </template>
+
+<style>
+.app-style{
+  
+  background: linear-gradient(-154deg, #C7E9C0 8%, #238B46 90%);
+
+}
+</style>

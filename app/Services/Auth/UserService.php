@@ -2,6 +2,7 @@
 
 namespace App\Services\Auth;
 
+use App\Models\User;
 use App\Repositories\UserRepository;
 use App\Services\Service;
 use Illuminate\Support\Facades\Auth;
@@ -10,6 +11,9 @@ use App\Services\AddressService;
 use App\Services\EmployeeService;
 use App\Services\WorkDetailService;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Support\Carbon;
+use App\Models\PaymentPlan;
+use Twilio\Rest\Client;
 
 class UserService extends Service
 {
@@ -32,6 +36,44 @@ class UserService extends Service
     {
         if (Auth::attempt($request->all())) {
             $request->session()->regenerate();
+
+            $user = User::with('role')->where('id',  Auth::user()->id)->first();
+
+            // if ($user->role->name === 'Admin' || $user->role->name === 'Staff') {
+            //     dd(env("TWILIO_AUTH_TOKEN"));
+            //      // Twilio client initialization
+            //     $account_sid = env("TWILIO_SID");
+            //     $auth_token = env("TWILIO_AUTH_TOKEN");
+            //     $twilio_number = env("TWILIO_PHONE_NUMBER");
+            //     $client = new Client($account_sid, $auth_token);
+            //     $dueDate = Carbon::now()->format('Y-m-d');
+                
+            //     $duePayments = PaymentPlan::with('lot.user.personal_info')->where('due_date', $dueDate)
+            //     ->where('is_sms_sent', 0)->get();
+
+            
+              
+            //     foreach ($duePayments as $duePayment) {
+            //         $message = "Reminder: Payment for today is due. Amount: " . $duePayment->amount;
+
+            //         try {
+            //             $client->messages->create(
+            //                 '09511046579', // Recipient's phone number
+            //                 [
+            //                     'from' => $twilio_number,
+            //                     'body' => $message,
+            //                 ]
+            //             );
+
+            //             dd("SEND SUCCESSFULLY");
+            //         } catch (\Exception $e) {
+            //             dd($e->getMessage());
+            //             \Log::error("Failed to send SMS to {$duePayment->lot->user->personal_info->phone_number}: " . $e->getMessage());
+            //         }
+            //     }
+            // }
+            
+            
             return back()->with(['message' => 'Authorized', 'user' => parent::doFindById(Auth::user()->id)]);
         }
 

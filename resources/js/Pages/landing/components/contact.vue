@@ -2,7 +2,7 @@
 </script>
 
 <template>
-    <section id="contact" class="tw-py-16 tw-bg-lime-600 tw-text-white">
+    <section id="contact" class="tw-py-16 tw-bg-lime-600 tw-text-white app-style">
         <div class="tw-container tw-mx-auto tw-px-6 tw-text-center">
         <h3 class="tw-text-3xl tw-font-semibold">Contact Us</h3>
         <p class="tw-mt-4 tw-text-lg tw-text-black">Have questions? Reach out to our team for more information.</p>
