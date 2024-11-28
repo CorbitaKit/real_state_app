@@ -18,7 +18,7 @@ const fetchProperty = (id) => {
   <Header />
 
   <!-- Hero Section -->
-  <section class="tw-relative tw-bg-lime-500 tw-text-white tw-py-20 tw-bg-cover tw-bg-center" style="background-image: url('/bg-logo.jpg');">
+  <section class="tw-relative tw-text-white tw-py-20 tw-bg-cover tw-bg-center" style="background-image: url('/bg-logo.jpg');">
     <div class="tw-container tw-mx-auto tw-px-6 tw-text-center">
       <!-- Logo in Hero Section -->
       <div class="tw-mb-8">

@@ -19,7 +19,7 @@ const isActive = (path) => {
 };
 
 </script>
-
+<!-- QF4UK7BVJ23K1QRADGB4BPJT -->
 
 <template>
     <aside class="app-navbar">
@@ -42,7 +42,7 @@ const isActive = (path) => {
                 </li> -->
                 <li  v-if="user.role.name === 'Admin'" :class="{active: isActive('/dashboard')}">
                     <a href="/dashboard" aria-expanded="false">
-                        <i class="nav-icon ti ti-rocket"></i>
+                        <i class="nav-icon ti ti-list"></i>
                         <span class="nav-title">Dashboard</span>
                     </a> 
                 </li>

@@ -18,4 +18,5 @@ class PaymentPlan extends Model
     {
         return $this->hasOne(Lot::class, 'id', 'lot_id');
     }
+
 }
