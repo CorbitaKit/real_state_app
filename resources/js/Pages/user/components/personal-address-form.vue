@@ -4,7 +4,8 @@ import { generateRegion, handleCity, handleProvince, handleBarangay } from '../.
 
 
 const props = defineProps({
-    personal_address: Object
+    personal_address: Object,
+    error: Boolean
 })
 
 const provinces = ref([])
@@ -77,12 +78,16 @@ const handleBarangays = async () => {
                                 <select  class="js-basic-single form-control" name="region" v-model="personal_address.region" @change="handleProvinces">
                                     <option  v-for="region in regions" :value="region">{{ region.region_name }}</option>
                                 </select>
+                                <span v-if="error && !personal_address.region" style="color: red;">Region field is required</span>
+
                             </div>
                             <div class="form-group col-md-6">
                                 <label for="inputPassword4">Province</label>
                                 <select  class="js-basic-single form-control" name="province"v-model="personal_address.province" @change="handleCities">
                                     <option  v-for="province in provinces" :value="province">{{ province.province_name }}</option>
                                 </select>
+                                <span v-if="error && !personal_address.province" style="color: red;">Province field is required</span>
+
                             </div>
                         </div>
                         <div class="form-row">
@@ -91,22 +96,31 @@ const handleBarangays = async () => {
                                 <select  class="js-basic-single form-control" name="city" v-model="personal_address.city" @change="handleBarangays">
                                     <option  v-for="city in cities" :value="city">{{ city.city_name }}</option>
                                 </select>
+                                <span v-if="error && !personal_address.city" style="color: red;">City field is required</span>
+                                
                             </div>
                             <div class="form-group col-md-6">
                                 <label for="inputPassword4">Barangay</label>
                                 <select  class="js-basic-single form-control" name="province" v-model="personal_address.barangay" @change="handleCities">
                                     <option  v-for="brgy in barangays" :value="brgy">{{ brgy.brgy_name }}</option>
                                 </select>
+                                <span v-if="error && !personal_address.barangay" style="color: red;">Barangay field is required</span>
+
                             </div>
                         </div>
                         <div class="form-row">
                             <div class="form-group col-md-6">
                                 <label for="inputCity">Purok</label>
                                 <input type="text" class="form-control" id="phase" v-model="personal_address.purok" >
+                                <span v-if="error && !personal_address.purok" style="color: red;">Purok field is required</span>
+
                             </div>
                             <div class="form-group col-md-6">
                                 <label for="inputCity">Complete Address</label>
                                 <input type="text" class="form-control" id="phase" v-model="personal_address.complete_address" >
+                                <span v-if="error && !personal_address.complete_address" style="color: red;">Complete address field is required</span>
+
+                                
                             </div>
                         </div>
                     </form>

@@ -10,6 +10,7 @@ const form = useForm({
 });
 
 const error = ref();
+const inputType = ref('password')
 
 const submit = async () => {
     await axios.get("/sanctum/csrf-cookie");
@@ -22,6 +23,11 @@ const submit = async () => {
         },
     });
 };
+
+const togglePasswordVisibility = () => {
+    // Toggle between 'password' and 'text'
+    inputType.value = inputType.value === 'password' ? 'text' : 'password';
+}
 </script>
 
 <template>
@@ -44,7 +50,14 @@ const submit = async () => {
                                     <div class="col-12">
                                         <div class="form-group">
                                             <label class="control-label">Password*</label>
-                                            <input type="password"  @keyup.enter="submit" v-model="form.password" class="form-control" placeholder="Password" />
+                                            <div class="input-group mb-3">
+                                                <input placeholder="Password" :type="inputType" @keyup.enter="submit" v-model="form.password" class="form-control" aria-label="Recipient's username" aria-describedby="button-addon2">
+                                                <div class="input-group-append">
+                                                    <button class="btn btn-success" type="button" id="button-addon2" @click="togglePasswordVisibility">
+                                                        <i class="nav-icon ti ti-eye"></i>
+                                                    </button>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
                                     <div class="col-12">

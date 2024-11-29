@@ -6,6 +6,9 @@ import Sales from './components/sales.vue'
 import Profile from './components/profile.vue'
 import Property from './components/property.vue'
 import Staffs from './components/staff.vue'
+import Application from './components/application.vue'
+import Payment from './components/payment.vue'
+import Lot from './components/lot.vue'
 import moment from 'moment'
 const props = defineProps(
     {
@@ -13,7 +16,14 @@ const props = defineProps(
         applications: Object,
         payments: Number,
         properties: Number,
-        sales: Object
+        sales: Object,
+        lot_application: Number,
+        site_visit: Number,
+        approved_payment: Number,
+        pending_payment: Number,
+        available_lot : Number,
+        pending_lot : Number,
+        occupied_lot : Number,
     },
 
 
@@ -31,6 +41,9 @@ defineOptions({ layout: Layout })
         <Widget :properties="properties.length" :clients="clients.length" :applications="applications.length" :sales="sales.overall"/>
         <Sales />
         <Profile />
+        <Application :lot_application="lot_application" :site_visit="site_visit"/>
+        <Payment :pending_payment="pending_payment" :approved_payment="approved_payment"/>
+        <Lot :available_lot="available_lot" :occupied_lot="occupied_lot" :pending_lot="pending_lot"/>
         <Property :properties="properties"/>
         
     </div>

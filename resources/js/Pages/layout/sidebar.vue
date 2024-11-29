@@ -26,7 +26,7 @@ const isActive = (path) => {
         <!-- begin navbar-header -->
         <div class="navbar-header align-items-center d-lg-block d-none">
             <a class="navbar-brand" href="/dashboard">
-                <img src="/logo-6.png" class="img-fluid logo-desktop tw-p-6" alt="logo" />
+                <img src="/logo-final.png" class="img-fluid logo-desktop tw-p-6" alt="logo" />
                 <img src="/assets/img/logo-icon.png" class="img-fluid logo-mobile" alt="logo" />
             </a>
         </div>

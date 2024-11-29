@@ -208,8 +208,15 @@ const setButton = () => {
                         <thead>
                             <tr>
                                 <th scope="col">
-                                    Payment Proof
+                                    Invoice Number
                                 </th>
+                                <th scope="col">
+                                    Amount
+                                </th>
+                                <th scope="col">
+                                    Invoice
+                                </th>
+                               
                                 <th scope="col">
                                     Payment Type
                                 </th>
@@ -219,17 +226,13 @@ const setButton = () => {
                                 <th scope="col">
                                     Payment For
                                 </th>
-                                <th scope="col">
-                                    Amount
-                                </th>
+                                
                                 <th scope="col">
                                     Status
                                 </th>
+                               
                                 <th scope="col">
-                                    Invoice Number
-                                </th>
-                                <th scope="col">
-                                    Invoice
+                                    Payment Proof
                                 </th>
                                 <th v-if="user.role_id != 3" scope="col">
                                     Actions
@@ -239,43 +242,11 @@ const setButton = () => {
                         <tbody>
                             
                             <tr v-for="payment in payments" :key="payment.id">
-                                <td>
-                    
-                                    <Image alt="Image" preview>
-                                        <template #previewicon>
-                                            <i class="pi pi-search"></i>
-                                        </template>
-                                        <template #image>
-                                            <img :src="'/storage/'+payment.files[0]?.url" alt="image" class="tw-h-[50px]"/>
-                                        </template>
-                                        <template #preview="slotProps">
-                                            <img :src="'/storage/'+payment.files[0]?.url" alt="preview" :style="slotProps.style" @click="slotProps.onClick" />
-                                        </template>
-                                    </Image>
-                                </td>
-                                <td>
-                                    {{ payment.mode_of_payment }}
-                                </td>
                                 <td >
-                                    {{ payment.date_of_payment }}
-                                </td>
-                                <td>
-                                    Phase {{ payment.lots[0].property.phase }},
-                                    purok {{ payment.lots[0].property.purok }},
-                                    barangay {{ payment.lots[0].property.barangay }},<br>
-                                    {{ payment.lots[0].property.city }},
-                                    {{ payment.lots[0].property.province }},
-                                    Lot {{ payment.lots[0].id }} 
-                                
+                                    {{ payment.invoice_number }}
                                 </td>
                                 <td >
                                     {{ payment.amount }}
-                                </td>
-                                <td >
-                                    {{ payment.status }}
-                                </td>
-                                <td >
-                                    {{ payment.invoice_number }}
                                 </td>
                                 <td >
                                     <Image alt="Image" preview v-if="payment.status == 'Confirmed'">
@@ -287,6 +258,41 @@ const setButton = () => {
                                         </template>
                                         <template #preview="slotProps">
                                             <img :src="'/storage/'+payment.files[1]?.url" alt="preview" :style="slotProps.style" @click="slotProps.onClick" />
+                                        </template>
+                                    </Image>
+                                </td>
+                                
+                                <td>
+                                    {{ payment.mode_of_payment }}
+                                </td>
+                                <td >
+                                    {{ payment.date_of_payment }}
+                                </td>
+                                <td>
+                                    Phase {{ payment.lots[0].property.phase }},
+                                    Purok {{ payment.lots[0].property.purok }},
+                                    Barangay {{ payment.lots[0].property.barangay }},<br>
+                                    {{ payment.lots[0].property.city }},
+                                    {{ payment.lots[0].property.province }},
+                                    Lot {{ payment.lots[0].id }} 
+                                
+                                </td>
+                              
+                                <td >
+                                    {{ payment.status }}
+                                </td>
+                                
+                                <td>
+                    
+                                    <Image alt="Image" preview>
+                                        <template #previewicon>
+                                            <i class="pi pi-search"></i>
+                                        </template>
+                                        <template #image>
+                                            <img :src="'/storage/'+payment.files[0]?.url" alt="image" class="tw-h-[50px]"/>
+                                        </template>
+                                        <template #preview="slotProps">
+                                            <img :src="'/storage/'+payment.files[0]?.url" alt="preview" :style="slotProps.style" @click="slotProps.onClick" />
                                         </template>
                                     </Image>
                                 </td>

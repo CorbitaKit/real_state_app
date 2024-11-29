@@ -39,6 +39,7 @@ Route::post('/email/verification-notification', function (Request $request) {
     return back()->with('message', 'Verification link sent!');
 })->middleware(['auth', 'throttle:6,1'])->name('verification.send');
 
+Route::get('filter-properties/{filter}', [LandingPageController::class,'filterProperty']);
 
 Route::middleware(['auth:sanctum'])->group(function () {
     Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard');
@@ -54,7 +55,6 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::resource('payments', PaymentController::class);
     Route::resource('reports', ReportController::class);
     Route::post('upload-file', [FileController::class, 'upload']);
-
     Route::patch('/update-personal-info/{user_id}', [ClientController::class, 'updatePersonalInfo']);
     Route::post('/reports/filter', [ReportController::class, 'filter']);
 
