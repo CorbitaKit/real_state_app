@@ -39,6 +39,11 @@ const togglePasswordVisibility = () => {
                         <div class="login pt-4">
                             <h1 class="mb-2">Jef Aldebal Real State Service </h1>
                             <p>Welcome back, please login to your account.</p>
+                            <div v-if="error">
+                                <div v-for="(e, i) in error" :key="i" class="alert alert-danger mb-2 mt-2" role="alert">
+                                    {{ e }}
+                                </div>
+                            </div>
                             <form action="#" class="mt-3 mt-sm-5">
                                 <div class="row">
                                     <div class="col-12">
