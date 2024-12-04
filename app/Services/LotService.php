@@ -24,7 +24,8 @@ class LotService extends Service
                 'color_label' => $lot['color_label'],
                 'status' => $lot['status'],
                 'property_id' => $propertyId,
-                'name' => $lot['name']
+                'name' => $lot['name'],
+                'block' => $lot['block']
             ]);
         }
 

@@ -7,6 +7,7 @@ import WorkInfoForm from './components/work-info-form.vue'
 import { router, useForm } from '@inertiajs/vue3';
 import { useToaster } from '../composables/toast'
 import moment from 'moment'
+import Swal from 'sweetalert2'
 
 const props = defineProps({
     'user_id': Number
@@ -52,16 +53,18 @@ const validatePersonalAddressData = () => {
 const validateData = (field) => {
     const hasEmptyField = Object.values(field).some(value => value === '');
     if (hasEmptyField) {
-        show('error','Ooppss!','Please check all the fields')
+        Swal.fire({
+                title: "Opps!",
+                text: "Please fill out all the field!",
+                icon: "error"
+            });
         return false
     } 
     return true
 }
 
 const submit = () => {
-    if (!validateData(form.work_details)) {
-        return false
-    }
+   
 
     form.transform((data) => {
         data.personal_address.province = data.personal_address.province.province_name;
@@ -80,7 +83,11 @@ const submit = () => {
             console.log(err)
         }),
         onSuccess: ((res) => {
-            show('success','Success!','Profile updated successfully!!')
+            Swal.fire({
+                title: "Success",
+                text: "User profile created succesfully!",
+                icon: 'success'
+            })
             router.get('/properties')
         })
     })

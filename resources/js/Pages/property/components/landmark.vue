@@ -91,6 +91,7 @@ onMounted(() => {
                     <span> Monthly Payment: {{ formatCurrency(lot.lot_group.monthly_amortizations) }} </span><br>
                     <span> Total Amount:  {{ formatCurrency(lot.lot_group.sqr_meter * lot.lot_group.amount_per_sqr_meter) }}</span><br>
                     <span> Status: {{ lot.status }}</span><br>
+                    <span> Block: {{ lot.block }}</span><br>
                     <span v-if="lot.user && lot.status === 'Pending'"> Applied By: {{ lot.user.personal_info.first_name }} {{ lot.user.personal_info.last_name }}</span>
                     <span v-if="lot.user && lot.status === 'Occupied'"> Owned By: {{ lot.user.personal_info.first_name }} {{ lot.user.personal_info.last_name }}</span><br>
                     <span v-if="lot.user && lot.status === 'Occupied'">Remaining Balance: 2000</span><br>

@@ -58,7 +58,7 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
     Route::post('upload-file', [FileController::class, 'upload']);
     Route::patch('/update-personal-info/{user_id}', [ClientController::class, 'updatePersonalInfo']);
     Route::post('/reports/filter', [ReportController::class, 'filter']);
-
+    Route::get('/documents', [FileController::class, 'viewUserDocuments']);
     Route::post('logout', function (Request $request) {
         Auth::guard('web')->logout();
         $request->session()->invalidate();

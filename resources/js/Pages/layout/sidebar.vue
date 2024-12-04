@@ -125,6 +125,12 @@ const isActive = (path) => {
                         <span class="nav-title">Reports</span>
                     </a> 
                 </li>
+                <!-- <li :class="{active: isActive('/documents')}"  v-if="user.role.name === 'Client'">
+                    <a href="/documents" aria-expanded="false">
+                        <i class="nav-icon ti ti-folder"></i>
+                        <span class="nav-title">My Documents</span>
+                    </a> 
+                </li> -->
 
             </ul>
         </div>

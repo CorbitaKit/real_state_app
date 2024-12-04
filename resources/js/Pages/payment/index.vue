@@ -6,7 +6,7 @@ import { router, useForm } from '@inertiajs/vue3'
 import FileUpload from '../components/fileupload.vue'
 import { useToaster } from '../composables/toast'
 import Swal from 'sweetalert2'
-
+import { formatCurrency } from '../composables/currencyFormatter'
 const { show } = useToaster()
 import { ref } from 'vue'
 
@@ -246,7 +246,7 @@ const setButton = () => {
                                     {{ payment.invoice_number }}
                                 </td>
                                 <td >
-                                    {{ payment.amount }}
+                                    {{formatCurrency(payment.amount) }}
                                 </td>
                                 <td >
                                     <Image alt="Image" preview v-if="payment.status == 'Confirmed'">
@@ -299,7 +299,7 @@ const setButton = () => {
 
                                 <td  v-if="user.role_id != 3">
                                     <!-- <v-icon v-if="payment.status === 'Pending'" @click="confirmPayment(payment.id)"  name="fc-approval" animation="ring" scale="2" class="text-4xl rounded cursor-pointer block float-left mr-2"/>-->
-                                    <div class="dropdown">
+                                    <div class="dropdown" v-if="payment.status == 'Pending'">
                                         <a class="p-2" href="#!" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                             <i class="fe fe-more-horizontal"></i>
                                         </a>

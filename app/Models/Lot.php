@@ -16,7 +16,8 @@ class Lot extends Model
         'lot_group_id',
         'user_id',
         'color_label',
-        'name'
+        'name',
+        'block'
     ];
 
     public function property(): BelongsTo

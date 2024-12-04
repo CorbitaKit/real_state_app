@@ -20,6 +20,7 @@ return new class extends Migration
             $table->foreignId('property_id');
             $table->string('color_label');
             $table->foreignId('user_id')->nullable();
+            $table->integer('block');
         });
     }
 

@@ -20,6 +20,7 @@ return new class extends Migration
             $table->date('reserved_date');
             $table->string('status');
             $table->string('reason')->nullable();
+            $table->foreignId('acknowledged_by')->nullable();
         });
     }
 

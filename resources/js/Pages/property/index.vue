@@ -97,6 +97,7 @@ defineOptions({layout: Layout})
                             {{ property.region }}
 
                         </h5>
+                        <h4>{{ property.description }}</h4>
                     </div>
                     <div>
                         <a @click.prevent="show(property.id)" data-toggle="tooltip" data-placement="top" title="" data-original-title="View Property Details" href="javascript:void(0);" class="btn btn-xs btn-icon btn-round btn-outline-info"><i class="fas fa-eye"></i></a>
