@@ -35,9 +35,6 @@ class UserService extends Service
     {
         if (Auth::attempt($request->all())) {
             $request->session()->regenerate();
-
-          
-            
             return back()->with(['message' => 'Authorized', 'user' => parent::doFindById(Auth::user()->id)]);
         }
 
