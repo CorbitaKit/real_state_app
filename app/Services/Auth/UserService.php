@@ -13,7 +13,6 @@ use App\Services\WorkDetailService;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Carbon;
 use App\Models\PaymentPlan;
-use Twilio\Rest\Client;
 
 class UserService extends Service
 {
