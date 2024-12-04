@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Application;
 use App\Services\ApplicationService;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -16,9 +17,10 @@ class ApplicationController extends Controller
     }
 
     public function index()
-    {
+    {  
+        $applications = Application::with('user.personal_info', 'user.address', 'user.workDetails', 'lot.property')->get();
         return Inertia::render('application/index', [
-            'applications' => $this->service->doGet()
+            'applications' => $applications
         ]);
     }
     public function store(Request $request)

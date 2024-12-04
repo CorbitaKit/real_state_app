@@ -12,7 +12,7 @@ import Swal from 'sweetalert2'
 const { getUserInfo } = getUser()
 const confirm = useConfirm();
 const { show } = useToaster()
-
+const client_view = ref(false)
 
 const props = defineProps({
     applications: Object
@@ -20,7 +20,7 @@ const props = defineProps({
 const user = getUserInfo()
 const visible = ref(false)
 const application_id = ref()
-
+const client = ref()
 const form = useForm({
     status: '',
     reason: ''
@@ -67,6 +67,11 @@ const sendRequest = () => {
         })
     })
 }
+
+const setClient = (selectedClient) => {
+    client.value = selectedClient
+    client_view.value = true
+}
 defineOptions({layout: Layout})
 
 </script>
@@ -97,15 +102,129 @@ defineOptions({layout: Layout})
         </div>
     </div>
     <ConfirmDialog />
-    <Toast />
     <Dialog v-model:visible="visible" modal header="Reject Application" :style="{ width: '50rem' }">
-        <span class="text-surface-500 dark:text-surface-400 block mb-8">State your reason for rejecting this application.</span>
-        <div class="flex items-center gap-4 mb-4">
+        <span class="tw-text-surface-500 dark:tw-text-surface-400 tw-block tw-mb-8">State your reason for rejecting this application.</span>
+        <div class="tw-flex tw-items-center tw-gap-4 tw-mb-4">
             <label for="username" class="font-semibold w-24">Reason</label>
-            <InputText v-model="form.reason" class="w-full rounded-md"/>
+            <InputText v-model="form.reason" class="tw-w-full tw-rounded-md"/>
         </div>
-        <div class="flex justify-end gap-2">
+        <div class="tw-flex tw-justify-end tw-gap-2">
             <Button type="button" label="Save" @click="rejectApplication"></Button>
+        </div>
+    </Dialog>
+    <Dialog v-model:visible="client_view" modal header="Client Details" :style="{ width: '90rem' }">
+        <div class="card card-statistics contact-contant">
+            <div class="card-body py-4">
+                
+                <div class="table-responsive mt-2">
+                        <table class="table mb-0 table-border-3">
+                            <tbody class="mb-0">
+                                <tr>
+                                  <td>
+                                    Name
+                                  </td>
+                                  <td>
+                                    {{ client.personal_info.first_name }} 
+                                    {{ client.personal_info.last_name }}
+
+                                  </td>
+                                </tr>
+                                <tr>
+                                  <td>
+                                    Phone Number
+                                  </td>
+                                  <td>
+                                    {{ client.personal_info.phone_number }}
+
+                                  </td>
+                                </tr>
+                                <tr>
+                                  <td>
+                                    Address
+                                  </td>
+                                  <td>
+                                    Purok {{ client.address.purok }},
+                                    Barangay {{ client.address.barangay }},
+                                    {{ client.address.barangay }},
+                                     {{ client.address.province }}
+                                  </td>
+                                </tr>
+                                <tr>
+                                  <td>
+                                    Company Name
+                                  </td>
+                                  <td>
+                                    {{ client.work_details.company_name}}
+                                  </td>
+                                </tr>
+                                <tr>
+                                  <td>
+                                    Company Phone Number
+                                  </td>
+                                  <td>
+                                    {{ client.work_details.company_number}}
+
+                                  </td>
+                                </tr>
+                                <tr>
+                                  <td>
+                                    Company Email
+                                  </td>
+                                  <td>
+                                    {{ client.work_details.company_email}}
+
+                                  </td>
+                                </tr>
+                                <tr>
+                                  <td>
+                                    Job Title
+                                  </td>
+                                  <td>
+                                    {{ client.work_details.job_title }}
+                                    
+                                  </td>
+                                </tr>
+                                <tr>
+                                  <td>
+                                    Position
+                                  </td>
+                                  <td>
+                                    {{ client.work_details.position }}
+
+                                  </td>
+                                </tr>
+                                <tr>
+                                  <td>
+                                    Length Of Service
+                                  </td>
+                                  <td>
+                                    {{ client.work_details.length_of_stay }}
+
+                                  </td>
+                                </tr>
+                                <tr>
+                                  <td>
+                                    Employment Status
+                                  </td>
+                                  <td>
+                                    {{ client.work_details.status }}
+                                    
+                                  </td>
+                                </tr>
+                                <tr>
+                                  <td>
+                                    Gross Monthly Income
+                                  </td>
+                                  <td>
+                                    {{ client.work_details.gross_monthly_income }}
+
+                                  </td>
+                                </tr>
+                              
+                            </tbody>
+                        </table>
+                    </div>
+            </div>
         </div>
     </Dialog>
     <!-- <div class="relative overflow-x-auto mt-5">
@@ -200,7 +319,7 @@ defineOptions({layout: Layout})
                             <tbody class="mb-0">
                                 <tr v-for="application in applications" :key="application.id">
                                     <td v-if="user.role_id != 3" scope="row" >
-                                        <a class="text-blue" style="color:blue;" :href="`/users/${application.user.id}`">{{ application.user.personal_info.first_name }} {{ application.user.personal_info.last_name }} </a>
+                                        <a class="text-blue" style="color:blue;" href="#" @click="setClient(application.user)">{{ application.user.personal_info.first_name }} {{ application.user.personal_info.last_name }} </a>
                                     </td>
                                     <td>
                                         {{ application.application_type }}

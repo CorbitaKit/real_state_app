@@ -1,8 +1,7 @@
 <script setup>
 
 const props = defineProps({
-    work_details: Object,
-    is_client: Boolean
+    work_details: Object
 })
 
 const statuses = [
@@ -19,10 +18,16 @@ const statuses = [
         status: 'Regular'
     }
 ]
+
+const emits = defineEmits(['skip'])
+
+
 </script>
 
 <template>
+    
     <div class="tw-grid tw-grid-cols-2 tw-gap-4 tw-mx-9">
+        
         <div class="tw-mb-4">
             <label for="purok" class="tw-block tw-text-gray-700 tw-font-semibold tw-mb-2">Company Name</label>
             <InputText type="text" v-model="work_details.company_name" class="tw-block tw-appearance-none tw-w-full tw-px-3 tw-py-2 tw-border tw-rounded-md"/>        
@@ -67,9 +72,14 @@ const statuses = [
         </div>
 
         <div>
-            <label for="purok" class="tw-block tw-text-gray-700 tw-font-semibold tw-mb-2">Gorss monthly income</label>
+            <label for="purok" class="tw-block tw-text-gray-700 tw-font-semibold tw-mb-2">Gross monthly income</label>
             <InputNumber v-model="work_details.gross_monthly_income" inputId="currency-ph" mode="currency" currency="PHP" locale="en-PH" fluid  class="tw-w-full"/>
         </div>
+        <div class="tw-mt-8">
+            <a href="javascript:void(0);" class="btn btn-primary pull-right" @click="$emit('skip')">Skip</a>
+        </div>
+
+        
 
 
         

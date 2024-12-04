@@ -27,7 +27,7 @@ const mode_of_payments = ref([
 
 const form = useForm({
     file: {},
-    lot_id: {},
+    lot_id: 0,
     mode_of_payment: '',
     amount: 0,
     user_id: user.id,
@@ -52,11 +52,23 @@ const submit = () => {
                 text: "Payment submitted successfully!",
                 icon: "success"
             });
-            router.get('/payments')
+            router.get('/payments/get-by-user')
         })
     });
 }
+const checkLotData = () => {
+    console.log(form.lot_id)
+    if (form.lot_id == 0) {
+        Swal.fire({
+            icon: "error",
+            title: "Oops...",
+            text: "Please select a lot first",
+        });
 
+        return false
+    }
+    return true
+}
 </script>
 
 
@@ -92,7 +104,7 @@ const submit = () => {
     <div class="tw-mx-auto tw-bg-white tw-p-8 tw-my-8 tw-rounded tw-shadow-md">
         <Toast />
         <form-wizard step-size="xs" @on-complete="submit">
-            <tab-content title="List of lots">
+            <tab-content title="List of lots" :before-change="checkLotData">
                 <div class="tw-grid tw-grid-cols-3 tw-gap-3">
                     <div class="tw-mb-4" v-for="lot in lots" :key="lot.id">
                         <button @click="form.lot_id = lot.id" type="button" class="tw-text-black tw-text-lg tw-font-medium tw-block tw-w-full tw-items-center tw-rounded tw-p-4 tw-text-sm tw-font-medium transition hover:scale-105" :class="lot.color_label">

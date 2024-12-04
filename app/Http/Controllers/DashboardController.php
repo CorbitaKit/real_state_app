@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Inertia\Inertia;
 use App\Models\User;
 use App\Models\Application;
+use App\Models\Lot;
 use App\Models\Payment;
 use App\Models\Property;
 use Illuminate\Support\Facades\Auth;
@@ -89,12 +90,29 @@ class DashboardController extends Controller
             'yearly' => $yearlySales,
         ];
 
+        $lotApplicationCount = Application::where('application_type', 'Lot Application')->count();
+        $siteVisitCount = Application::where('application_type', 'Site Visit')->count();
+
+        $approvedPaymentCount = Payment::where('status', 'Confirmed')->count();
+        $pendingPaymentCount = Payment::where('status', 'Pending')->count();
+
+        $availableLotCount = Lot::where('status', 'Available')->count();
+        $pendingLotCount = Lot::where('status', 'Pending')->count();
+        $occupiedLotCount = Lot::where('status', 'Occupied')->count();
+
         return Inertia::render('dashboard/index', [
             'clients' => $clients,
             'applications' => $applications,
             'payments' => $payments,
             'properties' => $properties,
-            'sales' => $sales
+            'sales' => $sales,
+            'lot_application' => $lotApplicationCount,
+            'site_visit' => $siteVisitCount,
+            'approved_payment' => $approvedPaymentCount,
+            'pending_payment' => $pendingPaymentCount,
+            'available_lot' => $availableLotCount,
+            'pending_lot' => $pendingLotCount,
+            'occupied_lot' => $occupiedLotCount
         ]);
     }
 }
