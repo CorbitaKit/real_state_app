@@ -29,8 +29,9 @@ Route::get('/email/verify', function () {
 
 Route::get('/email/verify/{id}/{hash}', function (EmailVerificationRequest $request) {
     $request->fulfill();
+    
 
-    return redirect('/properties');
+    return redirect()->route('users.show', Auth::user()->id);
 })->middleware(['auth', 'signed'])->name('verification.verify');
 
 Route::post('/email/verification-notification', function (Request $request) {
@@ -41,7 +42,7 @@ Route::post('/email/verification-notification', function (Request $request) {
 
 Route::get('filter-properties/{filter}', [LandingPageController::class,'filterProperty']);
 
-Route::middleware(['auth:sanctum'])->group(function () {
+Route::middleware(['auth:sanctum', 'verified'])->group(function () {
     Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard');
     Route::get('payments/get-by-user', [PaymentController::class, 'getUserPayment']);
     Route::post('payments/update/{id}', [PaymentController::class, 'update']);
@@ -57,7 +58,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::post('upload-file', [FileController::class, 'upload']);
     Route::patch('/update-personal-info/{user_id}', [ClientController::class, 'updatePersonalInfo']);
     Route::post('/reports/filter', [ReportController::class, 'filter']);
-
+    Route::get('/documents', [FileController::class, 'viewUserDocuments']);
     Route::post('logout', function (Request $request) {
         Auth::guard('web')->logout();
         $request->session()->invalidate();

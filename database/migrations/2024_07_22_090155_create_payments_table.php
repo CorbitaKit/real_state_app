@@ -21,6 +21,7 @@ return new class extends Migration
             $table->date('date_of_payment');
             $table->string('status');
             $table->string('invoice_number')->nullable();
+            $table->foreignId('acknowledged_by')->nullable();
         });
     }
 

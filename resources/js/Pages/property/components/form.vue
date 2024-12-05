@@ -103,7 +103,7 @@ const handleBarangays = async () => {
                         </div>
                         <div class="form-row">
                             <div class="form-group col-md-6">
-                                <label for="inputCity">Phase/Block</label>
+                                <label for="inputCity">Phase</label>
                                 <input type="text" class="form-control" id="phase" v-model="useProperty.property.phase">
                             </div>
                             <div class="form-group col-md-6">

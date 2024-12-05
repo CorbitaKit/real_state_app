@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\UserRequest;
 use App\Services\Auth\UserService;
+use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Illuminate\Support\Facades\Auth;
@@ -38,7 +39,7 @@ class UserController extends Controller
         $user = $this->userService->doCreate($request->all());
         Auth::login($user);
         $request->session()->regenerate();
-        return redirect()->route('users.show', $user->id);
+        event(new Registered($user));
     }
 
     public function store(UserRequest $request)

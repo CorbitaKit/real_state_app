@@ -40,7 +40,7 @@ defineOptions({ layout: Layout })
     <div class="row">
         <Widget :properties="properties.length" :clients="clients.length" :applications="applications.length" :sales="sales.overall"/>
         <Sales />
-        <Profile />
+        <Profile :clients="clients"/>
         <Application :lot_application="lot_application" :site_visit="site_visit"/>
         <Payment :pending_payment="pending_payment" :approved_payment="approved_payment"/>
         <Lot :available_lot="available_lot" :occupied_lot="occupied_lot" :pending_lot="pending_lot"/>

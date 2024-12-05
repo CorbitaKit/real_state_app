@@ -14,16 +14,16 @@ return new class extends Migration
         Schema::create('work_information', function (Blueprint $table) {
             $table->id();
             $table->timestamps();
-            $table->string('company_name');
-            $table->string('company_address');
-            $table->string('company_email');
-            $table->string('company_number');
-            $table->integer('length_of_stay');
-            $table->string('status');
-            $table->foreignId('user_id');
-            $table->float('gross_monthly_income');
-            $table->string('job_title');
-            $table->string('position');
+            $table->string('company_name')->nullable();
+            $table->string('company_address')->nullable();
+            $table->string('company_email')->nullable();
+            $table->string('company_number')->nullable();
+            $table->integer('length_of_stay')->nullable();
+            $table->string('status')->nullable();
+            $table->foreignId('user_id')->nullable();
+            $table->float('gross_monthly_income')->nullable();
+            $table->string('job_title')->nullable();
+            $table->string('position')->nullable();
         });
     }
 

@@ -1,4 +1,5 @@
 /** @type {import('tailwindcss').Config} */
+import forms from '@tailwindcss/forms';
 export default {
   prefix: 'tw-',
   content: [
@@ -10,7 +11,7 @@ export default {
     extend: {},
   },
   plugins: [
-    require('@tailwindcss/forms'),
+    forms,
   ],
   corePlugins: {
     visibility: true

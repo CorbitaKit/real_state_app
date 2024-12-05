@@ -75,9 +75,9 @@ const emits = defineEmits(['skip'])
             <label for="purok" class="tw-block tw-text-gray-700 tw-font-semibold tw-mb-2">Gross monthly income</label>
             <InputNumber v-model="work_details.gross_monthly_income" inputId="currency-ph" mode="currency" currency="PHP" locale="en-PH" fluid  class="tw-w-full"/>
         </div>
-        <div class="tw-mt-8">
+        <!-- <div class="tw-mt-8">
             <a href="javascript:void(0);" class="btn btn-primary pull-right" @click="$emit('skip')">Skip</a>
-        </div>
+        </div> -->
 
         
 

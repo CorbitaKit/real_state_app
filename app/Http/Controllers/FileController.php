@@ -4,11 +4,12 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Inertia\Inertia;
 
 class FileController extends Controller
 {
-    public function upload(Request $request)
+    public function viewUserDocuments()
     {
-        dd($request);
+        return Inertia::render('user/documents');
     }
 }

@@ -20,8 +20,10 @@ const user = getUserInfo()
 const visible = ref(false)
 const payments = ref()
 const payment_view = ref(false)
+const admin_apply = ref(false)
 const props = defineProps({
-    property: Object
+    property: Object,
+    clients: Object
 })
 const form = useForm({
     application_type: 'Lot Application',
@@ -33,23 +35,12 @@ const form = useForm({
 
 
 const checkUser = (lot) => {
-    if (user.role_id !== 3 && lot.status !== 'Available') {
-        if (lot.payments) {
-            payment_view.value = true
-            payments.value = lot.payments
-        }
-    }
-    if (user.role_id === 3) {
-        if (!user.personal_info) {
-            confirm.require({
-                message: 'You did not set up your profile yet. Please set up your profile first to continue',
-                header: 'Confirmation',
-                icon: 'pi pi-exclamation-triangle',
-                
-            });
-        } else {
-            applyForLot(lot)
-        }
+    if (user.role.name === 'Client') {
+        applyForLot(lot)
+    } else {
+        form.lot_id = lot.id
+        admin_apply.value = true
+
     }
 }
 
@@ -82,14 +73,24 @@ const siteVisit = () => {
     visible.value = false
 }
 const sendApplication = () => {
+    console.log(form)
     form.post('/applications', {
         onSuccess: (() => {
-            // show('success', 'Application Sent!', 'We will review your application, and will send an email after reviewing')
-            Swal.fire({
+            if (admin_apply) {
+                admin_apply.value = false
+                Swal.fire({
+                    title: "Success!",
+                    text: "Application sent succesfully!",
+                    icon: "success"
+                });
+            } else {
+                Swal.fire({
                 title: "Success!",
                 text: "We will review your application, and will send an email after reviewing",
                 icon: "success"
             });
+            }
+            
         })
     })
 }
@@ -147,7 +148,6 @@ defineOptions({layout: Layout})
             <!-- end page title -->
         </div>
     </div>
-    <ConfirmDialog />
     <Dialog v-model:visible="payment_view" modal header="Payment History" :style="{ width: '50rem' }">
         <v-table>
             <thead>
@@ -169,7 +169,7 @@ defineOptions({layout: Layout})
             </thead>
             <tbody>
             <tr v-for="payment in payments" :key="payment.id" >
-                <td>{{ payment.amount }}</td>
+                <td>{{ formatCurrency(payment.amount) }}</td>
                 <td>{{ payment.mode_of_payment }}</td>
                 <td>{{ payment.date_of_payment }}</td>
                 <td>{{ payment.invoice_number }}</td>
@@ -187,78 +187,19 @@ defineOptions({layout: Layout})
             <Button type="button" label="Save" @click="siteVisit"></Button>
         </div>
     </Dialog>
-    <!-- <div class="tw-mx-auto tw-bg-white tw-p-8 tw-my-8 tw-rounded tw-shadow-md">
-        
-        <p class="tw-text-black tw-font-medium tw-text-1xl tw-pt-2 tw-mb-2" v-if="user.role_id == 3">
-            Note: This is not the actual map of the property, please refer to this 
-            <a class="text-blue" style="color:blue;" href="/test.jpg" target="__blank">image</a> or request a
-            <a href="#" @click="visible = true" style="color:blue;">site visit</a>
-        </p>
 
-        <div class="tw-grid tw-grid-cols-4 tw-gap-3 mb-4 ">
-            <div class="tw-mb-4 tw-border-2 tw-p-4 tw-text-lg tw-font-medium tw-text-black"  v-for="lot_group in property.lot_groups" :key="lot_group.id" :class="lot_group.color_label">
-                <span>{{ lot_group.amount_per_sqr_meter }} - Per sqr meter</span><br>
-                <span>{{ lot_group.sqr_meter }} sqr meter</span>
-
-            </div>
-        </div>
-        <div class="table-responsive mb-4">
-            <table class="table mb-0 table-border-3">
-                <thead>
-                    <tr>
-                        <th>Photo</th>
-                        <th>Order ID</th>
-                        <th>Customer</th>
-                        <th>Property</th>
-                        <th>Date </th>
-                        <th>Type</th>
-                        <th>Status</th>
-                        <th>Action</th>
-                    </tr>
-                </thead>
-                <tbody class="mb-0">
-                    <tr>
-                        <td>
-                            <div class="avatar avatar-lg">
-                                <img class="img-fluid rounded mCS_img_loaded" src="assets/img/blog/01.jpg" alt="">
-                            </div>
-                        </td>
-                        <td>#54981</td>
-                        <td>Karla George</td>
-                        <td>Eaton Place</td>
-                        <td><i class="far fa-calendar-alt mr-2 text-success"></i> 20-01-2020</td>
-                        <td>Rent</td>
-                        <td><span class="badge badge-success ">Paid</span></td>
-                        <td>
-                            <a href="javascript:void(0)" class="mr-2"><i class="fas fa-pencil-alt" data-toggle="tooltip" data-placement="top" title="" data-original-title="Edit"></i></a>
-                            <a href="javascript:void(0)"><i class="far fa-trash-alt" data-toggle="tooltip" data-placement="top" title="" data-original-title="Delete"></i></a>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-        
-        <div class="tw-grid tw-grid-cols-4 tw-gap-3">
-            
-            <div class="mb-4" v-for="lot in property.lots" :key="lot.id">
-                
-                <button @click="checkUser(lot)" type="button" class="tw-text-lg tw-font-medium tw-text-black tw-block tw-w-full tw-items-center tw-rounded tw-p-4 tw-text-sm tw-font-medium transition hover:scale-105" :class="lot.lot_group.color_label">
-                    <span> Lot {{ lot.id }}</span><br>
-                    <span> Monthly Payment: {{ lot.lot_group.monthly_amortizations }} </span><br>
-                    <span> Total Amount:  {{ lot.lot_group.sqr_meter * lot.lot_group.amount_per_sqr_meter }}</span><br>
-                    <span> Status: {{ lot.status }}</span><br>
-                    <span v-if="lot.user && lot.status === 'Pending'"> Applied By: {{ lot.user.personal_info.first_name }} {{ lot.user.personal_info.last_name }}</span>
-                    <span v-if="lot.user && lot.status === 'Occupied'"> Owned By: {{ lot.user.personal_info.first_name }} {{ lot.user.personal_info.last_name }}</span><br>
-                    <span v-if="lot.user && lot.status === 'Occupied'">Remaining Balance: 2000</span><br>
-                    <span v-if="lot.user && lot.status === 'Occupied'">Total percentage: 
-                        <ProgressBar :value="calculatePercentage(lot)"></ProgressBar>
-                    </span><br>
-                </button>
-            </div>
+    <Dialog v-model:visible="admin_apply" modal header="Select Client" :style="{ width: '50rem' }">
+        <div class="tw-flex items-center tw-gap-4 tw-mb-4">
+            <select  class="js-basic-single form-control" name="region" v-model="form.user_id">
+                <option  v-for="client in clients" :key="client.id" :value="client.id">{{ client.personal_info.first_name }} {{ client.personal_info.last_name }}</option>
+            </select>
             
         </div>
-    </div> -->
-    
+        <div class="tw-flex tw-justify-end tw-gap-2">
+            <Button type="button" label="Save" @click="sendApplication"></Button>
+        </div>
+    </Dialog>
+
 
     <div class="row">
         <div class="col-xl-12">
@@ -269,19 +210,24 @@ defineOptions({layout: Layout})
                             <thead>
                                 <tr>
                                     <th>Lot Number</th>
+                                    <th>Block</th>
                                     <th>Sqr Meters</th>
                                     <th>Amount Per Sqr Meters</th>
                                     <th>Monthly Amortization</th>
+                                    <th>Payment Percentage</th>
                                     <th>Status</th>
                                     <th v-if="user.role.name !== 'Client'">Client</th>
                                     <th>Action</th>
                                 </tr>
                             </thead>
                             <tbody class="mb-0">
-                                <tr v-for="lot in property.lots">
+                                <tr v-for="lot in property.lots" :key="lot.id">
                                     <td>
                                         {{ lot.name }}
                                         
+                                    </td>
+                                    <td>
+                                        Block {{ lot.block }}
                                     </td>
                                     <td>
                                         {{ lot.lot_group.sqr_meter }} m&sup2;
@@ -291,6 +237,9 @@ defineOptions({layout: Layout})
                                     </td>
                                     <td>
                                         {{ formatCurrency(lot.lot_group.monthly_amortizations) }}
+                                    </td>
+                                    <td>
+                                        <ProgressBar :value="calculatePercentage(lot)" />
                                     </td>
                                     <td >
                                         <span class="badge badge-info" v-if="lot.status === 'Available'">
@@ -318,7 +267,7 @@ defineOptions({layout: Layout})
                                             <div class="dropdown-menu custom-dropdown dropdown-menu-right p-4">
                                                 <h6 class="mb-1">Action</h6>
                                                 <a v-if="user.role.name !=='Client'" @click="showPayments(lot.payments)" class="dropdown-item" href="#"><i class="fa-fw far fa-file-alt pr-2"></i>View Payment History</a>
-                                                <a v-if="user.role.name === 'Client' && lot.status === 'Available'" @click.prevent="checkUser(lot)" class="dropdown-item" href="#!"><i class="fa-fw far fa-file-pdf pr-2"></i>Apply</a>
+                                                <a v-if=" lot.status === 'Available'" @click.prevent="checkUser(lot)" class="dropdown-item" href="#!"><i class="fa-fw far fa-file-pdf pr-2"></i>Apply</a>
                                                 <a v-if="user.role.name === 'Client'" @click.prevent="visible = true" class="dropdown-item" href="#!"><i class="fa-fw far fa-calendar pr-2"></i>Request a site visit</a>
                                             </div>
                                         </div>

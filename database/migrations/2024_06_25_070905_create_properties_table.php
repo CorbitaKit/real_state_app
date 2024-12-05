@@ -19,6 +19,7 @@ return new class extends Migration
             $table->string('barangay');
             $table->string('phase');
             $table->string('purok');
+            $table->longText('description');
         });
     }
 

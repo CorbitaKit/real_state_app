@@ -18,7 +18,8 @@ class Property extends Model
         'phase',
         'purok',
         'balance_payable',
-        'down_payment'
+        'down_payment',
+        'description'
     ];
 
     public function file(): MorphOne

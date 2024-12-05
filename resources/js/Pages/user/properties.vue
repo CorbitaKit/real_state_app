@@ -2,7 +2,7 @@
 import Layout from '../layout/main.vue'
 import Header from '../components/header.vue'
 import { ref } from 'vue'
-
+import { formatCurrency } from '../composables/currencyFormatter'
 
 defineOptions({layout: Layout})
 
@@ -59,7 +59,7 @@ const viewPaymentPlan = (lot_payment_plans) => {
             </thead>
             <tbody>
             <tr v-for="payment in payments" :key="payment.id" >
-                <td>{{ payment.amount }}</td>
+                <td>{{ formatCurrency(payment.amount) }}</td>
                 <td>{{ payment.mode_of_payment }}</td>
                 <td>{{ payment.date_of_payment }}</td>
                 <td>{{ payment.invoice_number }}</td>
@@ -102,7 +102,7 @@ const viewPaymentPlan = (lot_payment_plans) => {
                         {{ plan.due_date }}
                     </td>
                     <td>
-                        {{ plan.lot.lot_group.monthly_amortizations }}
+                        {{ formatCurrency(plan.lot.lot_group.monthly_amortizations) }}
                     </td>
                     <td>
                         <span v-if="plan.payment">{{ plan.payment.date_of_payment }}</span>
@@ -261,14 +261,14 @@ const viewPaymentPlan = (lot_payment_plans) => {
                                         {{ lot.lot_group.sqr_meter }} Square Meters
                                     </th>
                                     <td class="px-6 py-4">
-                                        {{ lot.lot_group.amount_per_sqr_meter }}
+                                        {{ formatCurrency(lot.lot_group.amount_per_sqr_meter) }}
                                     </td>
                                     
                                     <td class="px-6 py-4">
-                                        {{ calculateTotalAmount(lot.lot_group) }}
+                                        {{ formatCurrency(calculateTotalAmount(lot.lot_group)) }}
                                     </td>
                                     <td class="px-6 py-4">
-                                        {{ calculateRemainingBalance(lot) }}
+                                        {{ formatCurrency(calculateRemainingBalance(lot)) }}
                                     </td>
                                     <td class="px-6 py-4">
                                         <!-- <Button @click="viewPaymentHistory(lot.payments)" label="View Payments" severity="success" /> -->
@@ -278,7 +278,7 @@ const viewPaymentPlan = (lot_payment_plans) => {
                                             </a>
                                             <div class="dropdown-menu custom-dropdown dropdown-menu-right p-4">
                                                 <h6 class="mb-1">Action</h6>
-                                                <a @click="viewPaymentHistory(lot.payment)" class="dropdown-item" href="#"><i class="fa-fw far fa-file-alt pr-2"></i>View Payment History</a>
+                                                <a @click="viewPaymentHistory(lot.payments)" class="dropdown-item" href="#"><i class="fa-fw far fa-file-alt pr-2"></i>View Payment History</a>
                                                 <a @click="viewPaymentPlan(lot.payment_plans)" class="dropdown-item" href="#!"><i class="fa-fw far fa-file-pdf pr-2"></i>View Payment Breakdown</a>
                                                 
                                             </div>
