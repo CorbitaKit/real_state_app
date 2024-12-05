@@ -11,8 +11,6 @@ const lots = ref()
 const setLots = (user_lots) => {
     lots.value = user_lots
 }
-
-
 </script>
 
 <template>
@@ -35,7 +33,7 @@ const setLots = (user_lots) => {
                             {{ client.personal_info.last_name }} 
                            </td>
                            <td>
-                            <a @click="printDiv" href="javascript:void(0);" class="btn btn-icon btn-round btn-inverse-success mr-2 tooltip-wrapper" data-toggle="tooltip" data-placement="top" title="" data-original-title="Print client chart of account">
+                            <a href="javascript:void(0);" class="btn btn-icon btn-round btn-inverse-success mr-2 tooltip-wrapper" data-toggle="tooltip" data-placement="top" title="" data-original-title="Print client chart of account">
                                 <i class="fas fa-file"></i>
                             </a>
                             <a href="javascript:void(0);" class="btn btn-icon btn-round btn-inverse-info mr-2 tooltip-wrapper" data-toggle="tooltip" data-placement="top" title="" data-original-title="Print client transaction record">
@@ -53,5 +51,4 @@ const setLots = (user_lots) => {
         </div>
     </div>
     </div>
-   
 </template>
