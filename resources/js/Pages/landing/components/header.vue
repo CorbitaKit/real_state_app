@@ -16,7 +16,7 @@ const login = () => {
       <div class="container tw-mx-auto tw-px-6 tw-py-4 tw-flex tw-items-center tw-justify-between">
         <!-- Logo -->
         <div class="tw-flex tw-items-center tw-space-x-4">
-          <img src="/logo.jpeg" alt="RealEstateApp Logo" class="tw-h-12">
+          <img src="/logo101.png" alt="RealEstateApp Logo" class="tw-h-12">
           <h1 class="tw-text-3xl tw-text-black tw-font-bold tw-hidden tw-md:block">Jef Aldebal Realty Service</h1>
         </div>
         <!-- Navigation -->

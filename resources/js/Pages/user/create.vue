@@ -53,16 +53,7 @@ const form = useForm({
 })
 
 const submit = () => {
-    if (is_skip) {
-        form.work_details.company_name = 'N/A'
-        form.work_details.company_address = 'N/A'
-        form.work_details.company_number = 'N/A'
-        form.work_details.company_email = 'N/A'
-        form.work_details.length_of_stay = 0
-        form.work_details.position = 'N/A'
-        form.work_details.gross_monthly_income = 0.00
-        form.work_details.job_title = 'N/A'
-    }
+    
     form.transform((data) => {
         data.personal_address.province = data.personal_address.province.province_name;
         data.personal_address.city = data.personal_address.city.city_name;
