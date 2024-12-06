@@ -52,7 +52,7 @@ watch(filterText, async (newFilter, oldFilter) => {
       </div>
       <h2 class="tw-text-4xl tw-text-white tw-font-bold">Find Your Dream Home</h2>
       <p class="tw-mt-4 tw-text-xl tw-text-white tw-font-bold">Browse a wide range of properties at your fingertips</p>
-      <a href="#properties" class="tw-mt-6 tw-inline-block tw-bg-white tw-text-green-600 tw-py-3 tw-px-8 tw-rounded-full tw-text-lg tw-hover:bg-gray-200 tw-transition">Start Searching</a>
+      <a href="#properties" class="tw-mt-6 tw-inline-block tw-bg-green-700 tw-text-white tw-py-3 tw-px-8 tw-rounded-full tw-text-lg tw-hover:bg-green-600 tw-transition">Start Searching</a>
     </div>
   </section>
 

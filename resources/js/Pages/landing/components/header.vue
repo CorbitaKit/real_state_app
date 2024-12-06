@@ -21,7 +21,7 @@ const login = () => {
         </div>
         <!-- Navigation -->
         <nav>
-          <ul class="tw-flex tw-space-x-6">
+          <ul class="tw-flex tw-space-x-8 tw-font-bold">
             <li><a href="#" @click.prevent="home" class="tw-text-black tw-hover:text-gray-300">Home</a></li>
             <li><a href="#properties" class="tw-hover:text-gray-300 tw-text-black">Properties</a></li>
             <li><a href="#contact" class="tw-hover:text-gray-300 tw-text-black">Contact</a></li>
