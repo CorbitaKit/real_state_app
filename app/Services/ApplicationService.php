@@ -26,9 +26,15 @@ class ApplicationService extends Service
 
     public function doUpdate(array $data, int $id): Model
     {
+        
         $application = parent::doUpdate($data, $id);
-
-        $this->lotService->doUpdate(['status' => 'Occupied'], $application->lot_id);
+        if ($data['status'] === 'Rejected') {
+            $this->lotService->doUpdate(['status' => 'Available'], $application->lot_id);
+            return $application;
+        } else {
+            $this->lotService->doUpdate(['status' => 'Occupied'], $application->lot_id);
+        }
+        
 
         $startDate = Carbon::now();
         $endDate = $startDate->copy()->addYears(3);
