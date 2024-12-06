@@ -29,7 +29,7 @@ class ApplicationService extends Service
         
         $application = parent::doUpdate($data, $id);
         if ($data['status'] === 'Rejected') {
-            $this->lotService->doUpdate(['status' => 'Available'], $application->lot_id);
+            $this->lotService->doUpdate(['status' => 'Available', 'user_id' => null], $application->lot_id);
             return $application;
         } else {
             $this->lotService->doUpdate(['status' => 'Occupied'], $application->lot_id);
