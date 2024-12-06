@@ -8,7 +8,7 @@ import { useForm, router } from '@inertiajs/vue3'
 import moment from 'moment'
 import Swal from 'sweetalert2'
 import { ref } from 'vue'
-
+import fileupload from '../components/fileupload.vue'
 defineOptions({layout: Layout})
 
 const props = defineProps({
@@ -20,6 +20,7 @@ const personal_info_error = ref(false)
 const personal_address_error = ref(false)
 const is_skip = ref(false)
 const form = useForm({
+    file: {},
     account_info: {
         email :'',
         password:''
@@ -219,6 +220,10 @@ const validatePersonalAddressData = () => {
             <tab-content title="Work Information" v-if="!is_skip">
                 
                 <WorkInfoForm :work_details="form.work_details" @skip="is_skip = true" />
+            </tab-content>
+            <tab-content title="Requirements" v-if="is_client">
+                
+                <fileupload :file="form.file" />
             </tab-content>
             
         </form-wizard>

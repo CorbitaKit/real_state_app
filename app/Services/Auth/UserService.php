@@ -13,25 +13,31 @@ use App\Services\WorkDetailService;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Carbon;
 use App\Models\PaymentPlan;
+use App\Services\FileService;
+use App\Traits\FileUploadTrait;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Support\Facades\Http;
 
 class UserService extends Service
 {
+    use FileUploadTrait;
     protected $addressSerivce;
     protected $employeeService;
     protected $workService;
+    protected $fileService;
 
     public function __construct(
         UserRepository $repo,
         AddressService $addressService,
         EmployeeService $employeeService,
-        WorkDetailService $workDetailService
+        WorkDetailService $workDetailService,
+        FileService $fileService
     ) {
         parent::__construct($repo);
         $this->addressSerivce = $addressService;
         $this->employeeService = $employeeService;
         $this->workService = $workDetailService;
+        $this->fileService = $fileService;
     }
     public function doLogin(object $request): Object
     {
@@ -94,7 +100,21 @@ class UserService extends Service
                 $convertedData['personal_info']['user_id'] = $user->id;
                 $convertedData['personal_address']['user_id'] = $user->id;
                 $convertedData['work_details']['user_id'] = $user->id;
+
+                if ($convertedData['file']) {
+                    $fileUpload = $data['file']['value'];
+                    $path = $this->uploadFile($fileUpload, 'user/requirements');
+    
+                    $file = $this->fileService->doCreate([
+                        'filename' => $fileUpload->getClientOriginalName(),
+                        'url' => $path
+                    ]);
+    
+                    $user->files()->save($file);
+                }
             }
+
+            
             $convertedData['personal_info']['address'] = 'custom address';
             $this->employeeService->doCreate($convertedData['personal_info']);
             $this->addressSerivce->doCreate($convertedData['personal_address']);

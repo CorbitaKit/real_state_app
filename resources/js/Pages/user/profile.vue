@@ -44,10 +44,7 @@ const form = useForm({
         purok: '',
         complete_address: ''
     },
-    requirements: {
-        proof_of_income: {}
-
-    }
+    file: {}
 })
 const validatePersonalInfoData = () => {
     return validateData(form.personal_info)
@@ -116,6 +113,10 @@ defineOptions({layout: Layout})
             </tab-content>
             <tab-content title="Work Information">
                 <WorkInfoForm :work_details="form.work_details" />
+            </tab-content>
+
+            <tab-content title="Upload Requirements">
+                <Fileupload :file="form.file" />
             </tab-content>
         </form-wizard>
     </div>
