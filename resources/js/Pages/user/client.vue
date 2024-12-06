@@ -4,8 +4,8 @@ import Header from '../components/header.vue'
 import FileUpload from '../components/fileupload.vue'
 import { router, useForm } from '@inertiajs/vue3'
 import { reactive, ref } from 'vue'
-
-
+import moment from 'moment'
+import Swal from 'sweetalert2'
 const props = defineProps({
     clients: Object
 })
@@ -16,8 +16,18 @@ const payments = ref()
 const properties = ref()
 const property_view = ref(false)
 const generate_report = ref(false)
+const client_lots = ref()
+
+
+
 const form = useForm({
-    file: {}
+    file: {},
+    lot_id: 0,
+    mode_of_payment: 'Over the counter',
+    amount: 0,
+    user_id: 0,
+    status: 'Pending',
+    date_of_payment: ''
 })
 
 const reportsData = reactive({
@@ -61,6 +71,33 @@ const calculateTotalAmount = (lot_group) => {
     return lot_group.sqr_meter * lot_group.amount_per_sqr_meter
 }
 
+const makePayment = (client) => {
+    form.user = client.id
+
+    payment.value = true
+    client_lots.value = client.lots
+}
+
+const submitPayment = () => {
+    form.transform((data) => {
+      
+      return {
+          ...data,
+    
+         date_of_payment: moment().format('YYYY-MM-DD')
+      };
+  }).post('/payments', {
+      onSuccess: (() => {
+
+          Swal.fire({
+              title: "Success!",
+              text: "Payment submitted successfully!",
+              icon: "success"
+          });
+          router.get('/applications')
+      })
+  });
+}
 
 const calculateRemainingBalance = (lot) => {
     const total_amount = calculateTotalAmount(lot.lot_group)
@@ -110,15 +147,21 @@ const printDiv = () => {
 <template>
     
     <Dialog v-model:visible="payment" modal header="Make Payment" :style="{ width: '50rem' }">
-        <span class="tw-text-surface-500 tw-dark:text-surface-400 tw-block tw-mb-8">Please input invoice # number and attach the actual invoice</span>
+        <div class="tw-flex tw-items-center tw-gap-4 tw-mb-4">
+            <label for="username" class="tw-font-semibold tw-w-24">Lot</label>
+            <select  class="js-basic-single form-control" name="lot" v-model="form.lot_id" >
+                <option  v-for="lot in client_lots" :value="lot.id" :key="lot.id">{{ lot.name }}</option>
+            </select>
+        </div>
+        
         <div class="tw-flex tw-items-center tw-gap-4 tw-mb-4">
             <label for="username" class="tw-font-semibold tw-w-24">Amount</label>
-            <InputText class="tw-w-full tw-rounded-md"/>
+            <InputText class="tw-w-full tw-rounded-md" v-model="form.amount"/>
            
         </div>
         <div class="tw-flex tw-items-center tw-gap-4 tw-mb-4">
             <label for="username" class="tw-font-semibold tw-w-24">Invoice Number</label>
-            <InputText class="tw-w-full tw-rounded-md"/>
+            <InputText class="tw-w-full tw-rounded-md" v-model="form.invoice_number"/>
            
         </div>
         <FileUpload :file="form.file" />
@@ -338,8 +381,8 @@ const printDiv = () => {
                                                 <h6 class="mb-1">Action</h6>
                                                 <a @click.prevent="checkPaymentHistory(client.payments)" class="dropdown-item" href="#!"><i class="fa-fw far fa-file-alt pr-2"></i>View Payment History</a>
                                                 <a @click.prevent="viewProperties(client.lots)" class="dropdown-item" href="#!"><i class="fa-fw far fa-file-alt pr-2"></i>View Properties</a>
-                                                <!-- <a class="dropdown-item" href="#!"><i class="fa-fw fas fa-trash pr-2"></i>Delete</a>
-                                                <a @click.prevent="payment = true" class="dropdown-item" href="#!"><i class="fa-fw fas fa-receipt pr-2"></i>Make Payment</a> -->
+                                                <!-- <a class="dropdown-item" href="#!"><i class="fa-fw fas fa-trash pr-2"></i>Delete</a>  -->
+                                                <a @click.prevent="makePayment(client)" class="dropdown-item" href="#!"><i class="fa-fw fas fa-receipt pr-2"></i>Make Payment</a>
                                             </div>
                                         </div>
                                 </td>
