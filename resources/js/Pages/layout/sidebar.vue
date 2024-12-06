@@ -119,7 +119,7 @@ const isActive = (path) => {
                     </a> 
                 </li>
 
-                <li :class="{active: isActive('/reports')}"  v-if="user.role.name === 'Admin' || user.role.name === 'Staff'">
+                <li :class="{active: isActive('/reports')}"  v-if="user.role.name === 'Admin'">
                     <a href="/reports" aria-expanded="false">
                         <i class="nav-icon ti ti-folder"></i>
                         <span class="nav-title">Reports</span>
