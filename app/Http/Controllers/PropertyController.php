@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Property;
+use App\Models\User;
 use App\Services\PropertyService;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -33,8 +35,10 @@ class PropertyController extends Controller
 
     public function show($id)
     {
+        $clients = User::with('personal_info')->where('role_id', 3)->get();
         return Inertia::render('property/show', [
-            'property' => $this->service->doFindById($id)
+            'property' => $this->service->doFindById($id),
+            'clients' => $clients
         ]);
     }
 

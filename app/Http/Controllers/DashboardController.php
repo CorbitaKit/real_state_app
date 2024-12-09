@@ -8,6 +8,7 @@ use App\Models\User;
 use App\Models\Application;
 use App\Models\Lot;
 use App\Models\Payment;
+use App\Models\PaymentPlan;
 use App\Models\Property;
 use Illuminate\Support\Facades\Auth;
 
@@ -21,7 +22,7 @@ class DashboardController extends Controller
         if (!$currentUser->personal_info) {
             return redirect()->back();
         }
-        $clients = User::with('personal_info')
+        $clients = User::with('personal_info', 'lots')
         ->where('role_id', 3)
         ->whereHas('personal_info')
         ->get();
@@ -100,6 +101,7 @@ class DashboardController extends Controller
         $pendingLotCount = Lot::where('status', 'Pending')->count();
         $occupiedLotCount = Lot::where('status', 'Occupied')->count();
 
+        
         return Inertia::render('dashboard/index', [
             'clients' => $clients,
             'applications' => $applications,

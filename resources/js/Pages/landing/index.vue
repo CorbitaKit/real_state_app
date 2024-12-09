@@ -44,15 +44,15 @@ watch(filterText, async (newFilter, oldFilter) => {
   <Header />
 
   <!-- Hero Section -->
-  <section class="tw-relative tw-text-white tw-py-20 tw-bg-cover tw-bg-center" style="background-image: url('/bg-logo.jpg');">
+  <section class="tw-relative tw-text-white tw-py-20 tw-bg-cover tw-bg-center" style="background-image: url('/IMG_4702.jpeg');">
     <div class="tw-container tw-mx-auto tw-px-6 tw-text-center">
       <!-- Logo in Hero Section -->
       <div class="tw-mb-8">
-        <img src="/bg-logo.jpg" alt="RealEstateApp Logo" class="tw-mx-auto tw-h-20">
+        <img src="/Sidebar Logo.png" alt="RealEstateApp Logo" class="tw-mx-auto tw-h-60">
       </div>
-      <h2 class="tw-text-4xl tw-text-black tw-font-bold">Find Your Dream Home</h2>
-      <p class="tw-mt-4 tw-text-xl tw-text-black tw-font-bold">Browse a wide range of properties at your fingertips</p>
-      <a href="#properties" class="tw-mt-6 tw-inline-block tw-bg-white tw-text-green-600 tw-py-3 tw-px-8 tw-rounded-full tw-text-lg tw-hover:bg-gray-200 tw-transition">Start Searching</a>
+      <h2 class="tw-text-4xl tw-text-white tw-font-bold">Find Your Dream Home</h2>
+      <p class="tw-mt-4 tw-text-xl tw-text-white tw-font-bold">Browse a wide range of properties at your fingertips</p>
+      <a href="#properties" class="tw-mt-6 tw-inline-block tw-bg-green-700 tw-text-white tw-py-3 tw-px-8 tw-rounded-full tw-text-lg tw-hover:bg-green-600 tw-transition">Start Searching</a>
     </div>
   </section>
 

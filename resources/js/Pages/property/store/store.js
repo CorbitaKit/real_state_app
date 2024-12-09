@@ -11,7 +11,9 @@ const getDefaultPropertyState = () => ({
     lots: [],
     number_of_lot_groups: 0,
     lot_groups: [],
-    balance_payable: 36
+    balance_payable: 36,
+    blocks: 0,
+    description: '',
 });
 
 export const usePropertyStore  = defineStore('propertyStore', {

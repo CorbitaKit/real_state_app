@@ -25,7 +25,7 @@ class PaymentController extends Controller
     }
     public function create()
     {
-        $lots = Lot::where('user_id', Auth::user()->id)->where('status', 'Occupied')->get();
+        $lots = Lot::with('lotGroup', 'payments')->where('user_id', Auth::user()->id)->where('status', 'Occupied')->get();
         return Inertia::render('payment/create', ['lots' => $lots]);
     }
 

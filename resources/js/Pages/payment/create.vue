@@ -7,7 +7,7 @@ import { useForm, router } from '@inertiajs/vue3'
 import {getUser} from '../plugins/get-user-plugin'
 import moment from 'moment'
 import Swal from 'sweetalert2'
-
+import { formatCurrency } from '../composables/currencyFormatter'
 
 const { getUserInfo } = getUser()
 
@@ -16,6 +16,7 @@ const props = defineProps({
     lots: Object
 })
 
+const remaining_balance = ref()
 const mode_of_payments = ref([
     {
         mode_of_payment: 'GCash',
@@ -56,8 +57,23 @@ const submit = () => {
         })
     });
 }
+
+const calculateTotalAmount = (lot_group) => {
+    return lot_group.sqr_meter * lot_group.amount_per_sqr_meter
+}
+
+const calculateRemainingBalance = (lot) => {
+    const total_amount = calculateTotalAmount(lot.lot_group)
+    const total_payment = lot.payments.reduce((sum, payment) => sum + payment.amount, 0)
+
+    return total_amount - total_payment
+}
+
+const calculateTotalPayment = (lot) => {
+    return lot.payments.reduce((sum, payment) => sum + payment.amount, 0)
+}
+
 const checkLotData = () => {
-    console.log(form.lot_id)
     if (form.lot_id == 0) {
         Swal.fire({
             icon: "error",
@@ -68,6 +84,25 @@ const checkLotData = () => {
         return false
     }
     return true
+}
+
+const checkAmountPaid = () => {
+    if (form.amount > remaining_balance.value) {
+        Swal.fire({
+            icon: "error",
+            title: "Oops...",
+            text: "Entered amount should not be greater than remaining balance",
+        });
+        return false
+    }
+    return true
+
+
+}
+
+const setLot = (lot) => {
+    form.lot_id = lot.id
+    remaining_balance.value = calculateRemainingBalance(lot)
 }
 </script>
 
@@ -107,13 +142,15 @@ const checkLotData = () => {
             <tab-content title="List of lots" :before-change="checkLotData">
                 <div class="tw-grid tw-grid-cols-3 tw-gap-3">
                     <div class="tw-mb-4" v-for="lot in lots" :key="lot.id">
-                        <button @click="form.lot_id = lot.id" type="button" class="tw-text-black tw-text-lg tw-font-medium tw-block tw-w-full tw-items-center tw-rounded tw-p-4 tw-text-sm tw-font-medium transition hover:scale-105" :class="lot.color_label">
+                        <button :disabled="calculateRemainingBalance(lot) == 0" @click="setLot(lot)" type="button" class="tw-text-black tw-text-lg tw-font-medium tw-block tw-w-full tw-items-center tw-rounded tw-p-4 tw-text-sm tw-font-medium transition hover:scale-105" :class="lot.color_label">
                             <span> Lot {{ lot.id }}</span><br>
+                            <span>Remaining Balance: {{ formatCurrency(calculateRemainingBalance(lot)) }}</span><br>    
+                            <span>Total Payment:  {{ formatCurrency(calculateTotalPayment(lot)) }} </span>
                         </button>
                     </div>
                 </div>
             </tab-content>
-            <tab-content title="Payment Details">
+            <tab-content title="Payment Details" :before-change="checkAmountPaid">
                 <div class="tw-grid tw-grid-cols-2 tw-gap-4 tw-mx-9">
                     <div class="tw-mb-4">
                         <label for="phase" class="tw-block tw-text-gray-700 tw-font-semibold tw-mb-2">Amount</label>
@@ -123,7 +160,7 @@ const checkLotData = () => {
                         <label for="region" class="tw-block tw-text-gray-700 tw-font-semibold tw-mb-2">Mode of payment</label>
                         <!-- <Dropdown v-model="form.mode_of_payment" :options="mode_of_payments" filter optionLabel="mode_of_payment" placeholder="Select a mode of payment" class="tw-w-full md:w-full tw-border" /> -->
                         <select  class="js-basic-single form-control" name="region" v-model="form.mode_of_payment">
-                            <option  v-for="payment in mode_of_payments" :value="payment">{{ payment.mode_of_payment }}</option>
+                            <option  v-for="(payment, i) in mode_of_payments" :value="payment" :key="i">{{ payment.mode_of_payment }}</option>
                         </select>
                     </div>
                 </div>

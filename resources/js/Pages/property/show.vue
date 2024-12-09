@@ -1,15 +1,13 @@
 <script setup>
 import Layout from '../layout/main.vue'
-import Header from '../components/header.vue'
-
-import Card from './components/card.vue'
 import {getUser} from '../plugins/get-user-plugin'
 import { useConfirm } from "primevue/useconfirm";
 import { useForm, router } from '@inertiajs/vue3';
 import moment from 'moment';
 import { useToaster } from '../composables/toast'
-import { ref } from 'vue';
+import { reactive, ref } from 'vue';
 import Swal from 'sweetalert2'
+import { toWords } from 'number-to-words';
 
 const { show } = useToaster()
 const { getUserInfo } = getUser()
@@ -20,8 +18,22 @@ const user = getUserInfo()
 const visible = ref(false)
 const payments = ref()
 const payment_view = ref(false)
+const admin_apply = ref(false)
+const is_contract = ref(false)
+const contract_data = reactive({
+    seller: '',
+    seller_address: '',
+    buyer: '',
+    buyer_address: '',
+    lot_address: '',
+    size: '',
+    property_address:'',
+    amount_in_word: '',
+    amount: '',
+})
 const props = defineProps({
-    property: Object
+    property: Object,
+    clients: Object
 })
 const form = useForm({
     application_type: 'Lot Application',
@@ -33,47 +45,51 @@ const form = useForm({
 
 
 const checkUser = (lot) => {
-    if (user.role_id !== 3 && lot.status !== 'Available') {
-        if (lot.payments) {
-            payment_view.value = true
-            payments.value = lot.payments
-        }
-    }
-    if (user.role_id === 3) {
-        if (!user.personal_info) {
-            confirm.require({
-                message: 'You did not set up your profile yet. Please set up your profile first to continue',
-                header: 'Confirmation',
-                icon: 'pi pi-exclamation-triangle',
-                
-            });
-        } else {
-            applyForLot(lot)
-        }
+    if (user.role.name === 'Client') {
+        applyForLot(lot)
+    } else {
+        form.lot_id = lot.id
+        admin_apply.value = true
+
     }
 }
 
 const applyForLot = (lot) => {
-    if (lot.status === 'Available') {
-        confirm.require({
-            message: 'Are you sure you want to apply for this lot?',
-            header: 'Confirmation',
-            icon: 'pi pi-exclamation-triangle',
-            rejectProps: {
-                label: 'Cancel',
-                severity: 'secondary',
-                outlined: true
-            },
-            acceptProps: {
-                label: 'Save'
-            },
-            accept: () => {
+   
+   
+        // confirm.require({
+        //     message: 'Are you sure you want to apply for this lot?',
+        //     header: 'Confirmation',
+        //     icon: 'pi pi-exclamation-triangle',
+        //     rejectProps: {
+        //         label: 'Cancel',
+        //         severity: 'secondary',
+        //         outlined: true
+        //     },
+        //     acceptProps: {
+        //         label: 'Save'
+        //     },
+        //     accept: () => {
+        //         form.lot_id = lot.id
+        //         sendApplication()
+        //     },
+        // });
+        Swal.fire({
+            title: "Are you sure?",
+            text: "You want to apply for this lot?",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "Yes!"
+            }).then((result) => {
+            if (result.isConfirmed) {
                 form.lot_id = lot.id
                 sendApplication()
-            },
-        });
-    }
-}
+            }
+            });
+                
+        }
 const siteVisit = () => {
     form.application_type = 'Site Visit',
     form.reserved_date = moment(form.reserved_date).format('YYYY-MM-DD')
@@ -82,14 +98,24 @@ const siteVisit = () => {
     visible.value = false
 }
 const sendApplication = () => {
+    console.log(form)
     form.post('/applications', {
         onSuccess: (() => {
-            // show('success', 'Application Sent!', 'We will review your application, and will send an email after reviewing')
-            Swal.fire({
+            if (admin_apply) {
+                admin_apply.value = false
+                Swal.fire({
+                    title: "Success!",
+                    text: "Application sent succesfully!",
+                    icon: "success"
+                });
+            } else {
+                Swal.fire({
                 title: "Success!",
                 text: "We will review your application, and will send an email after reviewing",
                 icon: "success"
             });
+            }
+            
         })
     })
 }
@@ -116,6 +142,55 @@ const showPayments = (lotPayments) => {
     payment_view.value = true
 }
 
+const processContract = (lot) => {
+    contract_data.seller = user.personal_info.first_name + ' ' + user.personal_info.last_name
+    contract_data.buyer = lot.user.personal_info.first_name + ' ' + lot.user.personal_info.last_name
+    contract_data.buyer_address = lot.user.personal_info.address
+    contract_data.property_address = 'Purok ' + lot.property.purok + ', Barangay of ' + lot.property.barangay + ', ' + lot.property.city + ', ' + lot.property.province
+    contract_data.size = lot.lot_group.sqr_meter + ' square meters'
+    contract_data.lot_address = 'Phase ' + lot.property.phase + ', Block ' + lot.block + ', ' + lot.name 
+    contract_data.amount_in_word = toWords((lot.lot_group.sqr_meter * lot.lot_group.amount_per_sqr_meter))
+    contract_data.amount = formatCurrency((lot.lot_group.sqr_meter * lot.lot_group.amount_per_sqr_meter))
+    is_contract.value = true
+
+}
+
+const printDiv = () => {
+    const printContent = document.getElementById("printMe").outerHTML;
+    const printWindow = window.open("", "_blank");
+    printWindow.document.open();
+    printWindow.document.write(`
+        <html>
+            <head>
+                <title>Print Report</title>
+                <style>
+                    body {
+                        font-family: Arial, sans-serif;
+                        margin: 20px;
+                    }
+                    table {
+                        width: 100%;
+                        border-collapse: collapse;
+                    }
+                    th, td {
+                        border: 1px solid #ddd;
+                        padding: 8px;
+                    }
+                    th {
+                        background-color: #f2f2f2;
+                        text-align: left;
+                    }
+                </style>
+            </head>
+            <body>${printContent}</body>
+        </html>
+    `);
+    printWindow.document.close();
+    printWindow.focus();
+    printWindow.print();
+    printWindow.close();
+    is_contract.value = false
+};
 defineOptions({layout: Layout})
 </script>
 
@@ -147,7 +222,6 @@ defineOptions({layout: Layout})
             <!-- end page title -->
         </div>
     </div>
-    <ConfirmDialog />
     <Dialog v-model:visible="payment_view" modal header="Payment History" :style="{ width: '50rem' }">
         <v-table>
             <thead>
@@ -169,7 +243,7 @@ defineOptions({layout: Layout})
             </thead>
             <tbody>
             <tr v-for="payment in payments" :key="payment.id" >
-                <td>{{ payment.amount }}</td>
+                <td>{{ formatCurrency(payment.amount) }}</td>
                 <td>{{ payment.mode_of_payment }}</td>
                 <td>{{ payment.date_of_payment }}</td>
                 <td>{{ payment.invoice_number }}</td>
@@ -187,80 +261,21 @@ defineOptions({layout: Layout})
             <Button type="button" label="Save" @click="siteVisit"></Button>
         </div>
     </Dialog>
-    <!-- <div class="tw-mx-auto tw-bg-white tw-p-8 tw-my-8 tw-rounded tw-shadow-md">
-        
-        <p class="tw-text-black tw-font-medium tw-text-1xl tw-pt-2 tw-mb-2" v-if="user.role_id == 3">
-            Note: This is not the actual map of the property, please refer to this 
-            <a class="text-blue" style="color:blue;" href="/test.jpg" target="__blank">image</a> or request a
-            <a href="#" @click="visible = true" style="color:blue;">site visit</a>
-        </p>
 
-        <div class="tw-grid tw-grid-cols-4 tw-gap-3 mb-4 ">
-            <div class="tw-mb-4 tw-border-2 tw-p-4 tw-text-lg tw-font-medium tw-text-black"  v-for="lot_group in property.lot_groups" :key="lot_group.id" :class="lot_group.color_label">
-                <span>{{ lot_group.amount_per_sqr_meter }} - Per sqr meter</span><br>
-                <span>{{ lot_group.sqr_meter }} sqr meter</span>
-
-            </div>
-        </div>
-        <div class="table-responsive mb-4">
-            <table class="table mb-0 table-border-3">
-                <thead>
-                    <tr>
-                        <th>Photo</th>
-                        <th>Order ID</th>
-                        <th>Customer</th>
-                        <th>Property</th>
-                        <th>Date </th>
-                        <th>Type</th>
-                        <th>Status</th>
-                        <th>Action</th>
-                    </tr>
-                </thead>
-                <tbody class="mb-0">
-                    <tr>
-                        <td>
-                            <div class="avatar avatar-lg">
-                                <img class="img-fluid rounded mCS_img_loaded" src="assets/img/blog/01.jpg" alt="">
-                            </div>
-                        </td>
-                        <td>#54981</td>
-                        <td>Karla George</td>
-                        <td>Eaton Place</td>
-                        <td><i class="far fa-calendar-alt mr-2 text-success"></i> 20-01-2020</td>
-                        <td>Rent</td>
-                        <td><span class="badge badge-success ">Paid</span></td>
-                        <td>
-                            <a href="javascript:void(0)" class="mr-2"><i class="fas fa-pencil-alt" data-toggle="tooltip" data-placement="top" title="" data-original-title="Edit"></i></a>
-                            <a href="javascript:void(0)"><i class="far fa-trash-alt" data-toggle="tooltip" data-placement="top" title="" data-original-title="Delete"></i></a>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-        
-        <div class="tw-grid tw-grid-cols-4 tw-gap-3">
-            
-            <div class="mb-4" v-for="lot in property.lots" :key="lot.id">
-                
-                <button @click="checkUser(lot)" type="button" class="tw-text-lg tw-font-medium tw-text-black tw-block tw-w-full tw-items-center tw-rounded tw-p-4 tw-text-sm tw-font-medium transition hover:scale-105" :class="lot.lot_group.color_label">
-                    <span> Lot {{ lot.id }}</span><br>
-                    <span> Monthly Payment: {{ lot.lot_group.monthly_amortizations }} </span><br>
-                    <span> Total Amount:  {{ lot.lot_group.sqr_meter * lot.lot_group.amount_per_sqr_meter }}</span><br>
-                    <span> Status: {{ lot.status }}</span><br>
-                    <span v-if="lot.user && lot.status === 'Pending'"> Applied By: {{ lot.user.personal_info.first_name }} {{ lot.user.personal_info.last_name }}</span>
-                    <span v-if="lot.user && lot.status === 'Occupied'"> Owned By: {{ lot.user.personal_info.first_name }} {{ lot.user.personal_info.last_name }}</span><br>
-                    <span v-if="lot.user && lot.status === 'Occupied'">Remaining Balance: 2000</span><br>
-                    <span v-if="lot.user && lot.status === 'Occupied'">Total percentage: 
-                        <ProgressBar :value="calculatePercentage(lot)"></ProgressBar>
-                    </span><br>
-                </button>
-            </div>
+    <Dialog v-model:visible="admin_apply" modal header="Select Client" :style="{ width: '50rem' }">
+        <div class="tw-flex items-center tw-gap-4 tw-mb-4">
+            <select  class="js-basic-single form-control" name="region" v-model="form.user_id">
+                <option  v-for="client in clients" :key="client.id" :value="client.id">{{ client.personal_info.first_name }} {{ client.personal_info.last_name }}</option>
+            </select>
             
         </div>
-    </div> -->
-    
+        <div class="tw-flex tw-justify-end tw-gap-2">
+            <Button type="button" label="Save" @click="sendApplication"></Button>
+        </div>
+    </Dialog>
 
-    <div class="row">
+
+    <div class="row" v-if="!is_contract">
         <div class="col-xl-12">
             <div class="card card-statistics border-0 shadow-none mb-0">
                 <div class="card-body">
@@ -269,19 +284,24 @@ defineOptions({layout: Layout})
                             <thead>
                                 <tr>
                                     <th>Lot Number</th>
+                                    <th>Block</th>
                                     <th>Sqr Meters</th>
                                     <th>Amount Per Sqr Meters</th>
                                     <th>Monthly Amortization</th>
+                                    <th>Payment Percentage</th>
                                     <th>Status</th>
                                     <th v-if="user.role.name !== 'Client'">Client</th>
                                     <th>Action</th>
                                 </tr>
                             </thead>
                             <tbody class="mb-0">
-                                <tr v-for="lot in property.lots">
+                                <tr v-for="lot in property.lots" :key="lot.id">
                                     <td>
                                         {{ lot.name }}
                                         
+                                    </td>
+                                    <td>
+                                        Block {{ lot.block }}
                                     </td>
                                     <td>
                                         {{ lot.lot_group.sqr_meter }} m&sup2;
@@ -291,6 +311,9 @@ defineOptions({layout: Layout})
                                     </td>
                                     <td>
                                         {{ formatCurrency(lot.lot_group.monthly_amortizations) }}
+                                    </td>
+                                    <td>
+                                        <ProgressBar :value="calculatePercentage(lot)" />
                                     </td>
                                     <td >
                                         <span class="badge badge-info" v-if="lot.status === 'Available'">
@@ -318,7 +341,8 @@ defineOptions({layout: Layout})
                                             <div class="dropdown-menu custom-dropdown dropdown-menu-right p-4">
                                                 <h6 class="mb-1">Action</h6>
                                                 <a v-if="user.role.name !=='Client'" @click="showPayments(lot.payments)" class="dropdown-item" href="#"><i class="fa-fw far fa-file-alt pr-2"></i>View Payment History</a>
-                                                <a v-if="user.role.name === 'Client' && lot.status === 'Available'" @click.prevent="checkUser(lot)" class="dropdown-item" href="#!"><i class="fa-fw far fa-file-pdf pr-2"></i>Apply</a>
+                                                <a v-if="user.role.name !=='Client' && lot.status === 'Occupied'" @click="processContract(lot)" class="dropdown-item" href="#"><i class="fa-fw far fa-file-alt pr-2"></i>Print Contract</a>
+                                                <a v-if=" lot.status === 'Available'" @click.prevent="checkUser(lot)" class="dropdown-item" href="#!"><i class="fa-fw far fa-file-pdf pr-2"></i>Apply</a>
                                                 <a v-if="user.role.name === 'Client'" @click.prevent="visible = true" class="dropdown-item" href="#!"><i class="fa-fw far fa-calendar pr-2"></i>Request a site visit</a>
                                             </div>
                                         </div>
@@ -331,5 +355,65 @@ defineOptions({layout: Layout})
                 </div>
             </div>
         </div>
+    </div>
+    <div class="row" v-if="is_contract">
+        <div class="col-xl-12 col-sm-12" style="color:black;">
+            <div class="card card-statistics">
+                <div class="card-body p-3" id="printMe">
+                    <h1>
+                        <p class="MsoNormal" align="center" style="text-align:center">
+                            <b><span style="font-size:14.0pt;line-height:107%">CONTRACT TO SELL</span></b>
+                        </p>
+                        <p class="MsoNormal" align="center" style="text-align:center">
+                            <b><span style="font-size:14.0pt;line-height:107%"><br></span></b>
+                        </p>
+
+                        <p class="MsoNormal">
+                            <span style="font-size:14.0pt;line-height:107%">KNOW ALL MEN BY THESE PRESENTS:</span>
+                        </p>
+
+                        <p class="MsoNormal">
+                            <span style="font-size:14.0pt;line-height:107%">This contract to sell is made, executed, and entered into by and between:</span>
+                        </p>
+            
+                        <p class="MsoNormal">
+                            <span style="font-size:14.0pt;line-height:107%">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <b>{{  contract_data.seller }}</b>, of legal age, Filipino, single, and a resident of Panabo City, Davao del Norte, hereinafter referred to as the <b>SELLER</b>.</span>
+                        </p>
+
+                        <p class="MsoNormal" align="center" style="text-align:center">
+                            <b><span style="font-size:14.0pt;line-height:107%">-AND-</span></b>
+                        </p>
+
+                        <p class="MsoNormal">
+                            <span style="font-size:14.0pt;line-height:107%">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <b>{{ contract_data.buyer }}</b>, of legal age, Filipino, <b>married</b>, and a resident of <b>{{ contract_data.buyer_address }}</b>, hereinafter referred to as the <b>BUYER</b>.</span>
+                        </p>
+
+                        <p class="MsoNormal" align="center" style="text-align:center">
+                            <b><span style="font-size:14.0pt;line-height:107%">-WITNESSETH-</span></b>
+                        </p>
+
+                        <p class="MsoNormal">
+                            <b><span style="font-size:14.0pt;line-height:107%">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; WHEREAS</span></b><span style="font-size:14.0pt;line-height:107%">, the <b>SELLER</b> is authorized to enter into a contract to sell involving a parcel of land located at <b>{{ contract_data.property_address }}</b>, and covered by <b>Transfer Certificate of Title No. 256092</b>, containing a total area of <b>Fifty thousand square meters</b>, more or less, issued by the Registry of Deeds of the province of Davao del Norte.</span>
+                        </p>
+
+                        <p class="MsoNormal">
+                            <span style="font-size:14.0pt;line-height:107%">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Whereas, the <b>BUYER</b> has offered to buy a portion of said parcel of land containing an area of <b>{{ contract_data.size }}</b>, more or less, identified as <b>{{ contract_data.lot_address }}</b>, of the aforesaid property, and the <b>SELLER</b> has agreed to sell the above-mentioned property under the terms and conditions herein below set forth:</span>
+                        </p>
+
+                        <p class="MsoNormal">
+                            <span style="font-size:14.0pt;line-height:107%">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; NOW THEREFORE, for and in consideration of the total sum of <b>{{ contract_data.amount_in_word }} ({{ contract_data.amount }})</b> Philippine currency, and of the covenants herein after set forth, the <b>SELLER</b> agrees to sell, and the <b>BUYER</b> agrees to buy the aforesaid parcel of land, being a portion of the parcel of land covered by <b>Transfer Certificate of Title No. 256092</b>, subject to the following terms:</span>
+                        </p>
+
+                        <p class="MsoNormal">
+                            <span style="font-size:14.0pt;line-height:107%">----------------------------------------&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ---------------------------------------<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; SELLER&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; BUYER</span>
+                        </p>
+                    </h1>
+
+                </div>
+            </div>
+            <a @click="printDiv" href="javascript:void(0);" class="btn btn-block btn-round btn-outline-info">Print</a>
+        </div>
+
+      
     </div>
 </template>

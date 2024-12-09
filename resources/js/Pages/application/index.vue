@@ -1,3 +1,4 @@
+
 <script setup>
 import Layout from '../layout/main.vue'
 import Header from '../components/header.vue'
@@ -220,9 +221,28 @@ defineOptions({layout: Layout})
 
                                   </td>
                                 </tr>
+                                <tr>
+                                  <td>
+                                    Requirements
+                                  </td>
+                                  <td>
+                                    <Image alt="Image" preview v-if="client.files.length > 0">
+                                        <template #previewicon>
+                                            <i class="pi pi-search"></i>
+                                        </template>
+                                        <template #image>
+                                            <img :src="'/storage/'+client.files[0]?.url" alt="image" class="tw-h-[50px]"/>
+                                        </template>
+                                        <template #preview="slotProps">
+                                            <img :src="'/storage/'+client.files[0]?.url" alt="preview" :style="slotProps.style" @click="slotProps.onClick" />
+                                        </template>
+                                    </Image>
+                                  </td>
+                                </tr>
                               
                             </tbody>
                         </table>
+
                     </div>
             </div>
         </div>

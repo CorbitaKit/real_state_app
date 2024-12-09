@@ -65,9 +65,12 @@ const setLots = () => {
             sqr_meter: '',
             color_label: '',
             is_set: false,
-            status: 'Available'
+            status: 'Available',
+            block: ''
         })
     }
+    useProperty.property.number_of_lot_groups = 3
+    setLotGroups()
 
 }
 
@@ -107,63 +110,6 @@ const calculateMonthly = (lot_group) => {
 </script>
 
 <template>
-    <!-- <div class="grid grid-cols-2 gap-3 mx-9 mb-5">
-        <div class="mb-2">
-            <label for="purok" class="block text-gray-700 font-semibold mb-2">Down Payment</label>
-            <input v-model="useProperty.property.down_payment" type="number"  class="block appearance-none w-full px-3 py-2 border rounded-md focus:outline-none focus:ring focus:border-blue-300" />
-            
-        </div>
-        <div class="mb-2">
-            <label for="purok" class="block text-gray-700 font-semibold mb-2">Balance Payable in</label>
-            <InputNumber v-model="useProperty.property.balance_payable" inputId="expiry" suffix=" Month(s)" fluid class="w-full" />
-        </div>
-
-        <div class="mb-2">
-            <label for="purok" class="block text-gray-700 font-semibold mb-2">Number of Lot(s)</label>
-            <InputNumber :min="0" :max="100" @blur="setLots" v-model="useProperty.property.number_of_lot" inputId="integeronly" fluid class="w-full"/>
-        </div>
-        
-        <div class="mb-2">
-            <label for="purok" class="block text-gray-700 font-semibold mb-2">Number of Lot group(s)</label>
-            <InputNumber :min="0" :max="5"  @blur="setLotGroups" v-model="useProperty.property.number_of_lot_groups" inputId="integeronly" fluid class="w-full"/>
-        </div>
-    </div>
-    <hr />
-    <div class="grid grid-cols-5 gap-3 mx-9 mt-2 mb-5" v-for="lot_group in useProperty.property.lot_groups" :key="lot_group.id">
-        <div class="mb-2">
-            <label for="purok" class="block text-gray-700 font-semibold mb-2">Color label</label>
-            <button v-if="lot_group.color_label" @click="lot_group.color_label = ''" type="button" class="block w-full h-[42px] items-center rounded p-4 text-sm font-medium transition hover:scale-105" :class="lot_group.color_label.color" />
-            <Dropdown v-else v-model="lot_group.color_label"  :options="color_pallete" filter optionLabel="color" placeholder="Select a color for this lot group" class="w-full md:w-full border">
-                <template #option="slotProps">
-                    <div class="flex items-center">
-                        <button type="button" class="block w-[100%] items-center rounded p-4 text-sm font-medium transition hover:scale-105" :class="slotProps.option.color" />
-                    </div>
-                </template>
-            </Dropdown>
-            
-        </div>
-        <div class="mb-4">
-            <label for="purok" class="block text-gray-700 font-semibold mb-2">sqr meter</label>
-            <input v-model="lot_group.sqr_meter" type="number" class="block appearance-none w-full px-3 py-2 border rounded-md focus:outline-none focus:ring focus:border-blue-300" />
-        </div>
-        <div class="mb-4">
-            <label for="purok" class="block text-gray-700 font-semibold mb-2" style="white-space: nowrap;">Amount per sqr meter</label>
-            <input v-model="lot_group.amount_per_sqr_meter" @blur="calculateTotalAmount(lot_group)" type="number" class="block appearance-none w-full px-3 py-2 border rounded-md focus:outline-none focus:ring focus:border-blue-300" />
-        </div>
-        <div class="mb-4">
-            <label for="purok" class="block text-gray-700 font-semibold mb-2">Total Amount</label>
-            <input disabled v-model="lot_group.total_amount" type="text" class="block appearance-none w-full px-3 py-2 border rounded-md focus:outline-none focus:ring focus:border-blue-300" />
-        </div>
-        <div class="mb-4">
-            <label for="purok" class="block text-gray-700 font-semibold mb-2" style="white-space: nowrap;">Monthly Amortization</label>
-            <input disabled v-model="lot_group.monthly_amortizations" type="number" class="block appearance-none w-full px-3 py-2 border rounded-md focus:outline-none focus:ring focus:border-blue-300" />
-        </div>
-       
-      
-        <hr class="w-[950px]"/>
-    </div>
-     -->
-   
     <div class="row">
         <div class="col-xl-12">
             <div class="card card-statistics">
@@ -181,20 +127,24 @@ const calculateMonthly = (lot_group) => {
                                 <InputNumber :min="0" :max="100" @blur="setLots" v-model="useProperty.property.number_of_lot" inputId="integeronly" class="w-100" />
                                
                             </div>
-                            <div class="form-group col-md-6">
+                            <!-- <div class="form-group col-md-6">
                                 <label for="inputPassword4">Number of Lot Group(s)</label>
                                 <InputNumber :min="3" :max="3"  @blur="setLotGroups" v-model="useProperty.property.number_of_lot_groups" inputId="integeronly" class="w-100" />
-                            </div>
-                        </div>
-                        <div class="form-row">
-                            <!-- <div class="form-group col-md-6">
-                                <label for="downpayment">Down Payment</label>
-                                <InputNumber disabled v-model="useProperty.property.down_payment" inputId="currency-ph" mode="currency" currency="PHP" locale="en-PH" class="w-100" />
-                                
                             </div> -->
                             <div class="form-group col-md-6">
                                 <label for="inputPassword4">Balance Payable</label>
                                 <InputNumber disabled v-model="useProperty.property.balance_payable" class="w-100" name="downpayment" inputId="expiry" suffix=" Month(s)" fluid />
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group col-md-6">
+                                <label for="downpayment">Number of Block(s)</label>
+                                <InputNumber v-model="useProperty.property.blocks" class="w-100" />
+                                
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label for="inputPassword4">Description</label>
+                                <textarea v-model="useProperty.property.description" class="w-100"></textarea>
                             </div>
                         </div>
                     </form>

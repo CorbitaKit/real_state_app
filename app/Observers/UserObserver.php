@@ -14,7 +14,7 @@ class UserObserver
      */
     public function created(User $user): void
     {
-        event(new Registered($user));
+        // event(new Registered($user));
         // Mail::to($user)->queue(new UserCreated($user));
     }
 

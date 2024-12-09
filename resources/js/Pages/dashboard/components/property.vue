@@ -9,7 +9,7 @@ const fetchOccupiedLots = (lots) => {
 </script>
 
 <template>
-<div class="col-xl-12 col-xxl-12 mb-3">
+<div class="col-xl-8col-xxl-8mb-3">
     <div class="d-block d-sm-flex align-items-center justify-content-between mb-2 tab nav-border">
         <div class="card-heading mb-sm-0">
             <h5 class="card-title mb-sm-0">Property overview </h5>

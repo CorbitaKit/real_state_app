@@ -36,7 +36,16 @@ class UserController extends Controller
 
     public function clients()
     {
-        $clients = User::with('personal_info', 'address', 'workDetails')->where('role_id', 3)->get();
+        $clients = User::with('personal_info', 
+        'address', 
+        'workDetails', 
+        'payments.plan.lot.property', 
+        'lots.property', 
+        'lots.lotGroup', 
+        'lots.paymentPlans.payment', 
+        'lots.payments', 
+        'lots.paymentPlans.lot.lotGroup',
+        'lots.user.personal_info')->where('role_id', 3)->get();
         return Inertia::render('user/client', [
             'clients' => $clients
         ]);

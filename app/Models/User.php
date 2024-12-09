@@ -11,6 +11,7 @@ use App\Observers\UserObserver;
 use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
 
 #[ObservedBy([UserObserver::class])]
 
@@ -27,6 +28,7 @@ class User extends Authenticatable implements MustVerifyEmail
         'role_id',
         'email',
         'password',
+        
     ];
 
     /**
@@ -75,5 +77,15 @@ class User extends Authenticatable implements MustVerifyEmail
     public function lots(): HasMany
     {
         return $this->hasMany(Lot::class);
+    }
+
+    public function payments(): HasMany
+    {
+        return $this->hasMany(Payment::class);
+    }
+
+    public function files(): MorphMany
+    {
+        return $this->morphMany(File::class, 'fileable');
     }
 }

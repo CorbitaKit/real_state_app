@@ -83,7 +83,7 @@ const handleBarangays = async () => {
                             </div>
                             <div class="form-group col-md-6">
                                 <label for="inputPassword4">Province</label>
-                                <select  class="js-basic-single form-control" name="province"v-model="personal_address.province" @change="handleCities">
+                                <select  class="js-basic-single form-control" name="province" v-model="personal_address.province" @change="handleCities">
                                     <option  v-for="province in provinces" :value="province">{{ province.province_name }}</option>
                                 </select>
                                 <span v-if="error && !personal_address.province" style="color: red;">Province field is required</span>
