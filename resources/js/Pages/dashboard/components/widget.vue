@@ -10,7 +10,7 @@ const props = defineProps({
 </script>
 
 <template>
-    <div class="col-lg-5 col-xl-4 col-xxl-3 mb-3">
+    <div class=" col-lg-5 col-xl-4 col-xxl-3 mb-2">
         <div class="card card-statistics border-0 shadow-none">
             <div class="card-body">
                 <div class="d-flex align-items-center w-100">
@@ -55,7 +55,7 @@ const props = defineProps({
                 <div class="d-flex align-items-center w-100">
                     <div class="mr-3">
                         <h3 class="mb-0">₱{{ sales }}</h3>
-                        <p>Total Earnings <i class="fe fe-corner-left-up text-pink font-md ml-2"></i></p>
+                        <p>Total Sales <i class="fe fe-corner-left-up text-pink font-md  ml-2"></i></p>
                     </div>
                     <div class="avatar-type avatar-type-lg bg-pink-inverse ml-auto">
                         <i class="ti ti-money text-pink"></i>

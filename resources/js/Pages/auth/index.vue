@@ -37,7 +37,7 @@ const togglePasswordVisibility = () => {
                 <div class="col-lg-4">
                     <div class="d-flex align-items-center">
                         <div class="login pt-4">
-                            <h1 class="mb-2">Jef Aldebal Real State Service </h1>
+                            <h1 class="mb-2 tw-font-bold tw-text-xl ">Jef Aldebal Realty Services </h1>
                             <p>Welcome back, please login to your account.</p>
                             <div v-if="error">
                                 <div v-for="(e, i) in error" :key="i" class="alert alert-danger mb-2 mt-2" role="alert">

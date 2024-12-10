@@ -349,8 +349,8 @@ defineOptions({layout: Layout})
                                     </td>
                                     <td>
                                         Phase {{ application.lot.property.phase }},
-                                        purok {{ application.lot.property.purok }},
-                                        barangay {{ application.lot.property.barangay }},<br>
+                                        Purok {{ application.lot.property.purok }},
+                                        Barangay {{ application.lot.property.barangay }},<br>
                                         {{ application.lot.property.city }},
                                         {{ application.lot.property.province }},
                                         <span v-if="application.type === 'Lot Application'">Lot {{ application.lot.id }} </span> 

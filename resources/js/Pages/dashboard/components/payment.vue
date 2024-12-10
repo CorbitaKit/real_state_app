@@ -41,8 +41,8 @@ const setChartData = () => {
             {
                 data: [props.pending_payment, props.approved_payment],
                 backgroundColor: [
-                    documentStyle.getPropertyValue('--pink-500'),
-                    documentStyle.getPropertyValue('--gray-500'),
+                    documentStyle.getPropertyValue('--green-400'),
+                    documentStyle.getPropertyValue('--green-800'),
                     
                 ],
                 label: 'My dataset'

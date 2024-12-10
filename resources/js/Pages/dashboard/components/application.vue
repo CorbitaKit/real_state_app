@@ -24,8 +24,8 @@ const setChartData = () => {
         datasets: [
             {
                 data: [props.lot_application, props.site_visit],
-                backgroundColor: [documentStyle.getPropertyValue('--cyan-500'), documentStyle.getPropertyValue('--orange-500'), documentStyle.getPropertyValue('--gray-500')],
-                hoverBackgroundColor: [documentStyle.getPropertyValue('--cyan-400'), documentStyle.getPropertyValue('--orange-400'), documentStyle.getPropertyValue('--gray-400')]
+                backgroundColor: [documentStyle.getPropertyValue('--green-600'), documentStyle.getPropertyValue('--orange-500'), documentStyle.getPropertyValue('--gray-500')],
+                hoverBackgroundColor: [documentStyle.getPropertyValue('--green-300'), documentStyle.getPropertyValue('--orange-300'), documentStyle.getPropertyValue('--gray-400')]
             }
         ]
     };

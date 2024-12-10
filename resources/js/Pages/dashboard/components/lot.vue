@@ -42,8 +42,8 @@ const setChartData = () => {
         datasets: [
             {
                 data: [props.available_lot, props.pending_lot, props.occupied_lot],
-                backgroundColor: [documentStyle.getPropertyValue('--cyan-500'), documentStyle.getPropertyValue('--orange-500'), documentStyle.getPropertyValue('--gray-500')],
-                hoverBackgroundColor: [documentStyle.getPropertyValue('--cyan-400'), documentStyle.getPropertyValue('--orange-400'), documentStyle.getPropertyValue('--gray-400')]
+                backgroundColor: [documentStyle.getPropertyValue('--yellow-400'), documentStyle.getPropertyValue('--orange-400'), documentStyle.getPropertyValue('--green-400')],
+                hoverBackgroundColor: [documentStyle.getPropertyValue('--yellow-200'), documentStyle.getPropertyValue('--orange-200'), documentStyle.getPropertyValue('--green-200')]
             }
         ]
     };
