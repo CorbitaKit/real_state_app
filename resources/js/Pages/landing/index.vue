@@ -44,7 +44,7 @@ watch(filterText, async (newFilter, oldFilter) => {
   <Header />
 
   <!-- Hero Section -->
-  <section class="tw-relative tw-text-white tw-py-20 tw-bg-cover tw-bg-center" style="background-image: url('/IMG_4702.jpeg');">
+  <section class="tw-relative tw-text-white tw-py-40 tw-bg-cover tw-bg-center" style="background-image: url('/IMG_4702.jpeg');">
     <div class="tw-container tw-mx-auto tw-px-6 tw-text-center">
       <!-- Logo in Hero Section -->
       <div class="tw-mb-8">

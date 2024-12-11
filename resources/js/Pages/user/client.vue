@@ -475,6 +475,6 @@ const printDiv = () => {
                 </tbody>
             </table>
         </div>
-        <a @click="printDiv" href="javascript:void(0);" class="btn btn-block btn-round btn-outline-info">Print</a>
+        <a @click="printDiv" href="javascript:void(0);" class="btn btn-block btn-round btn-outline-info">Print </a>
     </div>
 </template>

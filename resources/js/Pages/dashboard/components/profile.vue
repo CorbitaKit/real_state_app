@@ -14,7 +14,7 @@ const setLots = (user_lots) => {
 </script>
 
 <template>
-    <div class="col-xxl-4 mb-3">
+    <div class="col-xxl-4 mb-sm-0">
         <div class="card card-statistics border-0 shadow-none mb-0">
         <div class="card-body">
             <div class="table-responsive">
