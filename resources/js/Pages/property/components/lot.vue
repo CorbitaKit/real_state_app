@@ -120,12 +120,12 @@ const calculateMonthly = (lot_group) => {
                 </div>
                 <div class="card-body">
                     <form>
-                        
+
                         <div class="form-row">
                             <div class="form-group col-md-6">
                                 <label for="inputEmail4">Number of Lots</label>
                                 <InputNumber :min="0" :max="100" @blur="setLots" v-model="useProperty.property.number_of_lot" inputId="integeronly" class="w-100" />
-                               
+
                             </div>
                             <!-- <div class="form-group col-md-6">
                                 <label for="inputPassword4">Number of Lot Group(s)</label>
@@ -133,14 +133,14 @@ const calculateMonthly = (lot_group) => {
                             </div> -->
                             <div class="form-group col-md-6">
                                 <label for="inputPassword4">Balance Payable</label>
-                                <InputNumber disabled v-model="useProperty.property.balance_payable" class="w-100" name="downpayment" inputId="expiry" suffix=" Month(s)" fluid />
+                                <InputNumber v-model="useProperty.property.balance_payable" class="w-100" name="downpayment" inputId="expiry" suffix=" Month(s)" fluid />
                             </div>
                         </div>
                         <div class="form-row">
                             <div class="form-group col-md-6">
                                 <label for="downpayment">Number of Block(s)</label>
                                 <InputNumber v-model="useProperty.property.blocks" class="w-100" />
-                                
+
                             </div>
                             <div class="form-group col-md-6">
                                 <label for="inputPassword4">Description</label>
@@ -163,7 +163,7 @@ const calculateMonthly = (lot_group) => {
                     </div>
                 </template>
             </Dropdown> -->
-            
+
         </div>
         <div class="tw-mb-4">
             <label for="purok" class="tw-block tw-text-gray-700 tw-font-semibold tw-mb-2">sqr meter</label>
@@ -178,16 +178,16 @@ const calculateMonthly = (lot_group) => {
             <label for="purok" class="tw-block tw-text-gray-700 tw-font-semibold tw-mb-2">Total Amount</label>
             <!-- <input disabled v-model="lot_group.total_amount" type="text" class="block appearance-none w-full px-3 py-2 border rounded-md focus:outline-none focus:ring focus:border-blue-300" /> -->
             <InputNumber disabled v-model="lot_group.total_amount" inputId="integeronly" class="w-100"/>
-            
+
         </div>
         <div class="mb-4">
             <label for="purok" class="tw-block tw-text-gray-700 tw-font-semibold tw-mb-2" style="white-space: nowrap;">Monthly Amortization/Downpayment</label>
             <!-- <input disabled v-model="lot_group.monthly_amortizations" type="number" class="block appearance-none w-full px-3 py-2 border rounded-md focus:outline-none focus:ring focus:border-blue-300" /> -->
             <InputNumber disabled v-model="lot_group.monthly_amortizations" inputId="integeronly" class="w-100"/>
-            
+
         </div>
-       
-      
+
+
         <hr class="tw-w-[500%]"/>
     </div>
 </template>

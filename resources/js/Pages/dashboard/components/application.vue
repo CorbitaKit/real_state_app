@@ -4,8 +4,9 @@ import { ref } from "vue";
 import { onMounted } from "vue";
 
 const props = defineProps({
-    lot_application: Number,
-    site_visit: Number
+    rejected_application: Number,
+    approved_application: Number,
+    for_review_application: Number,
 })
 
 const chartData = ref();
@@ -17,30 +18,70 @@ onMounted(() => {
 });
 
 const setChartData = () => {
-    const documentStyle = getComputedStyle(document.body);
+    const documentStyle = getComputedStyle(document.documentElement);
 
-    return {
-        labels: ['Lot Application', 'Site Visit'],
-        datasets: [
-            {
-                data: [props.lot_application, props.site_visit],
-                backgroundColor: [documentStyle.getPropertyValue('--cyan-500'), documentStyle.getPropertyValue('--orange-500'), documentStyle.getPropertyValue('--gray-500')],
-                hoverBackgroundColor: [documentStyle.getPropertyValue('--cyan-400'), documentStyle.getPropertyValue('--orange-400'), documentStyle.getPropertyValue('--gray-400')]
-            }
-        ]
-    };
+return {
+    labels: ['Applications'],
+    datasets: [
+        {
+            label: 'For Review',
+            backgroundColor: documentStyle.getPropertyValue('--cyan-500'),
+            borderColor: documentStyle.getPropertyValue('--cyan-500'),
+            data: [12]
+        },
+        {
+            label: 'Approved',
+            backgroundColor: documentStyle.getPropertyValue('--gray-500'),
+            borderColor: documentStyle.getPropertyValue('--gray-500'),
+            data: [34]
+        },
+        {
+            label: 'Rejected',
+            backgroundColor: documentStyle.getPropertyValue('--gray-500'),
+            borderColor: documentStyle.getPropertyValue('--gray-500'),
+            data: [14]
+        }
+    ]
+};
 };
 
 const setChartOptions = () => {
     const documentStyle = getComputedStyle(document.documentElement);
     const textColor = documentStyle.getPropertyValue('--text-color');
+    const textColorSecondary = documentStyle.getPropertyValue('--text-color-secondary');
+    const surfaceBorder = documentStyle.getPropertyValue('--surface-border');
 
     return {
+        indexAxis: 'y',
+        maintainAspectRatio: false,
+        aspectRatio: 0.8,
         plugins: {
             legend: {
                 labels: {
-                    cutout: '60%',
                     color: textColor
+                }
+            }
+        },
+        scales: {
+            x: {
+                ticks: {
+                    color: textColorSecondary,
+                    font: {
+                        weight: 500
+                    }
+                },
+                grid: {
+                    display: false,
+                    drawBorder: false
+                }
+            },
+            y: {
+                ticks: {
+                    color: textColorSecondary
+                },
+                grid: {
+                    color: surfaceBorder,
+                    drawBorder: false
                 }
             }
         }
@@ -55,11 +96,11 @@ const setChartOptions = () => {
             <div class="card-heading">
             <h5 class="card-title">Application Analysis</h5>
             </div>
-            
+
         </div>
         <div class="card-body pb-0">
             <div class="sales-chart">
-            <Chart type="doughnut" :data="chartData" :options="chartOptions" />
+            <Chart type="bar" :data="chartData" :options="chartOptions" />
             </div>
         </div>
         </div>

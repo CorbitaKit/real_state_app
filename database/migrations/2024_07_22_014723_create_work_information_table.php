@@ -18,7 +18,8 @@ return new class extends Migration
             $table->string('company_address')->nullable();
             $table->string('company_email')->nullable();
             $table->string('company_number')->nullable();
-            $table->integer('length_of_stay')->nullable();
+            $table->integer('length_of_stay_year')->nullable();
+            $table->integer('length_of_stay_month')->nullable();
             $table->string('status')->nullable();
             $table->foreignId('user_id')->nullable();
             $table->float('gross_monthly_income')->nullable();

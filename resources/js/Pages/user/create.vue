@@ -44,7 +44,8 @@ const form = useForm({
         company_address: '',
         company_number: '',
         company_email: '',
-        length_of_stay: '',
+        length_of_stay_year: '',
+        length_of_stay_month: '',
         status: '',
         gross_monthly_income: !props.is_client ? '0000.00' : '',
         job_title: '',
@@ -53,7 +54,7 @@ const form = useForm({
 })
 
 const submit = () => {
-    
+
     form.transform((data) => {
         data.personal_address.province = data.personal_address.province.province_name;
         data.personal_address.city = data.personal_address.city.city_name;
@@ -126,16 +127,16 @@ const validatePersonalInfoData = () => {
     }
         return true;
 
-    
+
 }
 const checkIfFieldsAreFilled = (data) => {
-   
+
     return  Object.keys(data).some(key => {
         return !data[key];
     });
 
 
-    
+
 }
 
 const validateAccountInfoData = () => {
@@ -169,9 +170,9 @@ const validatePersonalAddressData = () => {
 </script>
 
 <template>
-   
+
     <div class="row">
-        
+
         <div class="col-md-12 mb-2">
             <!-- begin page title -->
             <div class="d-block d-sm-flex flex-nowrap align-items-center">
@@ -179,15 +180,15 @@ const validatePersonalAddressData = () => {
                     <h1 v-if="!is_client">Create Staff</h1>
                     <h1 v-else>Create Client</h1>
                 </div>
-                
+
                 <div class="ml-auto d-flex align-items-center">
-                    
+
                     <nav>
                         <ol class="breadcrumb p-0 m-b-0">
                             <li class="breadcrumb-item">
                                 <a href="#" @click="home('/dashboard')"><i class="ti ti-home"></i></a>
                             </li>
-                            
+
                             <li v-if="!is_client" class="breadcrumb-item active text-primary" aria-current="page">Create Staff</li>
                             <li v-else class="breadcrumb-item active text-primary" aria-current="page">Create Client</li>
                         </ol>
@@ -209,14 +210,14 @@ const validatePersonalAddressData = () => {
                <PersonalAddressForm :personal_address="form.personal_address" :error="personal_address_error" />
             </tab-content>
             <tab-content title="Work Information" v-if="!is_skip">
-                
+
                 <WorkInfoForm :work_details="form.work_details" @skip="is_skip = true" />
             </tab-content>
-            <tab-content title="Requirements" v-if="is_client">
-                
+            <tab-content title="Upload Proof of Income" v-if="is_client">
+
                 <fileupload :file="form.file" />
             </tab-content>
-            
+
         </form-wizard>
     </div>
 </template>

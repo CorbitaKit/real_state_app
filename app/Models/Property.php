@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\Relations\MorphOne;
 
 class Property extends Model
@@ -22,9 +23,14 @@ class Property extends Model
         'description'
     ];
 
-    public function file(): MorphOne
+    public function files(): MorphMany
     {
-        return $this->morphOne(File::class, 'fileable');
+        return $this->MorphMany(File::class, 'fileable');
+    }
+
+    public function transactions(): HasMany
+    {
+        return $this->hasMany(Transaction::class);
     }
 
     public function lots(): HasMany

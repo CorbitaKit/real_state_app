@@ -10,6 +10,7 @@ use App\Models\Lot;
 use App\Models\Payment;
 use App\Models\PaymentPlan;
 use App\Models\Property;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 
 class DashboardController extends Controller
@@ -28,7 +29,7 @@ class DashboardController extends Controller
         ->get();
         $applications = Application::with('user.personal_info', 'lot.property')->get();
         $payments = Payment::with('user.personal_info', 'files', 'lots')->get();
-        $properties = Property::with('lots', 'file')->get();
+        $properties = Property::with('lots', 'files')->get();
 
         // Overall Sales
         $overallSales = Payment::sum('amount');
@@ -91,8 +92,10 @@ class DashboardController extends Controller
             'yearly' => $yearlySales,
         ];
 
-        $lotApplicationCount = Application::where('application_type', 'Lot Application')->count();
-        $siteVisitCount = Application::where('application_type', 'Site Visit')->count();
+        $forReviewApplicationCount = Application::where('status', 'For Review')->count();
+        $rejectedApplicationCount = Application::where('status', 'Rejected')->count();
+        $approvedApplicationCount = Application::where('status', 'Approved')->count();
+
 
         $approvedPaymentCount = Payment::where('status', 'Confirmed')->count();
         $pendingPaymentCount = Payment::where('status', 'Pending')->count();
@@ -101,15 +104,29 @@ class DashboardController extends Controller
         $pendingLotCount = Lot::where('status', 'Pending')->count();
         $occupiedLotCount = Lot::where('status', 'Occupied')->count();
 
-        
+
+
+        $daily = Payment::with('user.personal_info', 'lots.property')->whereDate('created_at', Carbon::today())->orderBy('created_at','desc')->get();
+        $weekly = Payment::with('user.personal_info', 'lots.property')->whereBetween('created_at', [
+                    Carbon::now()->startOfWeek(),
+                    Carbon::now()->endOfWeek()
+                ])->orderBy('created_at','desc')->get();
+        $monthly =  Payment::with('user.personal_info', 'lots.property')->whereYear('created_at', Carbon::now()->year)
+                ->whereMonth('created_at', Carbon::now()->month)
+                ->orderBy('created_at','desc')->get();
+
         return Inertia::render('dashboard/index', [
+            'daily' => $daily,
+            'weekly' => $weekly,
+            'monthly' => $monthly,
             'clients' => $clients,
             'applications' => $applications,
             'payments' => $payments,
             'properties' => $properties,
             'sales' => $sales,
-            'lot_application' => $lotApplicationCount,
-            'site_visit' => $siteVisitCount,
+            'for_review_application' => $forReviewApplicationCount,
+            'rejected_application' => $rejectedApplicationCount,
+            'approved_application' => $approvedApplicationCount,
             'approved_payment' => $approvedPaymentCount,
             'pending_payment' => $pendingPaymentCount,
             'available_lot' => $availableLotCount,

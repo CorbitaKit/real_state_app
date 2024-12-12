@@ -26,7 +26,7 @@ const checkIfFileUploaded = () => {
 }
 
 const checkIfFieldsAreFilled = () => {
-   
+
     const excludedKey = [
         'file',
         'number_of_lot',
@@ -99,7 +99,7 @@ const checkkIfhasUnset = () => {
 }
 
 const submit = () => {
-    
+
     const hasAnyUnsetBlock = useProperty.property.lots.some(lot => lot.block == 0)
      if (hasAnyUnsetBlock) {
         Swal.fire({
@@ -123,6 +123,7 @@ const handleFileUpdate = (file) => {
         <tab-content title="Property Layout image upload" :before-change="checkIfFileUploaded" @update:file="handleFileUpdate">
             <FileUpload :file="useProperty.property.file"/>
         </tab-content>
+
         <tab-content title="Property Address" :before-change="checkIfFieldsAreFilled">
             <Form />
         </tab-content>

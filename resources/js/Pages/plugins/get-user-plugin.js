@@ -4,11 +4,16 @@ export function getUser () {
 
     const page = usePage()
     const user = computed(() => page.props.user)
+    const notifications = computed(() => page.props.notifications)
 
     const getUserInfo = () => {
         return user.value
     }
 
+    const getNotifications = () => {
+        return notifications.value
+    }
 
-    return { getUserInfo }
+
+    return { getUserInfo, getNotifications }
 }

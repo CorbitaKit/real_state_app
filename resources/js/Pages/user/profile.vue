@@ -30,7 +30,8 @@ const form = useForm({
         company_address: '',
         company_number: '',
         company_email: '',
-        length_of_stay: '',
+        length_of_stay_year: '',
+        length_of_stay_month: '',
         status: '',
         gross_monthly_income: '',
         job_title: '',
@@ -62,12 +63,12 @@ const validateData = (field) => {
                 icon: "error"
             });
         return false
-    } 
+    }
     return true
 }
 
 const submit = () => {
-   
+
 
     form.transform((data) => {
         data.personal_address.province = data.personal_address.province.province_name;
@@ -115,7 +116,7 @@ defineOptions({layout: Layout})
                 <WorkInfoForm :work_details="form.work_details" />
             </tab-content>
 
-            <tab-content title="Upload Requirements">
+            <tab-content title="Upload Proof of Income">
                 <Fileupload :file="form.file" />
             </tab-content>
         </form-wizard>

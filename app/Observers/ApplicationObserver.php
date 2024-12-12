@@ -5,6 +5,7 @@ namespace App\Observers;
 use App\Mail\ApplicationApproved;
 use App\Mail\ApplicationRejected;
 use App\Models\Application;
+use App\Models\Notification;
 use App\Services\LotService;
 use Illuminate\Support\Facades\Mail;
 
@@ -26,7 +27,14 @@ class ApplicationObserver
         if ($application->application_type === 'Lot Application') {
             $status = 'Pending';
             $this->lotService->doUpdate(['status' => $status, 'user_id' => $application->user_id], $application->lot_id);
+
         }
+        Notification::create([
+            'text' => 'New Lot Application Added',
+            'type' => 'application',
+            'is_read' => 0,
+            'is_admin' => 1
+        ]);
     }
 
     /**

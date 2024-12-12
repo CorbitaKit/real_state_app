@@ -26,5 +26,5 @@
     </div>
     @include('assets.scripts')
 </body>
-    
+
 </html>

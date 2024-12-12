@@ -34,7 +34,7 @@ const submit = () => {
 const confirmPayment = (id) => {
     visible.value = true
     payment_id.value = id
-    
+
 }
 const submitPayment = () => {
     form.status = 'Confirmed'
@@ -67,15 +67,15 @@ const setButton = () => {
                 <div class="page-title mb-2 mb-sm-0">
                     <h1>Payments</h1>
                 </div>
-                
+
                 <div class="ml-auto d-flex align-items-center">
-                    
+
                     <nav>
                         <ol class="breadcrumb p-0 m-b-0">
                             <li class="breadcrumb-item">
                                 <a href="#" @click="home"><i class="ti ti-home"></i></a>
                             </li>
-                        
+
                             <li class="breadcrumb-item active text-primary" aria-current="page">Payments</li>
                         </ol>
                     </nav>
@@ -90,108 +90,13 @@ const setButton = () => {
         <div class="tw-flex tw-items-center tw-gap-4 tw-mb-4">
             <label for="username" class="tw-font-semibold tw-w-24">Invoice Number</label>
             <InputText v-model="form.invoice_number" class="tw-w-full tw-rounded-md"/>
-           
+
         </div>
         <FileUpload :file="form.file" />
         <div class="tw-flex tw-justify-end tw-gap-2">
             <Button type="button" label="Save" @click="submitPayment"></Button>
         </div>
     </Dialog>
-     <!-- <div class="tw-relative tw-overflow-x-auto tw-mt-5">
-        <v-table>
-            <thead>
-                <tr>
-                    <th scope="col" class="px-6 py-3">
-                        Payment Proof
-                    </th>
-                    <th scope="col" class="px-6 py-3">
-                        Payment Type
-                    </th>
-                    <th scope="col" class="px-6 py-3">
-                        Payment Date
-                    </th>
-                    <th scope="col" class="px-6 py-3">
-                        Payment For
-                    </th>
-                    <th scope="col" class="px-6 py-3">
-                        Amount
-                    </th>
-                    <th scope="col" class="px-6 py-3">
-                        Status
-                    </th>
-                    <th scope="col" class="px-6 py-3">
-                        Invoice Number
-                    </th>
-                    <th scope="col" class="px-6 py-3">
-                        Invoice
-                    </th>
-                    <th v-if="user.role_id != 3" scope="col" class="px-6 py-3">
-                        Actions
-                    </th>
-                </tr>
-            </thead>
-            <tbody>
-               
-                <tr v-for="payment in payments" :key="payment.id">
-                    <th scope="row">
-           
-                        <Image alt="Image" preview>
-                            <template #previewicon>
-                                <i class="pi pi-search"></i>
-                            </template>
-                            <template #image>
-                                <img :src="'/storage/'+payment.files[0]?.url" alt="image" class="h-[50px]"/>
-                            </template>
-                            <template #preview="slotProps">
-                                <img :src="'/storage/'+payment.files[0]?.url" alt="preview" :style="slotProps.style" @click="slotProps.onClick" />
-                            </template>
-                        </Image>
-                    </th>
-                    <th scope="row">
-                        {{ payment.mode_of_payment }}
-                    </th>
-                    <td class="px-6 py-4">
-                        {{ payment.date_of_payment }}
-                    </td>
-                    <td class="px-6 py-4">
-                        Phase {{ payment.lots[0].property.phase }},
-                        purok {{ payment.lots[0].property.purok }},
-                        barangay {{ payment.lots[0].property.barangay }},<br>
-                        {{ payment.lots[0].property.city }},
-                        {{ payment.lots[0].property.province }},
-                        Lot {{ payment.lots[0].id }} 
-                       
-                    </td>
-                    <td class="px-6 py-4">
-                        {{ payment.amount }}
-                    </td>
-                    <td class="px-6 py-4">
-                        {{ payment.status }}
-                    </td>
-                    <td class="px-6 py-4">
-                        {{ payment.invoice_number }}
-                    </td>
-                    <td class="px-6 py-4">
-                        <Image alt="Image" preview v-if="payment.status == 'Confirmed'">
-                            <template #previewicon>
-                                <i class="pi pi-search"></i>
-                            </template>
-                            <template #image>
-                                <img :src="'/storage/'+payment.files[1]?.url" alt="image" class="h-[50px]"/>
-                            </template>
-                            <template #preview="slotProps">
-                                <img :src="'/storage/'+payment.files[1]?.url" alt="preview" :style="slotProps.style" @click="slotProps.onClick" />
-                            </template>
-                        </Image>
-                    </td>
-
-                    <td class="px-6 py-4" v-if="user.role_id != 3">
-                        <v-icon v-if="payment.status === 'Pending'" @click="confirmPayment(payment.id)"  name="fc-approval" animation="ring" scale="2" class="text-4xl rounded cursor-pointer block float-left mr-2"/>                     
-                    </td>
-                </tr>
-            </tbody>
-        </v-table>
-    </div> -->
     <div class="row">
         <div class="col-xl-12">
             <div class="card card-statistics clients-contant">
@@ -200,7 +105,7 @@ const setButton = () => {
                         <div class="card-heading">
                             <h5 class="card-title">Payment Lists</h5>
                         </div>
-                       
+
                     </div>
                 </div>
                 <div class="card-body table-responsive">
@@ -216,7 +121,7 @@ const setButton = () => {
                                 <th scope="col">
                                     Invoice
                                 </th>
-                               
+
                                 <th scope="col">
                                     Payment Type
                                 </th>
@@ -226,11 +131,11 @@ const setButton = () => {
                                 <th scope="col">
                                     Payment For
                                 </th>
-                                
+
                                 <th scope="col">
                                     Status
                                 </th>
-                               
+
                                 <th scope="col">
                                     Payment Proof
                                 </th>
@@ -240,7 +145,7 @@ const setButton = () => {
                             </tr>
                         </thead>
                         <tbody>
-                            
+
                             <tr v-for="payment in payments" :key="payment.id">
                                 <td >
                                     {{ payment.invoice_number }}
@@ -261,7 +166,7 @@ const setButton = () => {
                                         </template>
                                     </Image>
                                 </td>
-                                
+
                                 <td>
                                     {{ payment.mode_of_payment }}
                                 </td>
@@ -274,16 +179,16 @@ const setButton = () => {
                                     Barangay {{ payment.lots[0].property.barangay }},<br>
                                     {{ payment.lots[0].property.city }},
                                     {{ payment.lots[0].property.province }},
-                                    Lot {{ payment.lots[0].id }} 
-                                
+                                    Lot {{ payment.lots[0].id }}
+
                                 </td>
-                              
+
                                 <td >
                                     {{ payment.status }}
                                 </td>
-                                
+
                                 <td>
-                    
+
                                     <Image alt="Image" preview>
                                         <template #previewicon>
                                             <i class="pi pi-search"></i>

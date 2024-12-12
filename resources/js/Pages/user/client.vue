@@ -6,20 +6,20 @@ import { router, useForm } from '@inertiajs/vue3'
 import { reactive, ref } from 'vue'
 import moment from 'moment'
 import Swal from 'sweetalert2'
+import { useVueToPrint } from "vue-to-print";
+
 const props = defineProps({
     clients: Object
 })
-const visible = ref(false)
 const payment = ref(false)
 const payment_history = ref(false)
 const payments = ref()
 const properties = ref()
 const property_view = ref(false)
-const generate_report = ref(false)
 const client_lots = ref()
-
-
-
+const chart_view = ref(false)
+const chartOfAccountRef = ref()
+const printableRef = ref()
 const form = useForm({
     file: {},
     lot_id: 0,
@@ -42,7 +42,7 @@ defineOptions({layout: Layout})
 
 
 const generateReport = (lot) => {
-    generate_report.value = true
+    chart_view.value = true
     property_view.value = false
     reportsData.name = lot.user.personal_info.first_name + ' ' + lot.user.personal_info.last_name
     reportsData.block = lot.block
@@ -80,10 +80,10 @@ const makePayment = (client) => {
 
 const submitPayment = () => {
     form.transform((data) => {
-      
+
       return {
           ...data,
-    
+
          date_of_payment: moment().format('YYYY-MM-DD')
       };
   }).post('/payments', {
@@ -106,46 +106,101 @@ const calculateRemainingBalance = (lot) => {
     return total_amount - total_payment
 }
 
-const printDiv = () => {
-    const printContent = document.getElementById("printMe").outerHTML;
-    const printWindow = window.open("", "_blank");
-    printWindow.document.open();
-    printWindow.document.write(`
-        <html>
-            <head>
-                <title>Print Report</title>
-                <style>
-                    body {
-                        font-family: Arial, sans-serif;
-                       
-                    }
-                    table {
-                        width: 100%;
-                        border-collapse: collapse;
-                    }
-                    th, td {
-                        border: 1px solid #ddd;
-                        padding: 8px;
-                    }
-                    th {
-                        background-color: #f2f2f2;
-                        text-align: left;
-                    }
-                </style>
-            </head>
-            <body>${printContent}</body>
-        </html>
-    `);
-    printWindow.document.close();
-    printWindow.focus();
-    printWindow.print();
-    printWindow.close();
-    generate_report.value = false
-};
+
+
+const { handlePrint } = useVueToPrint({
+  content: printableRef,
+  documentTitle: "AwesomeFileName",
+});
+const print = () => {
+    printableRef.value = chartOfAccountRef.value
+    handlePrint()
+}
 </script>
 
 <template>
-    
+    <Dialog v-model:visible="chart_view" modal :style="{ width: '60rem' }">
+        <div ref="chartOfAccountRef">
+            <v-table class="responsive">
+                <tbody>
+                    <tr>
+                        <td></td>
+                        <td>
+                            <img src="/header.png" style="height: 100px;"/>
+                        </td>
+                        <td>
+                            <h1 style="margin-left:100px;">JEFF ALDEBAL REALTY SERVICE</h1>
+                        Door 3, CEASAR APARMENT, Sto. Niño, Carmen, Davao del Norte
+                        </td>
+                    </tr>
+                </tbody>
+            </v-table>
+            <h1 class="text-center">CHART OF ACCOUNTS</h1>
+            <v-table>
+                <tbody>
+                    <tr>
+
+                        <td>
+                            NAME:
+                        </td>
+                        <td>
+                            PHASE:
+                        </td>
+                        <td>
+                            BLOCK:
+                        </td>
+                        <td>
+                            LOT:
+                        </td>
+                    </tr>
+                </tbody>
+            </v-table>
+            <v-table>
+                <thead>
+
+                    <tr>
+                        <th class="text-left">
+                            Due Date
+                        </th>
+                        <th class="text-left">
+                            MONTHLY AMOUNT
+                        </th>
+                        <th class="text-left">
+                            DATE PAID
+                        </th>
+                        <th class="text-left">
+                            AMOUNT PAID
+                        </th>
+                        <th class="text-left">
+                            O.R / A.R. NO
+                        </th>
+
+                        <th class="text-left">
+                            PAYMENT MODE
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr v-for="(payment, i) in reportsData.payments" :key="i">
+                        <td>{{ payment.due_date }}</td>
+                        <td>{{ formatCurrency(payment.lot.lot_group.monthly_amortizations) }}</td>
+                        <td>{{ payment.payment?.date_of_payment }}</td>
+                        <td>
+                            <span v-if="payment.payment?.amount">{{ formatCurrency(payment.payment.amount) }}</span>
+                        </td>
+                        <td>
+                            {{ payment.payment?.invoice_number }}
+                        </td>
+                        <td>
+                            {{ payment.payment?.mode_of_payment }}
+                        </td>
+                    </tr>
+                </tbody>
+            </v-table>
+        </div>
+        <button class="btn btn-block btn-info" @click="print">Print</button>
+    </Dialog>
+
     <Dialog v-model:visible="payment" modal header="Make Payment" :style="{ width: '50rem' }">
         <div class="tw-flex tw-items-center tw-gap-4 tw-mb-4">
             <label for="username" class="tw-font-semibold tw-w-24">Lot</label>
@@ -153,23 +208,24 @@ const printDiv = () => {
                 <option  v-for="lot in client_lots" :value="lot.id" :key="lot.id">{{ lot.name }}</option>
             </select>
         </div>
-        
+
         <div class="tw-flex tw-items-center tw-gap-4 tw-mb-4">
             <label for="username" class="tw-font-semibold tw-w-24">Amount</label>
             <InputText class="tw-w-full tw-rounded-md" v-model="form.amount"/>
-           
+
         </div>
         <div class="tw-flex tw-items-center tw-gap-4 tw-mb-4">
             <label for="username" class="tw-font-semibold tw-w-24">Invoice Number</label>
             <InputText class="tw-w-full tw-rounded-md" v-model="form.invoice_number"/>
-           
+
         </div>
         <FileUpload :file="form.file" />
         <div class="tw-flex tw-justify-end tw-gap-2">
             <Button type="button" label="Save" @click="submitPayment"></Button>
         </div>
-    </Dialog> 
+    </Dialog>
     <Dialog v-model:visible="payment_history" modal header="Payment Plan" :style="{ width: '100rem' }">
+
         <v-table>
             <thead>
             <tr>
@@ -182,8 +238,8 @@ const printDiv = () => {
                 <th class="text-left">
                     Amount
                 </th>
-                
-                
+
+
                 <th class="text-left">
                     Payment Date
                 </th>
@@ -219,7 +275,7 @@ const printDiv = () => {
                     </td>
                     <td>
                         {{ payment.date_of_payment }}
-                       
+
                     </td>
                     <td>
                         {{ payment.mode_of_payment }}
@@ -244,12 +300,12 @@ const printDiv = () => {
                 <th class="text-left">
                    Address
                 </th>
-                
+
                 <th class="text-left">
                     Size
                 </th>
-                
-                
+
+
                 <th class="text-left">
                    Amount Per Square Meters
                 </th>
@@ -277,14 +333,14 @@ const printDiv = () => {
                         {{ lot.property.city }} City,
                         {{ lot.property.province }}
                     </td>
-                
+
                     <td> {{ lot.lot_group.sqr_meter }} Square Meter</td>
                     <td>
                         {{ formatCurrency(lot.lot_group.amount_per_sqr_meter) }}
                     </td>
                     <td>
                         {{ formatCurrency((lot.lot_group.amount_per_sqr_meter * lot.lot_group.sqr_meter)) }}
-                       
+
                     </td>
                     <td>
                        {{ formatCurrency(calculateRemainingBalance(lot)) }}
@@ -292,13 +348,13 @@ const printDiv = () => {
                     <td>
                         <a  @click.prevent="generateReport(lot)" href="javascript:void(0);" class="tooltip-wrapper btn btn-icon btn-round btn-light" data-toggle="tooltip" data-placement="top" title="" data-original-title="Generate Chart Of Accounts"><i class="fas fa-print"></i></a>
                     </td>
-                    
+
 
                 </tr>
             </tbody>
         </v-table>
     </Dialog>
-  
+
     <div class="row" >
         <div class="col-md-12 mb-2">
             <!-- begin page title -->
@@ -306,15 +362,15 @@ const printDiv = () => {
                 <div class="page-title mb-2 mb-sm-0">
                     <h1>Clients</h1>
                 </div>
-                
+
                 <div class="ml-auto d-flex align-items-center">
-                    
+
                     <nav>
                         <ol class="breadcrumb p-0 m-b-0">
                             <li class="breadcrumb-item">
                                 <a href="#" @click="home('/dashboard')"><i class="ti ti-home"></i></a>
                             </li>
-                            
+
                             <li class="breadcrumb-item active text-primary" aria-current="page">Clients</li>
                         </ol>
                     </nav>
@@ -323,8 +379,8 @@ const printDiv = () => {
             <!-- end page title -->
         </div>
     </div>
-    
-    <div class="row" v-if="!generate_report">
+
+    <div class="row">
         <div class="col-xl-12">
             <div class="card card-statistics clients-contant">
                 <div class="card-header">
@@ -332,7 +388,7 @@ const printDiv = () => {
                         <div class="card-heading">
                             <h5 class="card-title">Client Lists</h5>
                         </div>
-                       
+
                     </div>
                 </div>
                 <div class="card-body table-responsive">
@@ -357,7 +413,7 @@ const printDiv = () => {
                             </tr>
                         </thead>
                         <tbody>
-                            
+
                             <tr v-for="client in clients" :key="client.id">
                                 <td>
                                     <div class="">
@@ -393,88 +449,6 @@ const printDiv = () => {
             </div>
         </div>
     </div>
-    
-    <div class="card card-statistics clients-contant" v-else>
-        
-        <div class="card-body table-responsive" id="printMe">
-            <div class="row" style="margin-bottom:100px;">
-                <div class="col-md-4 ml-5">
-                    <img src="/header.png" style="height: 100px;"/>
-                </div>
-                <div class="col-md-4 ml-5">
-                    <h1 style="margin-left:100px;">JEFF ALDEBAL REALTY SERVICE</h1>
-                    Door 3, CEASAR APARMENT, Sto. Niño, Carmen, Davao del Norte
-                </div>
-            </div>
-            <div class="row" style="margin-bottom:60px;">
-                <div class="col-md-4 ml-5">
-                  
-                </div>
-                <div class="col-md-4 ml-5">
-                    <h1 style="margin-left:100px;"><strong>CHART OF ACCOUNTS</strong></h1>
-                   
-                </div>
-            </div>
-            <div class="container">
-                <div class="row mb-2">
-                    <div class="col-md-3" >
-                        <p>NAME: {{ reportsData.name }}</p>
-                    </div>
-                    <div class="col-md-3" >
-                        <p>PHASE: {{ reportsData.phase }}</p>
-                    </div>
-                    <div class="col-md-3" >
-                        <p>BLOCK: {{ reportsData.block }}</p>
-                    </div>
-                    <div class="col-md-3" >
-                        <p>LOT: {{ reportsData.lot_number }}</p>
-                    </div>
-                </div>
-            </div>
-            <table class="table mb-0 table-border-3">
-                <thead>
-                    <tr>
-                        <th class="text-left">
-                            Due Date
-                        </th>
-                        <th class="text-left">
-                            MONTHLY AMOUNT
-                        </th>
-                        <th class="text-left">
-                            DATE PAID
-                        </th>
-                        <th class="text-left">
-                            AMOUNT PAID
-                        </th>
-                        <th class="text-left">
-                            O.R / A.R. NO
-                        </th>
-                      
-                        <th class="text-left">
-                           PAYMENT MODE
-                        </th>
-                       
-                    </tr>
-                </thead>
-                <tbody>
-                    
-                    <tr v-for="(payment, i) in reportsData.payments" :key="i">
-                        <td>{{ payment.due_date }}</td>
-                        <td>{{ formatCurrency(payment.lot.lot_group.monthly_amortizations) }}</td>
-                        <td>{{ payment.payment?.date_of_payment }}</td>
-                        <td>
-                            <span v-if="payment.payment?.amount">{{ formatCurrency(payment.payment.amount) }}</span>
-                        </td>
-                        <td>
-                            {{ payment.payment?.invoice_number }}
-                        </td>
-                        <td>
-                            {{ payment.payment?.mode_of_payment }}
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-        <a @click="printDiv" href="javascript:void(0);" class="btn btn-block btn-round btn-outline-info">Print</a>
-    </div>
+
+
 </template>

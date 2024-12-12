@@ -9,6 +9,7 @@ use App\Http\Controllers\PropertyController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\LandingPageController;
 use App\Http\Controllers\FileController;
+use App\Http\Controllers\NotificationController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
 use Illuminate\Http\Request;
@@ -29,7 +30,7 @@ Route::get('/email/verify', function () {
 
 Route::get('/email/verify/{id}/{hash}', function (EmailVerificationRequest $request) {
     $request->fulfill();
-    
+
 
     return redirect()->route('users.show', Auth::user()->id);
 })->middleware(['auth', 'signed'])->name('verification.verify');
@@ -59,6 +60,8 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
     Route::patch('/update-personal-info/{user_id}', [ClientController::class, 'updatePersonalInfo']);
     Route::post('/reports/filter', [ReportController::class, 'filter']);
     Route::get('/documents', [FileController::class, 'viewUserDocuments']);
+    Route::post('upload-property-map', [FileController::class,'uploadPropertyMap']);
+    Route::get('/read-notification/{id}', [NotificationController::class, 'readNotification']);
     Route::post('logout', function (Request $request) {
         Auth::guard('web')->logout();
         $request->session()->invalidate();

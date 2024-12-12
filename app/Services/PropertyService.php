@@ -40,7 +40,7 @@ class PropertyService extends Service
                 'filename' => $fileUpload->getClientOriginalName(),
                 'url' => $path
             ]);
-            $property->file()->save($file);
+            $property->files()->save($file);
             $lots = $this->lotService->storeLots($data->lots, $property->id);
             $this->lotGroupService->storeLotGroups($data->lot_groups, $property->id, $lots->toArray());
             return $property;

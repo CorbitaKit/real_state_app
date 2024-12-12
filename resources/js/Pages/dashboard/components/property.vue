@@ -3,13 +3,10 @@ const props = defineProps({
     properties: Object
 })
 
-const fetchOccupiedLots = (lots) => {
-
-}
 </script>
 
 <template>
-<div class="col-xl-8col-xxl-8mb-3">
+<div class="col-xl-12 col-xxl-12 mb-3">
     <div class="d-block d-sm-flex align-items-center justify-content-between mb-2 tab nav-border">
         <div class="card-heading mb-sm-0">
             <h5 class="card-title mb-sm-0">Property overview </h5>
@@ -37,16 +34,16 @@ const fetchOccupiedLots = (lots) => {
                                             <i class="pi pi-search"></i>
                                         </template>
                                         <template #image>
-                                            <img :src="'/storage/'+property.file?.url" alt="image" class="tw-h-[50px]"/>
+                                            <img :src="'/storage/'+property.files[0]?.url" alt="image" class="tw-h-[50px]"/>
                                         </template>
                                         <template #preview="slotProps">
-                                            <img :src="'/storage/'+property.file?.url" alt="preview" :style="slotProps.style" @click="slotProps.onClick" />
+                                            <img :src="'/storage/'+property.files[0]?.url" alt="preview" :style="slotProps.style" @click="slotProps.onClick" />
                                         </template>
                                     </Image>
                                 </div>
                             </td>
                             <td>{{ property.id }}</td>
-                            <td> 
+                            <td>
                                 Phase {{ property.phase }},
                                 Purok {{ property.purok }},
                                 Barangay {{ property.barangay }}
@@ -61,7 +58,7 @@ const fetchOccupiedLots = (lots) => {
                                 {{ property.lots.filter(lot => lot.status === "Occupied").length }}
                             </td>
                         </tr>
-                       
+
                     </tbody>
                 </table>
             </div>

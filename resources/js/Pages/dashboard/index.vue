@@ -12,13 +12,17 @@ import Lot from './components/lot.vue'
 import moment from 'moment'
 const props = defineProps(
     {
+        daily: Object,
+        weekly: Object,
+        monthly: Object,
         clients: Object,
         applications: Object,
         payments: Number,
         properties: Number,
         sales: Object,
-        lot_application: Number,
-        site_visit: Number,
+        for_review_application: Number,
+        rejected_application: Number,
+        approved_application: Number,
         approved_payment: Number,
         pending_payment: Number,
         available_lot : Number,
@@ -39,13 +43,13 @@ defineOptions({ layout: Layout })
 <template>
     <div class="row">
         <Widget :properties="properties.length" :clients="clients.length" :applications="applications.length" :sales="sales.overall"/>
-        <Sales /> 
-        <Profile :clients="clients"/> 
-        <Application :lot_application="lot_application" :site_visit="site_visit"/>
+        <Sales :daily="daily" :weekly="weekly" :monthly="monthly"/>
+        <!-- <Profile :clients="clients"/> -->
+        <Application :for_review_application="for_review_application" :rejected_application="rejected_application" :approved_application="approved_application"/>
         <Payment :pending_payment="pending_payment" :approved_payment="approved_payment"/>
         <Lot :available_lot="available_lot" :occupied_lot="occupied_lot" :pending_lot="pending_lot"/>
         <Property :properties="properties"/>
-        
+
     </div>
     <div class="row">
         <div class="col-lg-5 col-xl-4 col-xxl-4 mb-3">
@@ -53,7 +57,7 @@ defineOptions({ layout: Layout })
                 <h5 class="card-title">Applications Overview</h5>
             </div>
             <div class="card card-statistics border-0 shadow-none mb-0">
-                
+
                 <div class="card-body">
                     <ul class="activity">
                         <li class="activity-item primary" v-for="application in applications">
@@ -66,7 +70,7 @@ defineOptions({ layout: Layout })
                                 <span>{{  convertDate(application.created_at) }}</span>
                             </div>
                         </li>
-                       
+
                     </ul>
                 </div>
             </div>
@@ -114,7 +118,7 @@ defineOptions({ layout: Layout })
                                             {{ payment.mode_of_payment }}
                                         </td>
                                         <td>
-                                            {{ payment.user.personal_info.first_name }} 
+                                            {{ payment.user.personal_info.first_name }}
                                             {{ payment.user.personal_info.last_name }}
 
                                         </td>
@@ -124,9 +128,9 @@ defineOptions({ layout: Layout })
                                         <td>
                                             {{ payment.status }}
                                         </td>
-                                       
+
                                     </tr>
-                                    
+
                                 </tbody>
                             </table>
                         </div>

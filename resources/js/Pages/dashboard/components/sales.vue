@@ -1,127 +1,114 @@
 <script setup>
 import { ref, watch } from "vue";
 import Chart from "primevue/chart";
+import { useVueToPrint } from "vue-to-print";
+
 
 const props = defineProps({
-  sales: Object
+  daily: Object,
+  weekly: Object,
+  monthly: Object
 })
 // Period options
-const periods = ["Daily", "Weekly", "Monthly", "Quarterly", "Yearly"];
+const periods = ["Daily", "Weekly", "Monthly"];
 const selectedPeriod = ref("Daily");
+const sales = props.daily
 
-// Reactive chart data and options
-const chartData = ref({});
-const chartOptions = ref({});
 
-// Dummy Sales Data
-const salesData = ref([
-  {
-    daily: [500, 700, 800, 450, 900, 1200, 950], // Monday to Sunday
-    weekly: [3000, 4000, 4500, 3200], // Week 1 to Week 4
-    monthly: [12000, 15000, 17000, 14000, 18000, 20000, 21000, 19000, 22000, 24000, 26000, 25000], // Jan to Dec
-    quarterly: [45000, 52000, 60000, 58000], // Q1 to Q4
-    yearly: [
-      { year: "2021", total_sales: 200000 },
-      { year: "2022", total_sales: 240000 },
-      { year: "2023", total_sales: 280000 },
-      { year: "2024", total_sales: 29000 },
-    ],
-  },
-]);
 
-// Generate chart data based on the selected period
-const setChartData = (sales, period) => {
-  const labels = [];
-  const data = [];
-
-  switch (period) {
-    case "Daily":
-      labels.push(...["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"]);
-      data.push(...sales.daily);
-      break;
-
-    case "Weekly":
-      labels.push(...["Week 1", "Week 2", "Week 3", "Week 4"]);
-      data.push(...sales.weekly);
-      break;
-
-    case "Monthly":
-      labels.push(...["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]);
-      data.push(...sales.monthly);
-      break;
-
-    case "Quarterly":
-      labels.push(...["Q1", "Q2", "Q3", "Q4"]);
-      data.push(...sales.quarterly);
-      break;
-
-    case "Yearly":
-      sales.yearly.forEach((yearData) => {
-        labels.push(yearData.year);
-        data.push(yearData.total_sales);
-      });
-      break;
-
-    default:
-      break;
-  }
-
-  return {
-    labels,
-    datasets: [
-      {
-        label: `${period} Sales`,
-        data,
-        backgroundColor: "rgba(75, 192, 192, 0.2)",
-        borderColor: "rgba(75, 192, 192, 1)",
-        borderWidth: 1,
-      },
-    ],
-  };
-};
-
-// Chart options for styling
-const setChartOptions = () => ({
-  responsive: true,
-  plugins: {
-    legend: {
-      display: true,
-      position: "top",
-    },
-  },
-  scales: {
-    x: {
-      grid: {
-        display: false,
-      },
-    },
-    y: {
-      beginAtZero: true,
-      ticks: {
-        callback: (value) => `₱${value.toLocaleString()}`, // Add Peso sign
-      },
-    },
-  },
+const salesRef = ref()
+const sales_view = ref(false)
+const { handlePrint } = useVueToPrint({
+  content: salesRef,
+  documentTitle: "AwesomeFileName",
 });
 
-// Watch for changes in the selected period and update the chart
-watch(
-  selectedPeriod,
-  () => {
-    chartData.value = setChartData(salesData.value[0], selectedPeriod.value);
-    chartOptions.value = setChartOptions();
-  },
-  { immediate: true }
-);
-
-// Function to handle period changes
 const changePeriod = (period) => {
   selectedPeriod.value = period;
+
+  if (period === 'Daily') {
+    sales.value = props.daily
+  } else if (period === 'Weeklt') {
+    sales.value = props.weekly
+  } else {
+    sales.value = props.monthly
+  }
 };
 </script>
 
 <template>
-  <div class="col-lg-7 col-xl-8 col-xxl-5 mb-3">
+<Dialog v-model:visible="sales_view" modal :style="{ width: '60rem' }">
+    <div ref="salesRef">
+        <v-table class="responsive">
+            <tbody>
+                <tr>
+                    <td></td>
+                    <td>
+                        <img src="/header.png" style="height: 100px;"/>
+                    </td>
+                    <td>
+                        <h1 style="margin-left:100px;">JEFF ALDEBAL REALTY SERVICE</h1>
+                    Door 3, CEASAR APARMENT, Sto. Niño, Carmen, Davao del Norte
+                    </td>
+                </tr>
+            </tbody>
+        </v-table>
+        <h1 class="text-center">{{ selectedPeriod }} Reports</h1>
+
+        <v-table>
+            <thead>
+                    <tr>
+                        <th scope="col">
+                            DATE
+                        </th>
+                        <th scope="col">
+                            A.R. / O.R. NO
+                        </th>
+                        <th scope="col">
+                            NAME
+                        </th>
+
+                        <th scope="col">
+                            AMOUNT
+                        </th>
+                        <th scope="col">
+                            LOCATION
+                        </th>
+                        <th scope="col">
+                            BLOCK
+                        </th>
+
+                        <th scope="col">
+                            LOT
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+
+                    <tr v-for="sale in sales">
+                        <td>{{ sale.date_of_payment }}</td>
+                        <td>{{ sale.invoice_number }}</td>
+                        <td>{{ sale.user.personal_info.first_name }}
+                        {{ sale.user.personal_info.last_name }} </td>
+                        <td>{{ sale.amount }}</td>
+                        <td>
+                            Phase {{ sale.lots[0].property.phase }},
+                            Block {{ sale.lots[0].block }},
+                            {{ sale.lots[0].name }},
+                            Barangay {{ sale.lots[0].property.barangay }},
+                            {{ sale.lots[0].property.city }}
+                            {{ sale.lots[0].property.province }}
+
+                        </td>
+                        <td>{{ sale.lots[0].block }}</td>
+                        <td>{{ sale.lots[0].name }}</td>
+                    </tr>
+                </tbody>
+        </v-table>
+    </div>
+    <button class="btn btn-block btn-info" @click="handlePrint">Print</button>
+</Dialog>
+  <div class="col-lg-9 col-xl-9 col-xxl-9 mb-3">
     <div class="card card-statistics h-100 mb-0 border-0 shadow-none">
       <div class="card-header d-flex justify-content-between">
         <div class="card-heading">
@@ -148,12 +135,62 @@ const changePeriod = (period) => {
             >
               <i class="fa-fw far fa-file-alt pr-2"></i>{{ period }} View
             </a>
+            <a href="#" @click="sales_view = true"><i class="fa-fw far fa-file-alt pr-2"></i>Print</a>
           </div>
         </div>
       </div>
       <div class="card-body pb-0">
-        <div class="sales-chart">
-          <Chart type="bar" :data="chartData" :options="chartOptions" />
+        <div class="card-body table-responsive">
+            <table class="table mb-0 table-border-3">
+                <thead>
+                    <tr>
+                        <th scope="col">
+                            DATE
+                        </th>
+                        <th scope="col">
+                            A.R. / O.R. NO
+                        </th>
+                        <th scope="col">
+                            NAME
+                        </th>
+
+                        <th scope="col">
+                            AMOUNT
+                        </th>
+                        <th scope="col">
+                            LOCATION
+                        </th>
+                        <th scope="col">
+                            BLOCK
+                        </th>
+
+                        <th scope="col">
+                            LOT
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+
+                    <tr v-for="sale in sales">
+                        <td>{{ sale.date_of_payment }}</td>
+                        <td>{{ sale.invoice_number }}</td>
+                        <td>{{ sale.user.personal_info.first_name }}
+                        {{ sale.user.personal_info.last_name }} </td>
+                        <td>{{ sale.amount }}</td>
+                        <td>
+                            Phase {{ sale.lots[0].property.phase }},
+                            Block {{ sale.lots[0].block }},
+                            {{ sale.lots[0].name }},
+                            Barangay {{ sale.lots[0].property.barangay }},
+                            {{ sale.lots[0].property.city }}
+                            {{ sale.lots[0].property.province }}
+
+                        </td>
+                        <td>{{ sale.lots[0].block }}</td>
+                        <td>{{ sale.lots[0].name }}</td>
+                    </tr>
+                </tbody>
+            </table>
         </div>
       </div>
     </div>

@@ -77,8 +77,8 @@ const viewPaymentPlan = (lot_payment_plans) => {
                 <th class="text-left">
                     Amount
                 </th>
-                
-                
+
+
                 <th class="text-left">
                     Payment Date
                 </th>
@@ -145,27 +145,27 @@ const viewPaymentPlan = (lot_payment_plans) => {
                     <th scope="col" class="px-6 py-3">
                         Remaining Balance
                     </th>
-                
+
                     <th scope="col" class="px-6 py-3">
                         Actions
                     </th>
                 </tr>
             </thead>
             <tbody>
-               
+
                 <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700" v-for="lot in client_lots" :key="lot.id">
                     <td class="px-6 py-4">
-                      
+
                         Phase {{ lot.property.phase }},
                         purok {{ lot.property.purok }},
                         barangay {{ lot.property.barangay }},
                         {{ lot.property.city }},
                         {{ lot.property.province }},
-                        {{ lot.name }} 
-                     
-                       
-                     
-                       
+                        {{ lot.name }}
+
+
+
+
                     </td>
                     <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                       {{ lot.lot_group.sqr_meter }} Square Meters
@@ -173,7 +173,7 @@ const viewPaymentPlan = (lot_payment_plans) => {
                     <td class="px-6 py-4">
                         {{ lot.lot_group.amount_per_sqr_meter }}
                     </td>
-                    
+
                     <td class="px-6 py-4">
                         {{ calculateTotalAmount(lot.lot_group) }}
                     </td>
@@ -183,9 +183,9 @@ const viewPaymentPlan = (lot_payment_plans) => {
                     <td class="px-6 py-4">
                         <Button @click="viewPaymentHistory(lot.payments)" label="View Payments" severity="success" />
                     </td>
-                    
 
-                   
+
+
                 </tr>
             </tbody>
         </table>
@@ -199,15 +199,15 @@ const viewPaymentPlan = (lot_payment_plans) => {
                 <div class="page-title mb-2 mb-sm-0">
                     <h1>My Properties</h1>
                 </div>
-                
+
                 <div class="ml-auto d-flex align-items-center">
-                    
+
                     <nav>
                         <ol class="breadcrumb p-0 m-b-0">
                             <li class="breadcrumb-item">
                                 <a href="#" @click="home('/dashboard')"><i class="ti ti-home"></i></a>
                             </li>
-                            
+
                             <li class="breadcrumb-item active text-primary" aria-current="page">My Properties</li>
                         </ol>
                     </nav>
@@ -239,7 +239,7 @@ const viewPaymentPlan = (lot_payment_plans) => {
                                     <th scope="col">
                                         Remaining Balance
                                     </th>
-                                
+
                                     <th scope="col">
                                         Actions
                                     </th>
@@ -248,13 +248,13 @@ const viewPaymentPlan = (lot_payment_plans) => {
                             <tbody class="mb-0">
                                 <tr  v-for="lot in client_lots" :key="lot.id">
                                     <td class="px-6 py-4">
-                      
+
                                         Phase {{ lot.property.phase }},
                                         purok {{ lot.property.purok }},
                                         barangay {{ lot.property.barangay }},
                                         {{ lot.property.city }},
                                         {{ lot.property.province }},
-                                        {{ lot.name }} 
+                                        {{ lot.name }}
 
                                     </td>
                                     <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
@@ -263,7 +263,7 @@ const viewPaymentPlan = (lot_payment_plans) => {
                                     <td class="px-6 py-4">
                                         {{ formatCurrency(lot.lot_group.amount_per_sqr_meter) }}
                                     </td>
-                                    
+
                                     <td class="px-6 py-4">
                                         {{ formatCurrency(calculateTotalAmount(lot.lot_group)) }}
                                     </td>
@@ -280,12 +280,12 @@ const viewPaymentPlan = (lot_payment_plans) => {
                                                 <h6 class="mb-1">Action</h6>
                                                 <a @click="viewPaymentHistory(lot.payments)" class="dropdown-item" href="#"><i class="fa-fw far fa-file-alt pr-2"></i>View Payment History</a>
                                                 <a @click="viewPaymentPlan(lot.payment_plans)" class="dropdown-item" href="#!"><i class="fa-fw far fa-file-pdf pr-2"></i>View Payment Breakdown</a>
-                                                
+
                                             </div>
                                         </div>
                                     </td>
                                 </tr>
-                              
+
                             </tbody>
                         </table>
                     </div>

@@ -17,8 +17,8 @@ class ApplicationController extends Controller
     }
 
     public function index()
-    {  
-        $applications = Application::with('user.personal_info', 'user.address', 'user.lots', 'user.workDetails', 'lot.property', 'user.files')->get();
+    {
+        $applications = Application::with('user.personal_info', 'user.address', 'user.lots', 'user.workDetails', 'lot.property', 'user.files')->orderBy('created_at', 'desc')->get();
         return Inertia::render('application/index', [
             'applications' => $applications
         ]);

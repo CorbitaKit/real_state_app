@@ -2,6 +2,8 @@
 
 namespace App\Http\Middleware;
 
+use App\Models\Notification;
+use Faker\Test\Provider\Collection;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Middleware;
@@ -40,7 +42,16 @@ class HandleInertiaRequests extends Middleware
         return array_merge(parent::share($request), [
             'user' => Auth::check() ? Auth::user() : null,
             'personal_info' => Auth::check() ? Auth::user()->personal_info : null,
-            'role' => Auth::check() ? Auth::user()->role : null
+            'role' => Auth::check() ? Auth::user()->role : null,
+            'notifications' => Auth::check() ? $this->getNotifications() : null,
         ]);
+    }
+
+    protected function getNotifications()
+    {
+        if (Auth::user()->role_id === 3) {
+            return Notification::where('is_admin', 0)->where('is_read', 0)->where('user_id', Auth::user()->id)->orderBy('created_at','desc')->get();
+        }
+        return  Notification::where('is_admin', 1)->where('is_read', 0)->orderBy('created_at','desc')->get();
     }
 }

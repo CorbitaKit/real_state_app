@@ -1,17 +1,17 @@
 
 <template>
-    
+
     <div class="col-lg-4 col-xl-4 col-xxl-4 mb-3">
         <div class="card card-statistics h-100 mb-0 border-0 shadow-none">
         <div class="card-header d-flex justify-content-between">
             <div class="card-heading">
             <h5 class="card-title">Payment Analysis</h5>
             </div>
-            
+
         </div>
         <div class="card-body pb-0">
             <div class="sales-chart">
-            <Chart type="polarArea" :data="chartData" :options="chartOptions" />
+                <Chart type="bar" :data="chartData" :options="chartOptions" />
             </div>
         </div>
         </div>
@@ -27,50 +27,35 @@ const props = defineProps({
 })
 onMounted(() => {
     chartData.value = setChartData();
-    chartOptions.value = setChartOptions();
 });
 
 const chartData = ref();
 const chartOptions = ref();
-        
-const setChartData = () => {
+
+
+const setChartData = () =>  {
     const documentStyle = getComputedStyle(document.documentElement);
 
     return {
+        labels: ['Payments'],
         datasets: [
             {
-                data: [props.pending_payment, props.approved_payment],
-                backgroundColor: [
-                    documentStyle.getPropertyValue('--pink-500'),
-                    documentStyle.getPropertyValue('--gray-500'),
-                    
-                ],
-                label: 'My dataset'
-            }
-        ],
-        labels: ['Pending', 'Approve']
+                type: 'bar',
+                label: 'Approved',
+                backgroundColor: documentStyle.getPropertyValue('--cyan-500'),
+                data: [12]
+            },
+            {
+                type: 'bar',
+                label: 'Pending',
+                backgroundColor: documentStyle.getPropertyValue('--orange-500'),
+                data: [13]
+            },
+
+
+        ]
+
     };
 };
-const setChartOptions = () => {
-    const documentStyle = getComputedStyle(document.documentElement);
-    const textColor = documentStyle.getPropertyValue('--text-color');
-    const surfaceBorder = documentStyle.getPropertyValue('--surface-border');
 
-    return {
-        plugins: {
-            legend: {
-                labels: {
-                    color: textColor
-                }
-            }
-        },
-        scales: {
-            r: {
-                grid: {
-                    color: surfaceBorder
-                }
-            }
-        }
-    };
-}
 </script>

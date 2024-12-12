@@ -20,6 +20,8 @@ const payments = ref()
 const payment_view = ref(false)
 const admin_apply = ref(false)
 const is_contract = ref(false)
+const terms = ref(false)
+const agree = ref(false)
 const contract_data = reactive({
     seller: '',
     seller_address: '',
@@ -55,8 +57,8 @@ const checkUser = (lot) => {
 }
 
 const applyForLot = (lot) => {
-   
-   
+
+
         // confirm.require({
         //     message: 'Are you sure you want to apply for this lot?',
         //     header: 'Confirmation',
@@ -85,10 +87,11 @@ const applyForLot = (lot) => {
             }).then((result) => {
             if (result.isConfirmed) {
                 form.lot_id = lot.id
-                sendApplication()
+                // sendApplication()
+                terms.value = true
             }
             });
-                
+
         }
 const siteVisit = () => {
     form.application_type = 'Site Visit',
@@ -98,7 +101,7 @@ const siteVisit = () => {
     visible.value = false
 }
 const sendApplication = () => {
-    console.log(form)
+    terms.value = false
     form.post('/applications', {
         onSuccess: (() => {
             if (admin_apply) {
@@ -115,14 +118,14 @@ const sendApplication = () => {
                 icon: "success"
             });
             }
-            
+
         })
     })
 }
 const calculatePercentage = (lot) => {
     const total_amount = lot.lot_group.sqr_meter * lot.lot_group.amount_per_sqr_meter;
     const total_payment = lot.payments.reduce((sum, payment) => sum + payment.amount, 0);
-    
+
     const percentage = (total_payment / total_amount) * 100;
     return percentage.toFixed(2);
 }
@@ -148,7 +151,7 @@ const processContract = (lot) => {
     contract_data.buyer_address = lot.user.personal_info.address
     contract_data.property_address = 'Purok ' + lot.property.purok + ', Barangay of ' + lot.property.barangay + ', ' + lot.property.city + ', ' + lot.property.province
     contract_data.size = lot.lot_group.sqr_meter + ' square meters'
-    contract_data.lot_address = 'Phase ' + lot.property.phase + ', Block ' + lot.block + ', ' + lot.name 
+    contract_data.lot_address = 'Phase ' + lot.property.phase + ', Block ' + lot.block + ', ' + lot.name
     contract_data.amount_in_word = toWords((lot.lot_group.sqr_meter * lot.lot_group.amount_per_sqr_meter))
     contract_data.amount = formatCurrency((lot.lot_group.sqr_meter * lot.lot_group.amount_per_sqr_meter))
     is_contract.value = true
@@ -202,9 +205,9 @@ defineOptions({layout: Layout})
                 <div class="page-title mb-2 mb-sm-0">
                     <h1>Applications</h1>
                 </div>
-                
+
                 <div class="ml-auto d-flex align-items-center">
-                    
+
                     <nav>
                         <ol class="breadcrumb p-0 m-b-0">
                             <li class="breadcrumb-item">
@@ -213,7 +216,7 @@ defineOptions({layout: Layout})
                             <li class="breadcrumb-item">
                                 <a href="#" @click="home('/applications')">Applicaitons</a>
                             </li>
-                        
+
                             <li class="breadcrumb-item active text-primary" aria-current="page">Property</li>
                         </ol>
                     </nav>
@@ -222,6 +225,34 @@ defineOptions({layout: Layout})
             <!-- end page title -->
         </div>
     </div>
+    <Dialog v-model:visible="terms" modal :style="{ width: '50rem' }">
+
+
+                <div class="card-header">
+                    <h5 class="card-title">Terms and Conditions</h5>
+                </div>
+                <div class="card-body" style="max-height: 200px; overflow-y: auto;">
+                    <h6>1. Introduction</h6>
+                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus luctus urna sed urna ultricies ac tempor dui sagittis.</p>
+                    <h6>2. User Obligations</h6>
+                    <p>In scelerisque sem at dolor. Maecenas mattis. Sed convallis tristique sem. Proin ut ligula vel nunc egestas porttitor.</p>
+                    <h6>3. Limitation of Liability</h6>
+                    <p>Nulla facilisi. Cras non velit nec nisi vulputate nonummy. Maecenas tincidunt lacus at velit.</p>
+                </div>
+
+
+            <!-- Checkbox for Agreement -->
+            <div class="form-check mb-3">
+                <input class="form-check-input" v-model="agree" type="checkbox" id="termsCheckbox" required>
+                <label class="form-check-label" for="termsCheckbox">
+                    I agree to the Terms and Conditions
+                </label>
+            </div>
+
+            <!-- Submit Button -->
+            <button type="submit" @click="sendApplication" class="btn btn-primary" :disabled="!agree" id="submitBtn">Submit</button>
+
+    </Dialog>
     <Dialog v-model:visible="payment_view" modal header="Payment History" :style="{ width: '50rem' }">
         <v-table>
             <thead>
@@ -267,7 +298,7 @@ defineOptions({layout: Layout})
             <select  class="js-basic-single form-control" name="region" v-model="form.user_id">
                 <option  v-for="client in clients" :key="client.id" :value="client.id">{{ client.personal_info.first_name }} {{ client.personal_info.last_name }}</option>
             </select>
-            
+
         </div>
         <div class="tw-flex tw-justify-end tw-gap-2">
             <Button type="button" label="Save" @click="sendApplication"></Button>
@@ -298,7 +329,7 @@ defineOptions({layout: Layout})
                                 <tr v-for="lot in property.lots" :key="lot.id">
                                     <td>
                                         {{ lot.name }}
-                                        
+
                                     </td>
                                     <td>
                                         Block {{ lot.block }}
@@ -326,11 +357,11 @@ defineOptions({layout: Layout})
                                             {{ lot.status }}
                                         </span>
                                     </td>
-                                        
+
                                     <td v-if="user.role.name !== 'Client'">
                                         <span v-if="lot.user">
                                             {{ lot.user.personal_info.first_name }}
-                                            {{ lot.user.personal_info.last_name }} 
+                                            {{ lot.user.personal_info.last_name }}
                                         </span>
                                     </td>
                                     <td>
@@ -348,7 +379,7 @@ defineOptions({layout: Layout})
                                         </div>
                                     </td>
                                 </tr>
-                              
+
                             </tbody>
                         </table>
                     </div>
@@ -375,7 +406,7 @@ defineOptions({layout: Layout})
                         <p class="MsoNormal">
                             <span style="font-size:14.0pt;line-height:107%">This contract to sell is made, executed, and entered into by and between:</span>
                         </p>
-            
+
                         <p class="MsoNormal">
                             <span style="font-size:14.0pt;line-height:107%">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <b>{{  contract_data.seller }}</b>, of legal age, Filipino, single, and a resident of Panabo City, Davao del Norte, hereinafter referred to as the <b>SELLER</b>.</span>
                         </p>
@@ -414,6 +445,6 @@ defineOptions({layout: Layout})
             <a @click="printDiv" href="javascript:void(0);" class="btn btn-block btn-round btn-outline-info">Print</a>
         </div>
 
-      
+
     </div>
 </template>
