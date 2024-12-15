@@ -43,13 +43,13 @@ const setChartData = () =>  {
                 type: 'bar',
                 label: 'Approved',
                 backgroundColor: documentStyle.getPropertyValue('--cyan-500'),
-                data: [12]
+                data: [props.approved_payment]
             },
             {
                 type: 'bar',
                 label: 'Pending',
                 backgroundColor: documentStyle.getPropertyValue('--orange-500'),
-                data: [13]
+                data: [props.pending_payment]
             },
 
 

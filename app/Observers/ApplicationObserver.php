@@ -5,6 +5,7 @@ namespace App\Observers;
 use App\Mail\ApplicationApproved;
 use App\Mail\ApplicationRejected;
 use App\Models\Application;
+use App\Models\Lot;
 use App\Models\Notification;
 use App\Services\LotService;
 use Illuminate\Support\Facades\Mail;
@@ -47,7 +48,8 @@ class ApplicationObserver
 
             Mail::to($user->email)->queue(new ApplicationRejected($application, $user));
         } else {
-            Mail::to($user->email)->queue(new ApplicationApproved());
+            $lot = Lot::with('property')->where('id', $application->lot_id)->first();
+            Mail::to($user->email)->queue(new ApplicationApproved($lot));
         }
     }
 

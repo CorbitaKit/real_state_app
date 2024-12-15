@@ -16,9 +16,10 @@ class ApplicationApproved extends Mailable
     /**
      * Create a new message instance.
      */
-    public function __construct()
+    public $lot;
+    public function __construct($lot)
     {
-        //
+        $this->lot = $lot;
     }
 
     /**

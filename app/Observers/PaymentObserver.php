@@ -21,7 +21,7 @@ class PaymentObserver
      */
     public function updated(Payment $payment): void
     {
-        Mail::to($payment->user->email)->queue(new PaymentApproved());
+        Mail::to($payment->user?->email)->queue(new PaymentApproved());
     }
 
     /**

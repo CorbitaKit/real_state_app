@@ -27,19 +27,19 @@ return {
             label: 'For Review',
             backgroundColor: documentStyle.getPropertyValue('--cyan-500'),
             borderColor: documentStyle.getPropertyValue('--cyan-500'),
-            data: [12]
+            data: [props.for_review_application]
         },
         {
             label: 'Approved',
             backgroundColor: documentStyle.getPropertyValue('--gray-500'),
             borderColor: documentStyle.getPropertyValue('--gray-500'),
-            data: [34]
+            data: [props.approved_application]
         },
         {
             label: 'Rejected',
             backgroundColor: documentStyle.getPropertyValue('--gray-500'),
             borderColor: documentStyle.getPropertyValue('--gray-500'),
-            data: [14]
+            data: [props.rejected_application]
         }
     ]
 };

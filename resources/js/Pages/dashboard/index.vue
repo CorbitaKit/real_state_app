@@ -118,8 +118,8 @@ defineOptions({ layout: Layout })
                                             {{ payment.mode_of_payment }}
                                         </td>
                                         <td>
-                                            {{ payment.user.personal_info.first_name }}
-                                            {{ payment.user.personal_info.last_name }}
+                                            {{ payment.user?.personal_info.first_name }}
+                                            {{ payment.user?.personal_info.last_name }}
 
                                         </td>
                                         <td>

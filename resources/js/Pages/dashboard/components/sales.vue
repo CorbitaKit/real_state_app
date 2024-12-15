@@ -88,8 +88,8 @@ const changePeriod = (period) => {
                     <tr v-for="sale in sales">
                         <td>{{ sale.date_of_payment }}</td>
                         <td>{{ sale.invoice_number }}</td>
-                        <td>{{ sale.user.personal_info.first_name }}
-                        {{ sale.user.personal_info.last_name }} </td>
+                        <td>{{ sale.user?.personal_info.first_name }}
+                        {{ sale.user?.personal_info.last_name }} </td>
                         <td>{{ sale.amount }}</td>
                         <td>
                             Phase {{ sale.lots[0].property.phase }},
@@ -174,8 +174,8 @@ const changePeriod = (period) => {
                     <tr v-for="sale in sales">
                         <td>{{ sale.date_of_payment }}</td>
                         <td>{{ sale.invoice_number }}</td>
-                        <td>{{ sale.user.personal_info.first_name }}
-                        {{ sale.user.personal_info.last_name }} </td>
+                        <td>{{ sale.user?.personal_info.first_name }}
+                        {{ sale.user?.personal_info.last_name }} </td>
                         <td>{{ sale.amount }}</td>
                         <td>
                             Phase {{ sale.lots[0].property.phase }},

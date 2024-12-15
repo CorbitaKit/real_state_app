@@ -22,11 +22,19 @@
         <div class="text-gray-700 mb-6">
             <p class="mb-4">Hi,</p>
             <p class="mb-6">
-                We are excited to let you know that your application has been approved!
+                We are excited to let you know that your application for:
             </p>
             <div class="text-center mb-8">
-
+                Phase {{ $lot->property->phase}},
+                Block {{ $lot->block }},
+                Lot {{ $lot->name }},
+                Purok {{ $lot->property->purok}},
+                Barangay {{ $lot->property->barangay }},
+                {{ $lot->property->city}},
+                {{ $lot->property->province }}
+                Has been approved!
             </div>
+
             <p class="mb-4">
                 Please visit our office at [Office address]
                 And please bring the initial requirements:

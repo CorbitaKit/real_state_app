@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Models\Application;
 use App\Models\Lot;
 use App\Models\Notification;
 use App\Repositories\ApplicationRepository;
@@ -11,6 +12,8 @@ use Illuminate\Support\Facades\Auth;
 use App\Services\LotService;
 use Carbon\Carbon;
 use App\Models\PaymentPlan;
+use Twilio\Rest\Client;
+
 class ApplicationService extends Service
 {
     protected $lotService;
@@ -49,6 +52,8 @@ class ApplicationService extends Service
                 'is_admin' => 0,
                 'user_id' => $application->user_id,
             ]);
+
+            $this->sendMessage($application->id);
         }
 
         $lot = Lot::with('property')->where('id', $application->lot_id)->first();
@@ -73,5 +78,29 @@ class ApplicationService extends Service
         }
 
         return $application;
+    }
+
+    protected function sendMessage(int $application_id)
+    {
+        $application = Application::with('user.personal_info', 'lot.property')->where('id', $application_id)->first();
+
+
+        $message = "Good Day! Mr./Ms. " . $application->user->personal_info->first_name . ", this is from Aldebal Realty Service. We would like to inform you that your application for lot at ".
+        " Phase " . $application->lot->property->phase .", Block ".  $application->lot->block . ", " . $application->lot->name . ", Purok " . $application->lot->property->purok . ", Barangay " .
+        $application->lot->property->barangay ." ". $application->lot->property->city ." City, ". $application->lot->property->province . " has been approved.". " Please bring 1 valid ID. Thank you.";
+
+        try {
+            $account_id = getenv("TWILIO_SID");
+            $auth_token = getenv("TWILIO_AUTH_TOKEN");
+            $twilio_number = getenv("TWILIO_NUMBER");
+
+            $client = new Client($account_id, $auth_token);
+
+            $client->messages->create($application->user->personal_info->phone_number, [
+                "from" => $twilio_number, "body" => $message
+            ]);
+        } catch (\Exception $e) {
+            dd($e->getMessage());
+        }
     }
 }
