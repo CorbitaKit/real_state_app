@@ -17,27 +17,14 @@ const modalRef = ref(); // Modal reference
 const filterText = ref("");
 const debounceDelay = 500;
 let debounceTimer = null;
-
+const property = ref()
 // Fetch and display properties
 const propertiesData = ref(props.properties);
 
-const openDetailsModal = () => {
+const openDetailsModal = (slectedProperty) => {
+  property.value = slectedProperty
   modalRef.value.showModal = true;
 };
-
-watch(filterText, () => {
-  clearTimeout(debounceTimer);
-  debounceTimer = setTimeout(() => {
-    if (!filterText.value) {
-      propertiesData.value = props.properties;
-      return;
-    }
-
-    axios.get(`filter-properties/${filterText.value}`).then((response) => {
-      propertiesData.value = response.data;
-    });
-  }, debounceDelay);
-});
 
 
 onMounted(() => {
@@ -47,7 +34,7 @@ onMounted(() => {
 watch(filterText, async (newFilter, oldFilter) => {
   clearTimeout(debounceTimer);
 
- 
+
   debounceTimer = setTimeout(() => {
     if (!newFilter) {
       propertiesData.value = props.properties
@@ -57,7 +44,7 @@ watch(filterText, async (newFilter, oldFilter) => {
     .then(response=> {
       propertiesData.value = response.data
     })
-    
+
   }, debounceDelay);
 })
 
@@ -76,7 +63,7 @@ watch(filterText, async (newFilter, oldFilter) => {
       </h2>
       <p class="tw-text-xl tw-text-white ">Your dream property is closer than you think</p>
     </div>
-  
+
 
    <!-- Search Bar Section -->
 <div class="tw-flex tw-justify-center tw-mt-4">
@@ -107,13 +94,13 @@ watch(filterText, async (newFilter, oldFilter) => {
 </section>
 
   <!-- Body Component -->
-  <Body @open-details="openDetailsModal" />
+  <Body @open-details="openDetailsModal" :properties="propertiesData"/>
 
   <!-- Modal Component -->
-  <ModalDetail ref="modalRef" />
+  <ModalDetail ref="modalRef" :property="property"/>
 
   <About />
-  
+
   <Contact />
   <Footer />
 </template>
@@ -128,9 +115,9 @@ watch(filterText, async (newFilter, oldFilter) => {
 
   /* Text Styling */
   color: #E6AC35; /* Yellow color for "Discover" */
-  
+
   /* White border effect */
-  text-shadow: 
+  text-shadow:
     -1px -1px 0 #ffffff, /* Top-left */
      1px -1px 0 #ffffff, /* Top-right */
     -1px  1px 0 #ffffff, /* Bottom-left */
@@ -153,9 +140,9 @@ watch(filterText, async (newFilter, oldFilter) => {
 
   /* Text Styling */
   color: #E6AC35; /* Yellow color for "Discover" */
-  
+
   /* White border effect */
-  text-shadow: 
+  text-shadow:
     -1px -1px 0 #ffffff, /* Top-left */
      1px -1px 0 #ffffff, /* Top-right */
     -1px  1px 0 #ffffff, /* Bottom-left */
@@ -178,9 +165,9 @@ watch(filterText, async (newFilter, oldFilter) => {
 
   /* Text Styling */
   color: #E6AC35; /* Yellow color for "Discover" */
-  
+
   /* White border effect */
-  text-shadow: 
+  text-shadow:
     -1px -1px 0 #000000, /* Top-left */
      1px -1px 0 #000000, /* Top-right */
     -1px  1px 0 #000000, /* Bottom-left */
@@ -199,9 +186,9 @@ watch(filterText, async (newFilter, oldFilter) => {
 
   /* Text Styling */
   color: #27542B; /* Yellow color for "Discover" */
-  
+
   /* White border effect */
-  text-shadow: 
+  text-shadow:
     -1px -1px 0 #FCFFFC, /* Top-left */
      1px -1px 0 #FCFFFC, /* Top-right */
     -1px  1px 0 #FCFFFC, /* Bottom-left */
@@ -218,7 +205,7 @@ watch(filterText, async (newFilter, oldFilter) => {
 
   /* Text Styling */
   color: #FCFFFC; /* Yellow color for "Discover" */
-  
+
 }
 .contact-title {
   font-family: 'Ultra', sans-serif;
@@ -230,7 +217,7 @@ watch(filterText, async (newFilter, oldFilter) => {
 
   /* Text Styling */
   color: #E7AB2D; /* Yellow color for "Discover" */
-  
+
 }
 .touch-title {
   font-family: 'Montserrat', sans-serif;
@@ -242,7 +229,7 @@ watch(filterText, async (newFilter, oldFilter) => {
 
   /* Text Styling */
   color: #FCFFFC; /* Yellow color for "Discover" */
-  
+
 }
 .info-title {
   font-family: 'Montserrat', sans-serif;
@@ -254,7 +241,7 @@ watch(filterText, async (newFilter, oldFilter) => {
 
   /* Text Styling */
   color: #FCFFFC; /* Yellow color for "Discover" */
-  
+
 }
 
 </style>

@@ -1,11 +1,25 @@
 <script setup>
 import { defineExpose, ref } from "vue";
-
+import { router } from "@inertiajs/vue3";
 const showModal = ref(false);
-
+const props = defineProps({
+    property: Object
+})
 const closeModal = () => {
   showModal.value = false;
 };
+
+
+const formatCurrency = (value) => {
+    return new Intl.NumberFormat('en-PH', {
+        style: 'currency',
+        currency: 'PHP',
+      }).format(value);
+}
+
+const redirect = () => {
+    router.get('/login')
+}
 
 defineExpose({ showModal });
 </script>
@@ -24,7 +38,7 @@ defineExpose({ showModal });
         >
           &times;
         </button>
-  
+
         <!-- Modal Content -->
         <div>
             <!-- Logo -->
@@ -33,14 +47,14 @@ defineExpose({ showModal });
             </div>
           <!-- Image -->
           <img src="/balay.png" alt="Project Image" class="tw-w-full tw-rounded-lg tw-mb-2" />
-  
+
           <!-- Header -->
             <div class=" tw-mx-auto tw-px-6 tw-text-center">
             <link href="https://fonts.googleapis.com/css2?family=Ultra&display=swap" rel="stylesheet">
             <h2 class="modal-datail-title">
                 Discover, <span class="green-text">Dream, Own</span>
             </h2>
-            <p class="tw-text-gray-600 tw-mb-4 tw-text-[20px]">Guadalupe, Carmen, Davao del Norte</p>
+            <p class="tw-text-gray-600 tw-mb-4 tw-text-[20px]">{{ property.barangay }}, {{ property.city }}, {{ property.province }}</p>
             </div>
 
           <!-- Details Grid -->
@@ -53,47 +67,40 @@ defineExpose({ showModal });
             <!-- Lot Sizes and Payments -->
             <div>
             <h3 class="tw-font-bold tw-text-md tw-text-gray-800 tw-text-center">Size</h3>
-            <p class="tw-flex tw-items-center">
+            <p class="tw-flex tw-items-center" v-for="lot_group in property.lot_groups">
                 <img src="/Home.png" alt="House Icon" class="tw-mr-5 tw-h-5 tw-w-5" />
-                50 sqm
+                {{ lot_group.sqr_meter }} sqm
             </p>
-            <p class="tw-flex tw-items-center">
-                <img src="/Home.png" alt="House Icon" class="tw-mr-5 tw-h-5 tw-w-5" />
-                200 sqm
-            </p>
-            <p class="tw-flex tw-items-center">
-                <img src="/Home.png" alt="House Icon" class="tw-mr-5 tw-h-5 tw-w-5" />
-                250 sqm
-            </p>
+
             </div>
-  
+
             <div>
             <h3 class="tw-font-bold tw-text-sm tw-text-gray-800 tw-text-center">Monthly Amortization/ <br>Down Payment</h3>
-              <p>₱ 25,000.00</p>
-              <p>₱ 33,333.00</p>
-              <p>₱ 40,000.00</p>
+              <p v-for="lot_group in property.lot_groups">{{ formatCurrency(lot_group.monthly_amortizations) }}</p>
             </div>
             <!-- Description -->
             <div class="tw-col-span-2">
                 <h3 class="tw-font-bold tw-text-gray-800 tw-mb-1">Description:</h3>
                 <p class="tw-text-gray-600">
-                Located at Tagum-Davao Highway, near Guadalupe Elementary School
+                {{ property.description }}
                 </p>
             </div>
         </div>
           </div>
-  
-         
-  
+
+
+
           <!-- Action Buttons -->
           <div class="tw-mt-6 tw-flex tw-justify-between">
             <button
               class="tw-bg-[#093E00] tw-text-white tw-py-2 tw-px-6 tw-rounded-md hover:tw-bg-[#072A00]"
+              @click="redirect"
             >
               View Actual Map
             </button>
             <button
               class="tw-bg-[#FFB800] tw-text-white tw-py-2 tw-px-6 tw-rounded-md hover:tw-bg-[#e6a400]"
+              @click="redirect"
             >
               View Lots
             </button>
@@ -102,7 +109,7 @@ defineExpose({ showModal });
       </div>
     </div>
   </template>
-  
+
 
 <style scoped>
 /* Optional: Smooth Modal Transition */

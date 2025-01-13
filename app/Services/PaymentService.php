@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Models\Lot;
 use App\Models\Notification;
+use App\Models\Payment;
 use App\Repositories\PaymentRepository;
 use App\Traits\FileUploadTrait;
 use Illuminate\Database\Eloquent\Collection;
@@ -75,6 +76,13 @@ class PaymentService extends Service
         $lot = Lot::with('lotGroup')->where('id', $payment->lot_id)->first();
 
         $transaction = Transaction::where('property_id', $lot->property_id)->where('user_id', $payment->user_id)->first();
+
+        $paymentPlans = PaymentPlan::where('user_id', $payment->user_id)->where('lot_id', $payment->lot_id)->get();
+
+        foreach ($paymentPlans as $paymentPlan) {
+            $paymentPlan->payment_id = $payment->id;
+            $paymentPlan->save();
+        }
 
         if ($transaction) {
             $total_amount = $transaction->total_amount + $payment->amount;

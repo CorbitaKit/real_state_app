@@ -8,6 +8,7 @@ import { useToaster } from '../composables/toast'
 import { reactive, ref } from 'vue';
 import Swal from 'sweetalert2'
 import { toWords } from 'number-to-words';
+import { useVueToPrint } from "vue-to-print";
 
 const { show } = useToaster()
 const { getUserInfo } = getUser()
@@ -21,6 +22,7 @@ const payment_view = ref(false)
 const admin_apply = ref(false)
 const is_contract = ref(false)
 const terms = ref(false)
+const contractRef = ref()
 const agree = ref(false)
 const contract_data = reactive({
     seller: '',
@@ -44,6 +46,11 @@ const form = useForm({
     reserved_date: moment().format('YYYY-MM-DD'),
     status: 'For Review'
 })
+
+const { handlePrint } = useVueToPrint({
+  content: contractRef,
+  documentTitle: "AwesomeFileName",
+});
 
 
 const checkUser = (lot) => {
@@ -158,42 +165,7 @@ const processContract = (lot) => {
 
 }
 
-const printDiv = () => {
-    const printContent = document.getElementById("printMe").outerHTML;
-    const printWindow = window.open("", "_blank");
-    printWindow.document.open();
-    printWindow.document.write(`
-        <html>
-            <head>
-                <title>Print Report</title>
-                <style>
-                    body {
-                        font-family: Arial, sans-serif;
-                        margin: 20px;
-                    }
-                    table {
-                        width: 100%;
-                        border-collapse: collapse;
-                    }
-                    th, td {
-                        border: 1px solid #ddd;
-                        padding: 8px;
-                    }
-                    th {
-                        background-color: #f2f2f2;
-                        text-align: left;
-                    }
-                </style>
-            </head>
-            <body>${printContent}</body>
-        </html>
-    `);
-    printWindow.document.close();
-    printWindow.focus();
-    printWindow.print();
-    printWindow.close();
-    is_contract.value = false
-};
+
 defineOptions({layout: Layout})
 </script>
 
@@ -232,12 +204,11 @@ defineOptions({layout: Layout})
                     <h5 class="card-title">Terms and Conditions</h5>
                 </div>
                 <div class="card-body" style="max-height: 200px; overflow-y: auto;">
-                    <h6>1. Introduction</h6>
-                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus luctus urna sed urna ultricies ac tempor dui sagittis.</p>
-                    <h6>2. User Obligations</h6>
-                    <p>In scelerisque sem at dolor. Maecenas mattis. Sed convallis tristique sem. Proin ut ligula vel nunc egestas porttitor.</p>
-                    <h6>3. Limitation of Liability</h6>
-                    <p>Nulla facilisi. Cras non velit nec nisi vulputate nonummy. Maecenas tincidunt lacus at velit.</p>
+                    <p>
+                        I HEREBY declare that the above statement is TRUE AND CORRECT, I agree to inform the owner if my reservation of the said Lots listed above will not be paid in full within 3 days from the time of reservation period, this reservation shall be automatically cancelled and forfeited.
+
+If the buyer wishes to discontinue the said installment all previous payments are non-refundable and subject for forfeiture.
+                    </p>
                 </div>
 
 
@@ -388,63 +359,105 @@ defineOptions({layout: Layout})
         </div>
     </div>
     <div class="row" v-if="is_contract">
-        <div class="col-xl-12 col-sm-12" style="color:black;">
+
+        <div class="col-xl-12 col-sm-12" style="color:black;" ref="contractRef">
+
             <div class="card card-statistics">
-                <div class="card-body p-3" id="printMe">
-                    <h1>
-                        <p class="MsoNormal" align="center" style="text-align:center">
-                            <b><span style="font-size:14.0pt;line-height:107%">CONTRACT TO SELL</span></b>
-                        </p>
-                        <p class="MsoNormal" align="center" style="text-align:center">
-                            <b><span style="font-size:14.0pt;line-height:107%"><br></span></b>
-                        </p>
+                <v-table class="responsive">
+                    <tbody>
+                        <tr>
+                            <td></td>
+                            <td>
+                                <img src="/header.png" style="height: 100px;"/>
+                            </td>
+                            <td>
+                                <h1 style="margin-left:100px;">JEFF ALDEBAL REALTY SERVICE</h1>
+                            Door 3, CEASAR APARMENT, Sto. Niño, Carmen, Davao del Norte
+                            </td>
+                        </tr>
+                    </tbody>
+                </v-table>
 
-                        <p class="MsoNormal">
-                            <span style="font-size:14.0pt;line-height:107%">KNOW ALL MEN BY THESE PRESENTS:</span>
-                        </p>
+                <div class="card-body p-5" id="printMe" style="font-family: 'Times New Roman', serif; line-height: 1.5; padding: 20px; max-width: 800px; margin: 0 auto;">
+    <h1>
+        <p class="MsoNormal" align="center" style="text-align:center; margin: 0; padding: 0;">
+            <b><span style="font-size:18pt;">CONTRACT TO SELL</span></b>
+        </p>
+        <br>
+        <p class="MsoNormal" style="text-align: justify; margin-bottom: 1em;">
+            <span style="font-size:14pt;">KNOW ALL MEN BY THESE PRESENTS:</span>
+        </p>
 
-                        <p class="MsoNormal">
-                            <span style="font-size:14.0pt;line-height:107%">This contract to sell is made, executed, and entered into by and between:</span>
-                        </p>
+        <p class="MsoNormal" style="text-align: justify; margin-bottom: 1em;">
+            <span style="font-size:14pt;">This contract to sell is made, executed, and entered into by and between:</span>
+        </p>
 
-                        <p class="MsoNormal">
-                            <span style="font-size:14.0pt;line-height:107%">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <b>{{  contract_data.seller }}</b>, of legal age, Filipino, single, and a resident of Panabo City, Davao del Norte, hereinafter referred to as the <b>SELLER</b>.</span>
-                        </p>
+        <p class="MsoNormal" style="text-align: justify; margin-bottom: 1em;">
+            <span style="font-size:14pt;">
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <b>{{ contract_data.seller }}</b>, of legal age, Filipino, single, and a resident of Panabo City, Davao del Norte, hereinafter referred to as the <b>SELLER</b>.
+            </span>
+        </p>
 
-                        <p class="MsoNormal" align="center" style="text-align:center">
-                            <b><span style="font-size:14.0pt;line-height:107%">-AND-</span></b>
-                        </p>
+        <p class="MsoNormal" align="center" style="text-align:center; margin-bottom: 1em;">
+            <b><span style="font-size:14pt;">-AND-</span></b>
+        </p>
 
-                        <p class="MsoNormal">
-                            <span style="font-size:14.0pt;line-height:107%">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <b>{{ contract_data.buyer }}</b>, of legal age, Filipino, <b>married</b>, and a resident of <b>{{ contract_data.buyer_address }}</b>, hereinafter referred to as the <b>BUYER</b>.</span>
-                        </p>
+        <p class="MsoNormal" style="text-align: justify; margin-bottom: 1em;">
+            <span style="font-size:14pt;">
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <b>{{ contract_data.buyer }}</b>, of legal age, Filipino, <b>married</b>, and a resident of <b>{{ contract_data.buyer_address }}</b>, hereinafter referred to as the <b>BUYER</b>.
+            </span>
+        </p>
 
-                        <p class="MsoNormal" align="center" style="text-align:center">
-                            <b><span style="font-size:14.0pt;line-height:107%">-WITNESSETH-</span></b>
-                        </p>
+        <p class="MsoNormal" align="center" style="text-align:center; margin-bottom: 1em;">
+            <b><span style="font-size:14pt;">-WITNESSETH-</span></b>
+        </p>
 
-                        <p class="MsoNormal">
-                            <b><span style="font-size:14.0pt;line-height:107%">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; WHEREAS</span></b><span style="font-size:14.0pt;line-height:107%">, the <b>SELLER</b> is authorized to enter into a contract to sell involving a parcel of land located at <b>{{ contract_data.property_address }}</b>, and covered by <b>Transfer Certificate of Title No. 256092</b>, containing a total area of <b>Fifty thousand square meters</b>, more or less, issued by the Registry of Deeds of the province of Davao del Norte.</span>
-                        </p>
+        <p class="MsoNormal" style="text-align: justify; margin-bottom: 1em;">
+            <b><span style="font-size:14pt;">WHEREAS</span></b>
+            <span style="font-size:14pt;">
+                the <b>SELLER</b> is authorized to enter into a contract to sell involving a parcel of land located at <b>{{ contract_data.property_address }}</b>, and covered by <b>Transfer Certificate of Title No. 256092</b>, containing a total area of <b>Fifty thousand square meters</b>, more or less, issued by the Registry of Deeds of the province of Davao del Norte.
+            </span>
+        </p>
 
-                        <p class="MsoNormal">
-                            <span style="font-size:14.0pt;line-height:107%">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Whereas, the <b>BUYER</b> has offered to buy a portion of said parcel of land containing an area of <b>{{ contract_data.size }}</b>, more or less, identified as <b>{{ contract_data.lot_address }}</b>, of the aforesaid property, and the <b>SELLER</b> has agreed to sell the above-mentioned property under the terms and conditions herein below set forth:</span>
-                        </p>
+        <p class="MsoNormal" style="text-align: justify; margin-bottom: 1em;">
+            <span style="font-size:14pt;">
+                Whereas, the <b>BUYER</b> has offered to buy a portion of said parcel of land containing an area of <b>{{ contract_data.size }}</b>, more or less, identified as <b>{{ contract_data.lot_address }}</b>, of the aforesaid property, and the <b>SELLER</b> has agreed to sell the above-mentioned property under the terms and conditions herein below set forth:
+            </span>
+        </p>
 
-                        <p class="MsoNormal">
-                            <span style="font-size:14.0pt;line-height:107%">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; NOW THEREFORE, for and in consideration of the total sum of <b>{{ contract_data.amount_in_word }} ({{ contract_data.amount }})</b> Philippine currency, and of the covenants herein after set forth, the <b>SELLER</b> agrees to sell, and the <b>BUYER</b> agrees to buy the aforesaid parcel of land, being a portion of the parcel of land covered by <b>Transfer Certificate of Title No. 256092</b>, subject to the following terms:</span>
-                        </p>
+        <p class="MsoNormal" style="text-align: justify; margin-bottom: 1em;">
+            <span style="font-size:14pt;">
+                NOW THEREFORE, for and in consideration of the total sum of <b>{{ contract_data.amount_in_word }} ({{ contract_data.amount }})</b> Philippine currency, and of the covenants herein after set forth, the <b>SELLER</b> agrees to sell, and the <b>BUYER</b> agrees to buy the aforesaid parcel of land, being a portion of the parcel of land covered by <b>Transfer Certificate of Title No. 256092</b>, subject to the following terms:
+            </span>
+        </p>
 
-                        <p class="MsoNormal">
-                            <span style="font-size:14.0pt;line-height:107%">----------------------------------------&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ---------------------------------------<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; SELLER&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; BUYER</span>
-                        </p>
-                    </h1>
+        <br>
 
-                </div>
-            </div>
-            <a @click="printDiv" href="javascript:void(0);" class="btn btn-block btn-round btn-outline-info">Print</a>
-        </div>
+        <p class="MsoNormal" align="center" style="text-align:center;">
+            <b>----------------------------------------</b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            <b>---------------------------------------</b>
+            <br>
+            <span style="font-size:14pt;">SELLER</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            <span style="font-size:14pt;">BUYER</span>
+        </p>
+        <br><br>
+        <p class="MsoNormal" align="center" style="text-align:center;">
+            <b>----------------------------------------</b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            <b>---------------------------------------</b>
+            <br>
+            <span style="font-size:14pt;">WITNESS 1</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            <span style="font-size:14pt;">WINTESS 2</span>
+        </p>
+    </h1>
+</div>
+
 
 
     </div>
+</div>
+            <a @click="handlePrint" href="javascript:void(0);" class="btn btn-block btn-round btn-outline-info">Print</a>
+        </div>
+
 </template>

@@ -1,11 +1,14 @@
 <script setup>
 import { defineEmits } from "vue";
 
+const props = defineProps({
+    properties: Object
+})
 // Emit setup
 const emit = defineEmits(["open-details"]);
 
-const openModal = () => {
-  emit("open-details"); // Emit to parent when a button is clicked
+const openModal = (property) => {
+  emit("open-details", property);
 };
 </script>
 
@@ -17,7 +20,7 @@ const openModal = () => {
     <div class=" tw-mx-auto tw-px-6 tw-text-center">
       <link href="https://fonts.googleapis.com/css2?family=Ultra&display=swap" rel="stylesheet">
       <h2 class="property-title">
-        Property List 
+        Property List
       </h2>
     </div>
       <!-- Heading -->
@@ -31,54 +34,17 @@ const openModal = () => {
           <!-- Card 1 -->
           <div
             class="tw-bg-white tw-rounded-lg tw-p-4 tw-text-left tw-w-100 tw-shadow-[0_4px_6px_-1px_rgba(0,0,0,0.1),0_2px_4px_-1px_rgba(0,0,0,0.06)]"
+            v-for="property in properties" :key="property.id"
           >
             <img src="/balay.png" alt="Phase 1 Image" class="tw-rounded-md tw-mb-4" />
             <h4 class="tw-text-lg tw-font-semibold tw-mb-2">
-              Phase 1-Guadalupe Project
+                 Phase {{ property.phase }} {{ property.barangay }} Project
             </h4>
             <p class="tw-text-gray-600 tw-text-sm">
-              Guadalupe, Carmen, Davao del Norte
+              {{ property.barangay }}, {{ property.city }}, {{ property.province }}
             </p>
             <button
-            @click="openModal"
-            class="tw-mt-4 tw-bg-[#FFB800] tw-text-white tw-font-medium tw-py-2 tw-w-full tw-rounded-md hover:tw-bg-[#e6a400] tw-shadow-[0_4px_6px_-1px_rgba(0,0,0,0.1),0_2px_4px_-1px_rgba(0,0,0,0.06)]"
-            >
-            View Details
-            </button>
-          </div>
-
-          <!-- Card 2 -->
-          <div
-            class="tw-bg-white tw-rounded-lg tw-p-4 tw-text-left tw-w-100 tw-shadow-[0_4px_6px_-1px_rgba(0,0,0,0.1),0_2px_4px_-1px_rgba(0,0,0,0.06)]"
-          >
-            <img src="/balay.png" alt="Phase 2 Image" class="tw-rounded-md tw-mb-4" />
-            <h4 class="tw-text-lg tw-font-semibold tw-mb-2">
-              Phase 2-Datu Abdul Project
-            </h4>
-            <p class="tw-text-gray-600 tw-text-sm">
-              Datu Abdul, Panabo City, Davao del Norte
-            </p>
-            <button
-            @click="openModal"
-            class="tw-mt-4 tw-bg-[#FFB800] tw-text-white tw-font-medium tw-py-2 tw-w-full tw-rounded-md hover:tw-bg-[#e6a400] tw-shadow-[0_4px_6px_-1px_rgba(0,0,0,0.1),0_2px_4px_-1px_rgba(0,0,0,0.06)]"
-            >
-            View Details
-            </button>
-          </div>
-
-          <!-- Card 3 -->
-          <div
-            class="tw-bg-white tw-rounded-lg tw-p-4 tw-text-left tw-w-100 tw-shadow-[0_4px_6px_-1px_rgba(0,0,0,0.1),0_2px_4px_-1px_rgba(0,0,0,0.06)]"
-          >
-            <img src="/balay.png" alt="Phase 2 Image" class="tw-rounded-md tw-mb-4" />
-            <h4 class="tw-text-lg tw-font-semibold tw-mb-2">
-              Phase 2-Datu Abdul Project
-            </h4>
-            <p class="tw-text-gray-600 tw-text-sm">
-              Datu Abdul, Panabo City, Davao del Norte
-            </p>
-            <button
-            @click="openModal"
+            @click="openModal(property)"
             class="tw-mt-4 tw-bg-[#FFB800] tw-text-white tw-font-medium tw-py-2 tw-w-full tw-rounded-md hover:tw-bg-[#e6a400] tw-shadow-[0_4px_6px_-1px_rgba(0,0,0,0.1),0_2px_4px_-1px_rgba(0,0,0,0.06)]"
             >
             View Details
