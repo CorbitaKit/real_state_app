@@ -37,7 +37,7 @@ import '@mdi/font/css/materialdesignicons.css'
 import Password from 'primevue/password';
 import Tooltip from 'primevue/tooltip';
 import ProgressBar from 'primevue/progressbar';
-
+import Checkbox from 'primevue/checkbox';
 
 
 // import 'vuetify/styles'
@@ -54,7 +54,7 @@ createInertiaApp({
   resolve: name => {
     const pages = import.meta.glob('./Pages/**/*.vue', { eager: true })
     return pages[`./Pages/${name}.vue`]
-  
+
   },
   setup({ el, App, props, plugin }) {
     createApp({ render: () => h(App, props) })
@@ -88,6 +88,7 @@ createInertiaApp({
       .component('Password', Password)
       .component('ProgressBar', ProgressBar)
       .component('ColumnGroup', ColumnGroup)
+      .component('Checkbox', Checkbox)
       .component('Row', Row)
       .mount(el)
   },

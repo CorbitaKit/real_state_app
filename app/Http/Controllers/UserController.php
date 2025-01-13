@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Inertia\Inertia;
 use App\Models\User;
 use App\Models\Employee;
+
 class UserController extends Controller
 {
     protected $service;
@@ -36,14 +37,14 @@ class UserController extends Controller
 
     public function clients()
     {
-        $clients = User::with('personal_info', 
-        'address', 
-        'workDetails', 
-        'payments.plan.lot.property', 
-        'lots.property', 
-        'lots.lotGroup', 
-        'lots.paymentPlans.payment', 
-        'lots.payments', 
+        $clients = User::with('personal_info',
+        'address',
+        'workDetails',
+        'payments.plan.lot.property',
+        'lots.property',
+        'lots.lotGroup',
+        'lots.paymentPlans.payment',
+        'lots.payments',
         'lots.paymentPlans.lot.lotGroup',
         'lots.user.personal_info')->where('role_id', 3)->get();
         return Inertia::render('user/client', [
@@ -78,4 +79,6 @@ class UserController extends Controller
         $personal_info->update($request->all());
         $this->show($user_id);
     }
+
+
 }

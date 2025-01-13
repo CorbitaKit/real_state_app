@@ -20,6 +20,9 @@ const client_lots = ref()
 const chart_view = ref(false)
 const chartOfAccountRef = ref()
 const printableRef = ref()
+const infoSheetRef = ref()
+const infosheet_view = ref(false)
+const clientInfo = ref()
 const form = useForm({
     file: {},
     lot_id: 0,
@@ -112,9 +115,34 @@ const { handlePrint } = useVueToPrint({
   content: printableRef,
   documentTitle: "AwesomeFileName",
 });
-const print = () => {
-    printableRef.value = chartOfAccountRef.value
+const print = (printRef) => {
+    if (printRef === 'chart-of-account') {
+        printableRef.value = chartOfAccountRef.value
+    }else if (printRef === 'info-sheet') {
+        printableRef.value = infoSheetRef.value
+    }
     handlePrint()
+}
+
+const handleClientInfo = (client) => {
+    clientInfo.value = {
+        first_name: client.personal_info.first_name,
+        mi: '',
+        last_name: client.personal_info.last_name,
+        date_of_birth: client.personal_info.birth_day,
+        age: calculateAge(client.personal_info.birth_day),
+        occupation: client.work_details.job_title,
+        address: 'Purok ' + client.address.purok + ', Barangay ' + client.address.barangay + ', ' + client.address.city + ' City ' + client.address.province,
+        project_name: '',
+        lots: client.lots,
+    }
+    infosheet_view.value = true
+}
+const calculateAge = (date) => {
+    const birthDate = new Date(date);
+    const currentDate = new Date();
+
+    return currentDate.getFullYear() - birthDate.getFullYear();
 }
 </script>
 
@@ -198,7 +226,7 @@ const print = () => {
                 </tbody>
             </v-table>
         </div>
-        <button class="btn btn-block btn-info" @click="print">Print</button>
+        <button class="btn btn-block btn-info" @click="print('chart-of-account')">Print</button>
     </Dialog>
 
     <Dialog v-model:visible="payment" modal header="Make Payment" :style="{ width: '50rem' }">
@@ -354,7 +382,94 @@ const print = () => {
             </tbody>
         </v-table>
     </Dialog>
+    <Dialog v-model:visible="infosheet_view" modal header="Client Information Sheet" :style="{ width: '100rem' }">
+        <div ref="infoSheetRef">
+            <v-table class="responsive">
+                <tbody>
+                    <tr>
+                        <td></td>
+                        <td>
+                            <img src="/header.png" style="height: 100px;"/>
+                        </td>
+                        <td>
+                            <h1 style="margin-left:100px;">JEFF ALDEBAL REALTY SERVICE</h1>
+                        Door 3, CEASAR APARMENT, Sto. Niño, Carmen, Davao del Norte
+                        </td>
+                    </tr>
+                </tbody>
+            </v-table>
+            <h1 class="text-center">BUYER'S INFORMATION SHEET</h1>
+            <v-table class="border-none">
+                <tbody>
+                    <tr>
+                        <td>
+                            FIRSTNAME: {{ clientInfo.first_name }}
+                        </td>
+                        <td>
+                            MI:
+                        </td>
+                        <td colspan="4">
+                            SURNAME: {{ clientInfo.last_name }}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="6">DATE OF BIRTH: {{ clientInfo.date_of_birth }}</td>
 
+                    </tr>
+                    <tr>
+                        <td colspan="6">AGE: {{ clientInfo.age }}</td>
+                    </tr>
+                    <tr>
+                        <td colspan="6">OCCUPATION: {{ clientInfo.occupation }}</td>
+                    </tr>
+                    <tr>
+                        <td>CURRENT ADDRESS:</td>
+                        <td>PRESENT ADDRESS:</td>
+                        <td colspan="5">PERMANENT ADDRESS: {{ clientInfo.address }}</td>
+                    </tr>
+                    <tr>
+                        <td colspan="6">PROJECT NAME:</td>
+                    </tr>
+                    <tr v-for="(lot, i) in clientInfo.lots">
+                        <td>BLOCK NO: {{ lot.block }}</td>
+                        <td>LOT NO: {{  lot.name }}</td>
+                        <td>SQM NO: {{ lot.lot_group.sqr_meter }}</td>
+                        <td>MONTHLY PAYMENT: {{ formatCurrency(lot.lot_group.monthly_amortizations) }}</td>
+                        <td>TCP: {{ formatCurrency((lot.lot_group.sqr_meter * lot.lot_group.amount_per_sqr_meter)) }}</td>
+                        <td colspan="2">TERMS OF PAYMENT: {{ lot.property.balance_payable }} Month(s)</td>
+                    </tr>
+                    <tr>
+                        <td colspan="6">
+                            <p>
+                                I HEREBY declare that the above statement is TRUE AND CORRECT, I agree to inform the owner if my reservation of
+                                the said lots listed above will no be paid until full within 3 days from the time of reservation period. This reservation
+                                sgall be automatically cancelled and forfiteid. If the buyer wishes to discontinue the said installment all previous payments
+                                are non-refundable and subject for forfieture.
+                            </p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="6">
+                            BUYERS SIGNATURE/DATE RECEIVED
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">
+                           SALES DIRECTOR
+                        </td>
+                        <td colspan="2">
+                           AGENT NAME
+                        </td>
+                        <td colspan="2">
+                           AGENT NAME
+                        </td>
+                    </tr>
+                </tbody>
+            </v-table>
+
+        </div>
+        <button class="btn btn-block btn-info" @click="print('info-sheet')">Print</button>
+    </Dialog>
     <div class="row" >
         <div class="col-md-12 mb-2">
             <!-- begin page title -->
@@ -439,6 +554,7 @@ const print = () => {
                                                 <a @click.prevent="viewProperties(client.lots)" class="dropdown-item" href="#!"><i class="fa-fw far fa-file-alt pr-2"></i>View Properties</a>
                                                 <!-- <a class="dropdown-item" href="#!"><i class="fa-fw fas fa-trash pr-2"></i>Delete</a>  -->
                                                 <a @click.prevent="makePayment(client)" class="dropdown-item" href="#!"><i class="fa-fw fas fa-receipt pr-2"></i>Make Payment</a>
+                                                <a @click.prevent="handleClientInfo(client)" class="dropdown-item" href="#!"><i class="fa-fw fas fa-receipt pr-2"></i>View Information Sheet</a>
                                             </div>
                                         </div>
                                 </td>

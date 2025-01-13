@@ -41,17 +41,7 @@ defineOptions({ layout: Layout })
 
 
 <template>
-    <div class="row">
-        <Widget :properties="properties.length" :clients="clients.length" :applications="applications.length" :sales="sales.overall"/>
-        <Sales :daily="daily" :weekly="weekly" :monthly="monthly"/>
-        <!-- <Profile :clients="clients"/> -->
-        <Application :for_review_application="for_review_application" :rejected_application="rejected_application" :approved_application="approved_application"/>
-        <Payment :pending_payment="pending_payment" :approved_payment="approved_payment"/>
-        <Lot :available_lot="available_lot" :occupied_lot="occupied_lot" :pending_lot="pending_lot"/>
-        <Property :properties="properties"/>
-
-    </div>
-    <div class="row">
+     <div class="row">
         <div class="col-lg-5 col-xl-4 col-xxl-4 mb-3">
             <div class="card-heading">
                 <h5 class="card-title">Applications Overview</h5>
@@ -66,8 +56,9 @@ defineOptions({ layout: Layout })
                                 <i v-else class="fe fe-calendar"></i>
                             </div>
                             <div class="activity-info">
-                                <h6 class="mb-0">{{ application.application_type }}</h6>
-                                <span>{{  convertDate(application.created_at) }}</span>
+                                <a href="/applications"><h6 class="mb-0">{{ application.application_type }}</h6></a>
+                                <span>{{  application .user.personal_info.first_name }} </span>&nbsp;
+                                <span> {{  application .user.personal_info.last_name}}</span>
                             </div>
                         </li>
 
@@ -139,6 +130,17 @@ defineOptions({ layout: Layout })
             </div>
         </div>
     </div>
+    <div class="row">
+        <Widget :properties="properties.length" :clients="clients.length" :applications="applications.length" :sales="sales.overall"/>
+        <Sales :daily="daily" :weekly="weekly" :monthly="monthly"/>
+        <!-- <Profile :clients="clients"/> -->
+        <Application :for_review_application="for_review_application" :rejected_application="rejected_application" :approved_application="approved_application"/>
+        <Payment :pending_payment="pending_payment" :approved_payment="approved_payment"/>
+        <Lot :available_lot="available_lot" :occupied_lot="occupied_lot" :pending_lot="pending_lot"/>
+        <Property :properties="properties"/>
+
+    </div>
+
 </template>
 
 

@@ -44,8 +44,16 @@ const { handlePrint } = useVueToPrint({
 const setLocation = (property) => {
     return property.purok + ', ' + property.barangay + ', ' + property.city
 }
-const show = (property_id) => {
-    router.get('/properties/' + property_id)
+const show = (property) => {
+    if (user.role.name === 'Client' && isAllLotsOccupied(property)) {
+        Swal.fire({
+            title: "Oppps!",
+            text: "You cannot view property details anymore since all of the lots are already occupied",
+            icon: "error"
+        });
+        return
+    }
+    router.get('/properties/' + property.id)
 }
 
 const deleteProperty = (property_id) => {
@@ -98,6 +106,9 @@ const uploadPropertyMap = () => {
             });
         })
     })
+}
+const isAllLotsOccupied = (property) => {
+    return property.lots.every(lot => lot.status === "Occupied");
 }
 defineOptions({layout: Layout})
 </script>
@@ -210,35 +221,35 @@ defineOptions({layout: Layout})
         </div>
     </Dialog>
     <div class="row">
-        <div class="col-lg-6" v-for="property in properties" :key="property.id">
-            <div class="card card-statistics">
-                <div class="card-header d-flex justify-content-between tw-text-xl tw-font-weight-bold">
-                    <div class="card-heading">
-                        <h5 class="card-title">
-                            Phase {{ property.phase }},
-                            Purok {{ property.purok }},
-                            Barangay {{ property.barangay }},
-                            {{ property.city }} City,
-                            {{ property.region }}
-
-                        </h5>
-                        <h4>{{ property.description }}</h4>
-                    </div>
-                    <div>
-                        <a v-if="user.role.name !== 'Client'" @click.prevent="uploadPic(property.id)" data-toggle="tooltip" data-placement="top" title="" data-original-title="Upload Property Map" href="javascript:void(0);" class="btn btn-xs btn-icon btn-round btn-outline-info"><i class="fas fa-upload"></i></a>
-                        <a v-if="user.role.name !== 'Client'" @click.prevent="setTransaction(property)" data-toggle="tooltip" data-placement="top" title="" data-original-title="Print Transaction Records   " href="javascript:void(0);" class="btn btn-xs btn-icon btn-round btn-outline-info ml-1"><i class="fas fa-file"></i></a>
-                        <a @click.prevent="show(property.id)" data-toggle="tooltip" data-placement="top" title="" data-original-title="View Property Details" href="javascript:void(0);" class="btn btn-xs btn-icon btn-round btn-outline-info ml-1"><i class="fas fa-eye"></i></a>
-                        <a v-if="user.role.name !== 'Client'" @click.prevent="deleteProperty(property.id)" data-toggle="tooltip" data-placement="top" title="" data-original-title="Delete Property" href="javascript:void(0);" class="btn btn-xs btn-icon btn-round btn-outline-danger ml-1"><i class="fas fa-trash"></i></a>
-
-                    </div>
-                </div>
-                <div class="card-body">
-
-                        <LandMark :address="setLocation(property)" :key="property.id" :map="property.id" :property="property"/>
-
-                </div>
+        <div
+  class="col-lg-6"
+  v-for="property in properties.filter(property => !(user.role.name === 'Client' && property.lots.every(lot => lot.status === 'Occupied')))"
+  :key="property.id">
+    <div class="card card-statistics">
+        <div class="card-header d-flex justify-content-between tw-text-xl tw-font-weight-bold">
+            <div class="card-heading">
+                <h5 class="card-title">
+                    Phase {{ property.phase }},
+                    Purok {{ property.purok }},
+                    Barangay {{ property.barangay }},
+                    {{ property.city }} City,
+                    {{ property.region }}
+                </h5>
+                <h4>{{ property.description }}</h4>
+            </div>
+            <div>
+                <a v-if="user.role.name !== 'Client'" @click.prevent="uploadPic(property.id)" data-toggle="tooltip" data-placement="top" title="" data-original-title="Upload Property Map" href="javascript:void(0);" class="btn btn-xs btn-icon btn-round btn-outline-info"><i class="fas fa-upload"></i></a>
+                <a v-if="user.role.name !== 'Client'" @click.prevent="setTransaction(property)" data-toggle="tooltip" data-placement="top" title="" data-original-title="Print Transaction Records" href="javascript:void(0);" class="btn btn-xs btn-icon btn-round btn-outline-info ml-1"><i class="fas fa-file"></i></a>
+                <a @click.prevent="show(property)" data-toggle="tooltip" data-placement="top" title="" data-original-title="View Property Details" href="javascript:void(0);" class="btn btn-xs btn-icon btn-round btn-outline-info ml-1"><i class="fas fa-eye"></i></a>
+                <a v-if="user.role.name !== 'Client'" @click.prevent="deleteProperty(property.id)" data-toggle="tooltip" data-placement="top" title="" data-original-title="Delete Property" href="javascript:void(0);" class="btn btn-xs btn-icon btn-round btn-outline-danger ml-1"><i class="fas fa-trash"></i></a>
             </div>
         </div>
+        <div class="card-body">
+            <LandMark :address="setLocation(property)" :key="property.id" :map="property.id" :property="property"/>
+        </div>
+    </div>
+</div>
+
     </div>
 
 </template>

@@ -9,7 +9,7 @@ import { reactive, ref } from 'vue';
 import Swal from 'sweetalert2'
 import { toWords } from 'number-to-words';
 import { useVueToPrint } from "vue-to-print";
-
+import axios from 'axios'
 const { show } = useToaster()
 const { getUserInfo } = getUser()
 const confirm = useConfirm();
@@ -165,6 +165,23 @@ const processContract = (lot) => {
 
 }
 
+const isAlreadyPaid80Percent = (lot) => {
+    return  calculatePercentage(lot) >= 80
+}
+
+const notifyClient = (user_id) => {
+    axios.get('/notify-user/' + user_id)
+    .then(response=> {
+        Swal.fire({
+            title: "Success!",
+            text: "SMS sent succesfully!",
+            icon: "success"
+        });
+    }).catch(err => {
+        console.log(err)
+    })
+}
+
 
 defineOptions({layout: Layout})
 </script>
@@ -297,10 +314,9 @@ If the buyer wishes to discontinue the said installment all previous payments ar
                                 </tr>
                             </thead>
                             <tbody class="mb-0">
-                                <tr v-for="lot in property.lots" :key="lot.id">
+                                <tr v-for="lot in property.lots.filter(lot => !(user.role.name === 'Client' && lot.status === 'Occupied'))" :key="lot.id">
                                     <td>
                                         {{ lot.name }}
-
                                     </td>
                                     <td>
                                         Block {{ lot.block }}
@@ -317,7 +333,7 @@ If the buyer wishes to discontinue the said installment all previous payments ar
                                     <td>
                                         <ProgressBar :value="calculatePercentage(lot)" />
                                     </td>
-                                    <td >
+                                    <td>
                                         <span class="badge badge-info" v-if="lot.status === 'Available'">
                                             {{ lot.status }}
                                         </span>
@@ -328,7 +344,6 @@ If the buyer wishes to discontinue the said installment all previous payments ar
                                             {{ lot.status }}
                                         </span>
                                     </td>
-
                                     <td v-if="user.role.name !== 'Client'">
                                         <span v-if="lot.user">
                                             {{ lot.user.personal_info.first_name }}
@@ -342,10 +357,12 @@ If the buyer wishes to discontinue the said installment all previous payments ar
                                             </a>
                                             <div class="dropdown-menu custom-dropdown dropdown-menu-right p-4">
                                                 <h6 class="mb-1">Action</h6>
-                                                <a v-if="user.role.name !=='Client'" @click="showPayments(lot.payments)" class="dropdown-item" href="#"><i class="fa-fw far fa-file-alt pr-2"></i>View Payment History</a>
-                                                <a v-if="user.role.name !=='Client' && lot.status === 'Occupied'" @click="processContract(lot)" class="dropdown-item" href="#"><i class="fa-fw far fa-file-alt pr-2"></i>Print Contract</a>
-                                                <a v-if=" lot.status === 'Available'" @click.prevent="checkUser(lot)" class="dropdown-item" href="#!"><i class="fa-fw far fa-file-pdf pr-2"></i>Apply</a>
+                                                <a v-if="user.role.name !== 'Client'" @click="showPayments(lot.payments)" class="dropdown-item" href="#"><i class="fa-fw far fa-file-alt pr-2"></i>View Payment History</a>
+                                                <a v-if="user.role.name !== 'Client' && lot.status === 'Occupied'" @click="processContract(lot)" class="dropdown-item" href="#"><i class="fa-fw far fa-file-alt pr-2"></i>Print Contract</a>
+                                                <a v-if="lot.status === 'Available'" @click.prevent="checkUser(lot)" class="dropdown-item" href="#!"><i class="fa-fw far fa-file-pdf pr-2"></i>Apply</a>
                                                 <a v-if="user.role.name === 'Client'" @click.prevent="visible = true" class="dropdown-item" href="#!"><i class="fa-fw far fa-calendar pr-2"></i>Request a site visit</a>
+                                                <a v-if="user.role.name != 'Client' && isAlreadyPaid80Percent(lot)" @click.prevent="notifyClient(lot.user_id)" class="dropdown-item" href="#!"><i class="fa-fw far fa-bell pr-2"></i>Notify Client</a>
+
                                             </div>
                                         </div>
                                     </td>

@@ -18,7 +18,7 @@ abstract class Repository implements BaseRepositoryInterface
 
     public function get(): Collection
     {
-        return $this->model->with($this->relations)->get();
+        return $this->model->with($this->relations)->orderBy('created_at', 'desc')->get();
     }
 
     public function findById(int $id): Model

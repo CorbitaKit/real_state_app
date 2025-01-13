@@ -85,15 +85,15 @@ defineOptions({layout: Layout})
                 <div class="page-title mb-2 mb-sm-0">
                     <h1>Applications</h1>
                 </div>
-                
+
                 <div class="ml-auto d-flex align-items-center">
-                    
+
                     <nav>
                         <ol class="breadcrumb p-0 m-b-0">
                             <li class="breadcrumb-item">
                                 <a href="#" @click="home('/dashboard')"><i class="ti ti-home"></i></a>
                             </li>
-                 
+
                             <li class="breadcrumb-item active text-primary" aria-current="page">Applications</li>
                         </ol>
                     </nav>
@@ -116,7 +116,7 @@ defineOptions({layout: Layout})
     <Dialog v-model:visible="client_view" modal header="Client Details" :style="{ width: '90rem' }">
         <div class="card card-statistics contact-contant">
             <div class="card-body py-4">
-                
+
                 <div class="table-responsive mt-2">
                         <table class="table mb-0 table-border-3">
                             <tbody class="mb-0">
@@ -125,7 +125,7 @@ defineOptions({layout: Layout})
                                     Name
                                   </td>
                                   <td>
-                                    {{ client.personal_info.first_name }} 
+                                    {{ client.personal_info.first_name }}
                                     {{ client.personal_info.last_name }}
 
                                   </td>
@@ -182,7 +182,7 @@ defineOptions({layout: Layout})
                                   </td>
                                   <td>
                                     {{ client.work_details.job_title }}
-                                    
+
                                   </td>
                                 </tr>
                                 <tr>
@@ -209,7 +209,7 @@ defineOptions({layout: Layout})
                                   </td>
                                   <td>
                                     {{ client.work_details.status }}
-                                    
+
                                   </td>
                                 </tr>
                                 <tr>
@@ -239,7 +239,7 @@ defineOptions({layout: Layout})
                                     </Image>
                                   </td>
                                 </tr>
-                              
+
                             </tbody>
                         </table>
 
@@ -288,10 +288,10 @@ defineOptions({layout: Layout})
                         barangay {{ application.lot.property.barangay }},<br>
                         {{ application.lot.property.city }},
                         {{ application.lot.property.province }},
-                       <span v-if="application.type === 'Lot Application'">Lot {{ application.lot.id }} </span> 
-                        
-                        
-                       
+                       <span v-if="application.type === 'Lot Application'">Lot {{ application.lot.id }} </span>
+
+
+
                     </td>
                     <td class="px-6 py-4">
                         <Tag v-if="application.status === 'For Review'" severity="info" :value="application.status"></Tag>
@@ -301,7 +301,7 @@ defineOptions({layout: Layout})
                     <td class="px-6 py-4" v-if="user.role_id != 3">
                         <v-icon v-if="application.status === 'For Review'" @click="handleStatusChange('Approved', application.id)" name="fc-approval" animation="ring" scale="2" class="text-4xl rounded cursor-pointer block float-left mr-2"/>
                         <v-icon v-if="application.status === 'For Review'" @click="handleStatusChange('Rejected', application.id)" fill="red" name="fa-window-close" animation="wrench" scale="2" class="text-4xl rounded cursor-pointer block float-left mr-2"/>
-                        
+
                     </td>
                 </tr>
             </tbody>
@@ -353,7 +353,7 @@ defineOptions({layout: Layout})
                                         barangay {{ application.lot.property.barangay }},<br>
                                         {{ application.lot.property.city }},
                                         {{ application.lot.property.province }},
-                                        <span v-if="application.type === 'Lot Application'">Lot {{ application.lot.id }} </span> 
+                                        <span v-if="application.type === 'Lot Application'">Lot {{ application.lot.id }} </span>
                                     </td>
                                     <td >
                                         <span class="badge badge-info" v-if="application.status === 'For Review'">
@@ -365,10 +365,10 @@ defineOptions({layout: Layout})
                                         <span class="badge badge-success" v-if="application.status === 'Approved'" severity="success">
                                             {{ application.status }}
                                         </span>
-                                        
+
                                     </td>
-                                        
-                                  
+
+
                                     <td v-if="user.role_id != 3">
                                         <div class="dropdown">
                                             <a class="p-2" href="#!" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -382,7 +382,7 @@ defineOptions({layout: Layout})
                                         </div>
                                     </td>
                                 </tr>
-                              
+
                             </tbody>
                         </table>
                     </div>

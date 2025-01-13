@@ -69,4 +69,6 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
 
         return redirect('/');
     });
+
+    Route::get('/notify-user/{user_id}', [UserController::class, 'notify']);
 });

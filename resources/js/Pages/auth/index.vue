@@ -67,8 +67,8 @@ const togglePasswordVisibility = () => {
                                     </div>
                                     <div class="col-12">
                                         <div class="d-block d-sm-flex  align-items-center">
-                                            <div class="form-check">
-                                                <input class="form-check-input" type="checkbox" id="gridCheck">
+                                            <div class=" border-solid border-4 border-gray-600">
+                                                <input  type="checkbox" >
                                                 <label class="form-check-label" for="gridCheck">
                                                     Remember Me
                                                 </label>
@@ -110,7 +110,7 @@ const togglePasswordVisibility = () => {
             </div>
             <div class="mb-4">
                 <label for="password" class="block text-gray-800">Password</label>
-               
+
                 <Password class="w-full" @keyup.enter="submit" v-model="form.password" variant="filled" :feedback="false" toggleMask />
             </div>
             <div class="mb-4 flex items-center">

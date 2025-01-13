@@ -3,6 +3,7 @@ import Layout from '../layout/main.vue'
 import Header from '../components/header.vue'
 import { ref } from 'vue'
 import { formatCurrency } from '../composables/currencyFormatter'
+import { useVueToPrint } from "vue-to-print";
 
 defineOptions({layout: Layout})
 
@@ -13,6 +14,13 @@ const payment_plans = ref()
 const props = defineProps({
     client_lots: Object
 })
+const chartOfAccountRef = ref()
+
+
+const { handlePrint } = useVueToPrint({
+  content: chartOfAccountRef,
+  documentTitle: "AwesomeFileName",
+});
 
 const calculateTotalAmount = (lot_group) => {
     return lot_group.sqr_meter * lot_group.amount_per_sqr_meter
@@ -39,6 +47,7 @@ const viewPaymentPlan = (lot_payment_plans) => {
 <template>
 
     <Dialog v-model:visible="visible" modal header="Payment History" :style="{ width: '50rem' }">
+
         <v-table>
             <thead>
             <tr>
@@ -68,62 +77,80 @@ const viewPaymentPlan = (lot_payment_plans) => {
         </v-table>
     </Dialog>
     <Dialog v-model:visible="payment_plan" modal header="Payment Plan" :style="{ width: '60rem' }">
-        <v-table>
-            <thead>
-            <tr>
-                <th class="text-left">
-                   Due Date
-                </th>
-                <th class="text-left">
-                    Amount
-                </th>
+        <div ref="chartOfAccountRef">
+            <v-table class="responsive">
+                                <tbody>
+                                    <tr>
+                                        <td></td>
+                                        <td>
+                                            <img src="/header.png" style="height: 100px;"/>
+                                        </td>
+                                        <td>
+                                            <h1 style="margin-left:100px;">JEFF ALDEBAL REALTY SERVICE</h1>
+                                        Door 3, CEASAR APARMENT, Sto. Niño, Carmen, Davao del Norte
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </v-table>
+                            <h1 class="text-center">CHART OF ACCOUNTS</h1>
+            <v-table>
+                <thead>
+                <tr>
+                    <th class="text-left">
+                    Due Date
+                    </th>
+                    <th class="text-left">
+                        Amount
+                    </th>
 
 
-                <th class="text-left">
-                    Payment Date
-                </th>
+                    <th class="text-left">
+                        Payment Date
+                    </th>
 
-                <th class="text-left">
-                    Mode of Payment
-                </th>
+                    <th class="text-left">
+                        Mode of Payment
+                    </th>
 
-                <th class="text-left">
-                    Status
-                </th>
-                <th class="text-left">
-                    Invoice Number
-                </th>
-
-            </tr>
-            </thead>
-            <tbody>
-                <tr v-for="plan in payment_plans">
-                    <td>
-                        {{ plan.due_date }}
-                    </td>
-                    <td>
-                        {{ formatCurrency(plan.lot.lot_group.monthly_amortizations) }}
-                    </td>
-                    <td>
-                        <span v-if="plan.payment">{{ plan.payment.date_of_payment }}</span>
-                        <span v-else>-</span>
-                    </td>
-                    <td>
-                        <span v-if="plan.payment">{{ plan.payment.mode_of_payment }}</span>
-                        <span v-else>-</span>
-                    </td>
-                    <td>
-                        <span v-if="plan.payment">{{ plan.payment.status }}</span>
-                        <span v-else>-</span>
-                    </td>
-                    <td>
-                        <span v-if="plan.payment">{{ plan.payment.invoice_number }}</span>
-                        <span v-else>-</span>
-                    </td>
+                    <th class="text-left">
+                        Status
+                    </th>
+                    <th class="text-left">
+                        Invoice Number
+                    </th>
 
                 </tr>
-            </tbody>
-        </v-table>
+                </thead>
+                <tbody>
+                    <tr v-for="plan in payment_plans">
+                        <td>
+                            {{ plan.due_date }}
+                        </td>
+                        <td>
+                            {{ formatCurrency(plan.lot.lot_group.monthly_amortizations) }}
+                        </td>
+                        <td>
+                            <span v-if="plan.payment">{{ plan.payment.date_of_payment }}</span>
+                            <span v-else>-</span>
+                        </td>
+                        <td>
+                            <span v-if="plan.payment">{{ plan.payment.mode_of_payment }}</span>
+                            <span v-else>-</span>
+                        </td>
+                        <td>
+                            <span v-if="plan.payment">{{ plan.payment.status }}</span>
+                            <span v-else>-</span>
+                        </td>
+                        <td>
+                            <span v-if="plan.payment">{{ plan.payment.invoice_number }}</span>
+                            <span v-else>-</span>
+                        </td>
+
+                    </tr>
+                </tbody>
+            </v-table>
+        </div>
+        <button class="btn btn-block btn-info" @click="handlePrint">Print</button>
     </Dialog>
     <!-- <div class="tw-mx-auto tw-bg-whitetw- tw-p-8 tw-my-8 tw-rounded tw-shadow-md">
         <div class="tw-relative tw-overflow-x-auto tw-mt-5">
@@ -221,6 +248,7 @@ const viewPaymentPlan = (lot_payment_plans) => {
             <div class="card card-statistics border-0 shadow-none mb-0">
                 <div class="card-body">
                     <div class="table-responsive">
+
                         <table class="table mb-0 table-border-3">
                             <thead>
                                 <tr>

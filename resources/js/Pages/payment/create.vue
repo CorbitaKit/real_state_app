@@ -25,7 +25,8 @@ const mode_of_payments = ref([
         mode_of_payment: 'Bank Transfer',
     }
 ])
-
+const advance = ref(false)
+const total = ref()
 const form = useForm({
     file: {},
     lot_id: 0,
@@ -37,9 +38,10 @@ const form = useForm({
 
 defineOptions({layout: Layout})
 
+
 const submit = () => {
     form.transform((data) => {
-      
+
         return {
             ...data,
            mode_of_payment: data.mode_of_payment.mode_of_payment,
@@ -66,6 +68,10 @@ const calculateRemainingBalance = (lot) => {
     const total_amount = calculateTotalAmount(lot.lot_group)
     const total_payment = lot.payments.reduce((sum, payment) => sum + payment.amount, 0)
 
+
+    form.amount = lot.lot_group.monthly_amortizations
+
+    total.value =  lot.lot_group.monthly_amortizations
     return total_amount - total_payment
 }
 
@@ -87,7 +93,8 @@ const checkLotData = () => {
 }
 
 const checkAmountPaid = () => {
-    if (form.amount > remaining_balance.value) {
+    console.log(form.amount)
+    if (form.amount > remaining_balance.value || form.amount < total.value) {
         Swal.fire({
             icon: "error",
             title: "Oops...",
@@ -104,6 +111,11 @@ const setLot = (lot) => {
     form.lot_id = lot.id
     remaining_balance.value = calculateRemainingBalance(lot)
 }
+
+const advancePayment = () => {
+
+    advance.value = true
+}
 </script>
 
 
@@ -116,15 +128,15 @@ const setLot = (lot) => {
                 <div class="page-title mb-2 mb-sm-0">
                     <h1>Payments</h1>
                 </div>
-                
+
                 <div class="ml-auto d-flex align-items-center">
-                    
+
                     <nav>
                         <ol class="breadcrumb p-0 m-b-0">
                             <li class="breadcrumb-item">
                                 <a href="#" @click="home"><i class="ti ti-home"></i></a>
                             </li>
-                        
+
                             <li class="breadcrumb-item">
                                 <a href="#" @click="home">Payments</a>
                             </li>
@@ -144,7 +156,7 @@ const setLot = (lot) => {
                     <div class="tw-mb-4" v-for="lot in lots" :key="lot.id">
                         <button :disabled="calculateRemainingBalance(lot) == 0" @click="setLot(lot)" type="button" class="tw-text-black tw-text-lg tw-font-medium tw-block tw-w-full tw-items-center tw-rounded tw-p-4 tw-text-sm tw-font-medium transition hover:scale-105" :class="lot.color_label">
                             <span> Lot {{ lot.id }}</span><br>
-                            <span>Remaining Balance: {{ formatCurrency(calculateRemainingBalance(lot)) }}</span><br>    
+                            <span>Remaining Balance: {{ formatCurrency(calculateRemainingBalance(lot)) }}</span><br>
                             <span>Total Payment:  {{ formatCurrency(calculateTotalPayment(lot)) }} </span>
                         </button>
                     </div>
@@ -154,7 +166,8 @@ const setLot = (lot) => {
                 <div class="tw-grid tw-grid-cols-2 tw-gap-4 tw-mx-9">
                     <div class="tw-mb-4">
                         <label for="phase" class="tw-block tw-text-gray-700 tw-font-semibold tw-mb-2">Amount</label>
-                        <InputNumber v-model="form.amount" inputId="currency-ph" mode="currency" currency="PHP" locale="en-PH" fluid  class="tw-w-full"/>   
+                        <InputNumber :disabled="!advance" v-model="form.amount" inputId="currency-ph" mode="currency" currency="PHP" locale="en-PH" fluid  class="tw-w-full"/>
+                        <a href="#" @click.prevent="advancePayment">Pay in Advance</a>
                     </div>
                     <div class="mb-4">
                         <label for="region" class="tw-block tw-text-gray-700 tw-font-semibold tw-mb-2">Mode of payment</label>
@@ -168,8 +181,8 @@ const setLot = (lot) => {
             <tab-content title="Upload Payment">
                 <FileUpload :file="form.file" />
             </tab-content>
-           
+
         </form-wizard>
     </div>
-    
+
 </template>

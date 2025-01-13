@@ -19,6 +19,7 @@ const { getUserInfo } = getUser()
 const user = getUserInfo()
 const visible = ref(false)
 const payment_id = ref()
+const filterText = ref()
 const form = useForm({
     status: '',
     invoice_number: '',
@@ -56,6 +57,8 @@ const setButton = () => {
     }
     return true
 }
+
+
 </script>
 
 <template>
@@ -109,9 +112,17 @@ const setButton = () => {
                     </div>
                 </div>
                 <div class="card-body table-responsive">
+                    <div class="row">
+                        <div class="col-md-4"></div>
+                        <div class="col-md-4"></div>
+                        <div class="col-md-4">
+                            <InputText class="tw-w-full mb-2" v-model="filterText" placeholder="...Search"/>
+                        </div>
+                    </div>
                     <table class="table mb-0 table-border-3">
                         <thead>
                             <tr>
+                                <th v-if="user.role.name != 'Client'">Client</th>
                                 <th scope="col">
                                     Invoice Number
                                 </th>
@@ -147,6 +158,10 @@ const setButton = () => {
                         <tbody>
 
                             <tr v-for="payment in payments" :key="payment.id">
+                                <td v-if="user.role.name != 'Client'">
+                                    {{ payment.user?.personal_info?.first_name }}&nbsp;
+                                    {{ payment.user?.personal_info?.last_name }}
+                                </td>
                                 <td >
                                     {{ payment.invoice_number }}
                                 </td>
