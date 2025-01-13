@@ -24,13 +24,13 @@ class DashboardController extends Controller
             return redirect()->back();
         }
         $clients = User::with('personal_info', 'lots')
-        ->where('role_id', 3)
-        ->whereHas('personal_info')
-        ->get();
+            ->where('role_id', 3)
+            ->whereHas('personal_info')
+            ->get();
         $applications = Application::with('user.personal_info', 'lot.property')
-        ->latest()
-        ->take(10)
-        ->get();
+            ->latest()
+            ->take(10)
+            ->get();
         $payments = Payment::with('user.personal_info', 'files', 'lots')->get();
         $properties = Property::with('lots', 'files')->get();
 

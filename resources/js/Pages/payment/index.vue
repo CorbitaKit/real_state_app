@@ -112,13 +112,13 @@ const setButton = () => {
                     </div>
                 </div>
                 <div class="card-body table-responsive">
-                    <div class="row">
+                    <!-- <div class="row">
                         <div class="col-md-4"></div>
                         <div class="col-md-4"></div>
                         <div class="col-md-4">
                             <InputText class="tw-w-full mb-2" v-model="filterText" placeholder="...Search"/>
                         </div>
-                    </div>
+                    </div> -->
                     <table class="table mb-0 table-border-3">
                         <thead>
                             <tr>
