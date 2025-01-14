@@ -4,15 +4,22 @@ import Header from '../components/header.vue'
 import { ref } from 'vue'
 import { formatCurrency } from '../composables/currencyFormatter'
 import { useVueToPrint } from "vue-to-print";
-
+import Swal from 'sweetalert2'
+import axios from 'axios'
 defineOptions({layout: Layout})
+import { router } from '@inertiajs/vue3'
+
 
 const visible = ref(false)
+const transferOwnership = ref(false)
 const payments = ref()
 const payment_plan = ref(false)
 const payment_plans = ref()
+const lot_id = ref()
+const user_id = ref()
 const props = defineProps({
-    client_lots: Object
+    client_lots: Object,
+    users: Object
 })
 const chartOfAccountRef = ref()
 
@@ -42,10 +49,51 @@ const viewPaymentPlan = (lot_payment_plans) => {
     payment_plan.value = true
     payment_plans.value = lot_payment_plans
 }
+
+
+const confirmTransfer = (user) => {
+    transferOwnership.value = false
+    Swal.fire({
+        title: "Are you sure?",
+        text: "You want to transfer ownership for this user!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Yes, transfer it!"
+    }).then((result) => {
+    if (result.isConfirmed) {
+        axios.get('/lot-transfer/' + user_id.value + '/' + lot_id.value)
+        .then(res => {
+                Swal.fire({
+                title: "Deleted!",
+                text: "Lot ownership transfered successully.",
+                icon: "success"
+            });
+
+            router.get('/lots/get-client-lots')
+        })
+
+
+
+    }
+    });
+}
+
+const doTransfer = (lot) => {
+    lot_id.value = lot.id
+    transferOwnership.value = true
+}
 </script>
 
 <template>
+     <Dialog v-model:visible="transferOwnership" modal header="Confirm Payment" :style="{ width: '50rem' }">
+        <span class="tw-text-surface-500 tw-dark:text-surface-400 tw-block tw-mb-8">Please Select User</span>
 
+        <select  class="js-basic-single form-control" name="region" v-model="user_id" @change="confirmTransfer">
+            <option  v-for="(user, i) in users" :value="user.id" :key="i">{{ user.personal_info?.first_name }} &nbsp; {{ user.personal_info?.last_name }}</option>
+        </select>
+    </Dialog>
     <Dialog v-model:visible="visible" modal header="Payment History" :style="{ width: '50rem' }">
 
         <v-table>
@@ -308,6 +356,7 @@ const viewPaymentPlan = (lot_payment_plans) => {
                                                 <h6 class="mb-1">Action</h6>
                                                 <a @click="viewPaymentHistory(lot.payments)" class="dropdown-item" href="#"><i class="fa-fw far fa-file-alt pr-2"></i>View Payment History</a>
                                                 <a @click="viewPaymentPlan(lot.payment_plans)" class="dropdown-item" href="#!"><i class="fa-fw far fa-file-pdf pr-2"></i>View Payment Breakdown</a>
+                                                <a @click="doTransfer(lot)" class="dropdown-item" href="#!"><i class="fa-fw far fa-file-pdf pr-2"></i>Transfer Ownership</a>
 
                                             </div>
                                         </div>
