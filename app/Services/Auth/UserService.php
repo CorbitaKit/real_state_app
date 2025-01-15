@@ -44,40 +44,40 @@ class UserService extends Service
         if (Auth::attempt($request->all())) {
             $user = User::with('role')->where('id', Auth::user()->id)->first();
 
-            if ($user->role->name === 'Admin' || $user->role->name === 'Staff') {
-                $overduePaymentPlans = PaymentPlan::with('user.personal_info', 'lot')
-                ->where('due_date', '<', now()->format('Y-m-d'))
-                ->whereNull('payment_id')
-                ->where('is_sms_sent', 0)->get();
+            // if ($user->role->name === 'Admin' || $user->role->name === 'Staff') {
+            //     $overduePaymentPlans = PaymentPlan::with('user.personal_info', 'lot')
+            //     ->where('due_date', '<', now()->format('Y-m-d'))
+            //     ->whereNull('payment_id')
+            //     ->where('is_sms_sent', 0)->get();
 
 
-                foreach ($overduePaymentPlans as $overDue) {
-                    $cleanedNumber = preg_replace('/[^0-9]/', '', $overDue->user->personal_info->phone_number);
+            //     foreach ($overduePaymentPlans as $overDue) {
+            //         $cleanedNumber = preg_replace('/[^0-9]/', '', $overDue->user->personal_info->phone_number);
 
-                    $response = Http::withHeaders([
-                        'Authorization' => 'App 37e306dbf911a4db4de9da34a281639d-5bc56cee-cb75-4e21-8915-1d9f0b41d091', // Replace YOUR_API_KEY with your actual key
-                        'Content-Type' => 'application/json',
-                        'Accept' => 'application/json'
-                    ])->post('https://e1p4v1.api.infobip.com/sms/2/text/advanced', [
-                        'messages' => [
-                            [
-                                'destinations' => [['to' => $cleanedNumber]],
-                                'from' => '447491163443',
-                                'text' => 'Good day! this is from Aldebal Real State Services. we just want to inform you that you missed your payment for ' . $overDue->due_date
-                            ]
-                        ]
-                    ]);
+            //         $response = Http::withHeaders([
+            //             'Authorization' => 'App 37e306dbf911a4db4de9da34a281639d-5bc56cee-cb75-4e21-8915-1d9f0b41d091', // Replace YOUR_API_KEY with your actual key
+            //             'Content-Type' => 'application/json',
+            //             'Accept' => 'application/json'
+            //         ])->post('https://e1p4v1.api.infobip.com/sms/2/text/advanced', [
+            //             'messages' => [
+            //                 [
+            //                     'destinations' => [['to' => $cleanedNumber]],
+            //                     'from' => '447491163443',
+            //                     'text' => 'Good day! this is from Aldebal Real State Services. we just want to inform you that you missed your payment for ' . $overDue->due_date
+            //                 ]
+            //             ]
+            //         ]);
 
-                    if ($response->successful()) {
-                        $overDue->is_sms_sent = 1;
-                        $overDue->save();
-                    } else {
-                        dd($response->status());
-                    }
-                }
+            //         if ($response->successful()) {
+            //             $overDue->is_sms_sent = 1;
+            //             $overDue->save();
+            //         } else {
+            //             dd($response->status());
+            //         }
+            //     }
 
 
-            }
+            // }
             $request->session()->regenerate();
             return back()->with(['message' => 'Authorized', 'user' => parent::doFindById(Auth::user()->id)]);
         }
