@@ -31,7 +31,12 @@ class PaymentService extends Service
         $payment = parent::doCreate($data);
 
        
-        
+        $paymentPlans = PaymentPlan::where('lot_id', $payment->lot_id)->whereNull('payment_id')->first();
+
+        if ($paymentPlans) {
+            $paymentPlans->payment_id = $payment->id;
+            $paymentPlans->save();
+        }
 
         $fileUpload = $data['file']['value'];
         $path = $this->uploadFile($fileUpload, 'files/payments');

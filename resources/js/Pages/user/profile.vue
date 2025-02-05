@@ -7,7 +7,9 @@ import WorkInfoForm from './components/work-info-form.vue'
 import { router, useForm } from '@inertiajs/vue3';
 import { useToaster } from '../composables/toast'
 import moment from 'moment'
+import fileupload from '../components/fileupload.vue'
 import Swal from 'sweetalert2'
+import Fileupload from '../components/fileupload.vue'
 
 const props = defineProps({
     'user_id': Number
@@ -41,6 +43,10 @@ const form = useForm({
         barangay: '',
         purok: '',
         complete_address: ''
+    },
+    requirements: {
+        proof_of_income: {}
+
     }
 })
 const validatePersonalInfoData = () => {

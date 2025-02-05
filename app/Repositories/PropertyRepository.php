@@ -8,6 +8,6 @@ class PropertyRepository extends Repository
 {
     public function __construct(Property $property)
     {
-        parent::__construct($property, ['lots', 'lotGroups', 'lots.payments', 'lots.lotGroup', 'file', 'lots.user.personal_info']);
+        parent::__construct($property, ['lots', 'lotGroups', 'lots.payments', 'lots.lotGroup', 'file', 'lots.user.personal_info', 'lots.property']);
     }
 }

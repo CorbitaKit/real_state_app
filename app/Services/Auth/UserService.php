@@ -41,12 +41,13 @@ class UserService extends Service
             if ($user->role->name === 'Admin' || $user->role->name === 'Staff') {
                 $overduePaymentPlans = PaymentPlan::with('user.personal_info', 'lot')
                 ->where('due_date', '<', now()->format('Y-m-d'))
+                ->whereNull('payment_id')
                 ->where('is_sms_sent', 0)->get();
 
 
                 foreach ($overduePaymentPlans as $overDue) {
                     $cleanedNumber = preg_replace('/[^0-9]/', '', $overDue->user->personal_info->phone_number);
-              
+          
                     $response = Http::withHeaders([
                         'Authorization' => 'App 37e306dbf911a4db4de9da34a281639d-5bc56cee-cb75-4e21-8915-1d9f0b41d091', // Replace YOUR_API_KEY with your actual key
                         'Content-Type' => 'application/json',

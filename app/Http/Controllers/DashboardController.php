@@ -22,7 +22,7 @@ class DashboardController extends Controller
         if (!$currentUser->personal_info) {
             return redirect()->back();
         }
-        $clients = User::with('personal_info', 'lots.payment', '')
+        $clients = User::with('personal_info', 'lots')
         ->where('role_id', 3)
         ->whereHas('personal_info')
         ->get();

@@ -1,15 +1,13 @@
 <script setup>
 import Layout from '../layout/main.vue'
-import Header from '../components/header.vue'
-
-import Card from './components/card.vue'
 import {getUser} from '../plugins/get-user-plugin'
 import { useConfirm } from "primevue/useconfirm";
 import { useForm, router } from '@inertiajs/vue3';
 import moment from 'moment';
 import { useToaster } from '../composables/toast'
-import { ref } from 'vue';
+import { reactive, ref } from 'vue';
 import Swal from 'sweetalert2'
+import { toWords } from 'number-to-words';
 
 const { show } = useToaster()
 const { getUserInfo } = getUser()
@@ -21,6 +19,18 @@ const visible = ref(false)
 const payments = ref()
 const payment_view = ref(false)
 const admin_apply = ref(false)
+const is_contract = ref(false)
+const contract_data = reactive({
+    seller: '',
+    seller_address: '',
+    buyer: '',
+    buyer_address: '',
+    lot_address: '',
+    size: '',
+    property_address:'',
+    amount_in_word: '',
+    amount: '',
+})
 const props = defineProps({
     property: Object,
     clients: Object
@@ -45,26 +55,41 @@ const checkUser = (lot) => {
 }
 
 const applyForLot = (lot) => {
-    if (lot.status === 'Available') {
-        confirm.require({
-            message: 'Are you sure you want to apply for this lot?',
-            header: 'Confirmation',
-            icon: 'pi pi-exclamation-triangle',
-            rejectProps: {
-                label: 'Cancel',
-                severity: 'secondary',
-                outlined: true
-            },
-            acceptProps: {
-                label: 'Save'
-            },
-            accept: () => {
+   
+   
+        // confirm.require({
+        //     message: 'Are you sure you want to apply for this lot?',
+        //     header: 'Confirmation',
+        //     icon: 'pi pi-exclamation-triangle',
+        //     rejectProps: {
+        //         label: 'Cancel',
+        //         severity: 'secondary',
+        //         outlined: true
+        //     },
+        //     acceptProps: {
+        //         label: 'Save'
+        //     },
+        //     accept: () => {
+        //         form.lot_id = lot.id
+        //         sendApplication()
+        //     },
+        // });
+        Swal.fire({
+            title: "Are you sure?",
+            text: "You want to apply for this lot?",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "Yes!"
+            }).then((result) => {
+            if (result.isConfirmed) {
                 form.lot_id = lot.id
                 sendApplication()
-            },
-        });
-    }
-}
+            }
+            });
+                
+        }
 const siteVisit = () => {
     form.application_type = 'Site Visit',
     form.reserved_date = moment(form.reserved_date).format('YYYY-MM-DD')
@@ -117,6 +142,55 @@ const showPayments = (lotPayments) => {
     payment_view.value = true
 }
 
+const processContract = (lot) => {
+    contract_data.seller = user.personal_info.first_name + ' ' + user.personal_info.last_name
+    contract_data.buyer = lot.user.personal_info.first_name + ' ' + lot.user.personal_info.last_name
+    contract_data.buyer_address = lot.user.personal_info.address
+    contract_data.property_address = 'Purok ' + lot.property.purok + ', Barangay of ' + lot.property.barangay + ', ' + lot.property.city + ', ' + lot.property.province
+    contract_data.size = lot.lot_group.sqr_meter + ' square meters'
+    contract_data.lot_address = 'Phase ' + lot.property.phase + ', Block ' + lot.block + ', ' + lot.name 
+    contract_data.amount_in_word = toWords((lot.lot_group.sqr_meter * lot.lot_group.amount_per_sqr_meter))
+    contract_data.amount = formatCurrency((lot.lot_group.sqr_meter * lot.lot_group.amount_per_sqr_meter))
+    is_contract.value = true
+
+}
+
+const printDiv = () => {
+    const printContent = document.getElementById("printMe").outerHTML;
+    const printWindow = window.open("", "_blank");
+    printWindow.document.open();
+    printWindow.document.write(`
+        <html>
+            <head>
+                <title>Print Report</title>
+                <style>
+                    body {
+                        font-family: Arial, sans-serif;
+                        margin: 20px;
+                    }
+                    table {
+                        width: 100%;
+                        border-collapse: collapse;
+                    }
+                    th, td {
+                        border: 1px solid #ddd;
+                        padding: 8px;
+                    }
+                    th {
+                        background-color: #f2f2f2;
+                        text-align: left;
+                    }
+                </style>
+            </head>
+            <body>${printContent}</body>
+        </html>
+    `);
+    printWindow.document.close();
+    printWindow.focus();
+    printWindow.print();
+    printWindow.close();
+    is_contract.value = false
+};
 defineOptions({layout: Layout})
 </script>
 
@@ -201,7 +275,7 @@ defineOptions({layout: Layout})
     </Dialog>
 
 
-    <div class="row">
+    <div class="row" v-if="!is_contract">
         <div class="col-xl-12">
             <div class="card card-statistics border-0 shadow-none mb-0">
                 <div class="card-body">
@@ -267,6 +341,7 @@ defineOptions({layout: Layout})
                                             <div class="dropdown-menu custom-dropdown dropdown-menu-right p-4">
                                                 <h6 class="mb-1">Action</h6>
                                                 <a v-if="user.role.name !=='Client'" @click="showPayments(lot.payments)" class="dropdown-item" href="#"><i class="fa-fw far fa-file-alt pr-2"></i>View Payment History</a>
+                                                <a v-if="user.role.name !=='Client' && lot.status === 'Occupied'" @click="processContract(lot)" class="dropdown-item" href="#"><i class="fa-fw far fa-file-alt pr-2"></i>Print Contract</a>
                                                 <a v-if=" lot.status === 'Available'" @click.prevent="checkUser(lot)" class="dropdown-item" href="#!"><i class="fa-fw far fa-file-pdf pr-2"></i>Apply</a>
                                                 <a v-if="user.role.name === 'Client'" @click.prevent="visible = true" class="dropdown-item" href="#!"><i class="fa-fw far fa-calendar pr-2"></i>Request a site visit</a>
                                             </div>
@@ -280,5 +355,65 @@ defineOptions({layout: Layout})
                 </div>
             </div>
         </div>
+    </div>
+    <div class="row" v-if="is_contract">
+        <div class="col-xl-12 col-sm-12" style="color:black;">
+            <div class="card card-statistics">
+                <div class="card-body p-3" id="printMe">
+                    <h1>
+                        <p class="MsoNormal" align="center" style="text-align:center">
+                            <b><span style="font-size:14.0pt;line-height:107%">CONTRACT TO SELL</span></b>
+                        </p>
+                        <p class="MsoNormal" align="center" style="text-align:center">
+                            <b><span style="font-size:14.0pt;line-height:107%"><br></span></b>
+                        </p>
+
+                        <p class="MsoNormal">
+                            <span style="font-size:14.0pt;line-height:107%">KNOW ALL MEN BY THESE PRESENTS:</span>
+                        </p>
+
+                        <p class="MsoNormal">
+                            <span style="font-size:14.0pt;line-height:107%">This contract to sell is made, executed, and entered into by and between:</span>
+                        </p>
+            
+                        <p class="MsoNormal">
+                            <span style="font-size:14.0pt;line-height:107%">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <b>{{  contract_data.seller }}</b>, of legal age, Filipino, single, and a resident of Panabo City, Davao del Norte, hereinafter referred to as the <b>SELLER</b>.</span>
+                        </p>
+
+                        <p class="MsoNormal" align="center" style="text-align:center">
+                            <b><span style="font-size:14.0pt;line-height:107%">-AND-</span></b>
+                        </p>
+
+                        <p class="MsoNormal">
+                            <span style="font-size:14.0pt;line-height:107%">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <b>{{ contract_data.buyer }}</b>, of legal age, Filipino, <b>married</b>, and a resident of <b>{{ contract_data.buyer_address }}</b>, hereinafter referred to as the <b>BUYER</b>.</span>
+                        </p>
+
+                        <p class="MsoNormal" align="center" style="text-align:center">
+                            <b><span style="font-size:14.0pt;line-height:107%">-WITNESSETH-</span></b>
+                        </p>
+
+                        <p class="MsoNormal">
+                            <b><span style="font-size:14.0pt;line-height:107%">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; WHEREAS</span></b><span style="font-size:14.0pt;line-height:107%">, the <b>SELLER</b> is authorized to enter into a contract to sell involving a parcel of land located at <b>{{ contract_data.property_address }}</b>, and covered by <b>Transfer Certificate of Title No. 256092</b>, containing a total area of <b>Fifty thousand square meters</b>, more or less, issued by the Registry of Deeds of the province of Davao del Norte.</span>
+                        </p>
+
+                        <p class="MsoNormal">
+                            <span style="font-size:14.0pt;line-height:107%">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Whereas, the <b>BUYER</b> has offered to buy a portion of said parcel of land containing an area of <b>{{ contract_data.size }}</b>, more or less, identified as <b>{{ contract_data.lot_address }}</b>, of the aforesaid property, and the <b>SELLER</b> has agreed to sell the above-mentioned property under the terms and conditions herein below set forth:</span>
+                        </p>
+
+                        <p class="MsoNormal">
+                            <span style="font-size:14.0pt;line-height:107%">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; NOW THEREFORE, for and in consideration of the total sum of <b>{{ contract_data.amount_in_word }} ({{ contract_data.amount }})</b> Philippine currency, and of the covenants herein after set forth, the <b>SELLER</b> agrees to sell, and the <b>BUYER</b> agrees to buy the aforesaid parcel of land, being a portion of the parcel of land covered by <b>Transfer Certificate of Title No. 256092</b>, subject to the following terms:</span>
+                        </p>
+
+                        <p class="MsoNormal">
+                            <span style="font-size:14.0pt;line-height:107%">----------------------------------------&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ---------------------------------------<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; SELLER&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; BUYER</span>
+                        </p>
+                    </h1>
+
+                </div>
+            </div>
+            <a @click="printDiv" href="javascript:void(0);" class="btn btn-block btn-round btn-outline-info">Print</a>
+        </div>
+
+      
     </div>
 </template>
