@@ -66,32 +66,32 @@ watch(filterText, async (newFilter, oldFilter) => {
 
 
    <!-- Search Bar Section -->
-<div class="tw-flex tw-justify-center tw-mt-4">
-  <div class="tw-relative tw-w-full md:tw-w-1/2 lg:tw-w-1/3">
-    <input
-      v-model="filterText"
-      type="text"
-      placeholder="Search Address, City, Zip Code, Phase"
-      class="tw-w-full tw-border tw-border-gray-300 tw-rounded-full tw-py-3 tw-pl-10 tw-pr-10 tw-text-gray-600 focus:tw-outline-none focus:tw-ring-2 focus:tw-ring-green-600"
-    />
-    <span class="tw-absolute tw-inset-y-0 tw-left-0 tw-flex tw-items-center tw-pl-4">
-      <!-- Search Icon -->
-      <svg class="tw-w-5 tw-h-5 tw-text-gray-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-4.35-4.35m1.3-6.15a7 7 0 11-14 0 7 7 0 0114 0z" />
-      </svg>
-    </span>
-    <span class="tw-absolute tw-inset-y-0 tw-right-0 tw-flex tw-items-center tw-pr-4">
-      <!-- Filter Button -->
-      <button type="button" class="tw-text-gray-600 tw-hover:text-green-600">
-        <!-- New Filter Icon -->
-        <svg class="tw-w-5 tw-h-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2a1 1 0 01-.293.707L14 12.414V19a1 1 0 01-.293.707l-4 4a1 1 0 01-1.414-1.414L12 19.586V12.414L3.293 6.707A1 1 0 013 6V4z" />
-        </svg>
-      </button>
-    </span>
-  </div>
-</div>
-</section>
+    <div class="tw-flex tw-justify-center tw-mt-4">
+        <div class="tw-relative tw-w-full md:tw-w-1/2 lg:tw-w-1/3">
+            <input
+            v-model="filterText"
+            type="text"
+            placeholder="Search Address, City, Zip Code, Phase"
+            class="tw-w-full tw-border tw-border-gray-300 tw-rounded-full tw-py-3 tw-pl-10 tw-pr-10 tw-text-gray-600 focus:tw-outline-none focus:tw-ring-2 focus:tw-ring-green-600"
+            />
+            <span class="tw-absolute tw-inset-y-0 tw-left-0 tw-flex tw-items-center tw-pl-4">
+            <!-- Search Icon -->
+            <svg class="tw-w-5 tw-h-5 tw-text-gray-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-4.35-4.35m1.3-6.15a7 7 0 11-14 0 7 7 0 0114 0z" />
+            </svg>
+            </span>
+            <span class="tw-absolute tw-inset-y-0 tw-right-0 tw-flex tw-items-center tw-pr-4">
+            <!-- Filter Button -->
+            <button type="button" class="tw-text-gray-600 tw-hover:text-green-600">
+                <!-- New Filter Icon -->
+                <svg class="tw-w-5 tw-h-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2a1 1 0 01-.293.707L14 12.414V19a1 1 0 01-.293.707l-4 4a1 1 0 01-1.414-1.414L12 19.586V12.414L3.293 6.707A1 1 0 013 6V4z" />
+                </svg>
+            </button>
+            </span>
+        </div>
+    </div>
+    </section>
 
   <!-- Body Component -->
   <Body @open-details="openDetailsModal" :properties="propertiesData"/>

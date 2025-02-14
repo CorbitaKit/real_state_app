@@ -27,12 +27,24 @@ class DashboardController extends Controller
             ->where('role_id', 3)
             ->whereHas('personal_info')
             ->get();
-        $applications = Application::with('user.personal_info', 'lot.property')
+        if ($user->role->name != 'Client') {
+            $applications = Application::with('user.personal_info', 'lot.property')
             ->latest()
             ->take(10)
             ->get();
-        $payments = Payment::with('user.personal_info', 'files', 'lots')->get();
-        $properties = Property::with('lots', 'files')->get();
+            $payments = Payment::with('user.personal_info', 'files', 'lots')->get();
+            $properties = Property::with('lots', 'files')->get();
+        } else {
+            $applications = Application::with('user.personal_info', 'lot.property')
+            ->where('user_id', $user->id)
+            ->latest()
+            ->take(10)
+            ->get();
+            $payments = Payment::with('user.personal_info', 'files', 'lots')->where('user_id', $user->id)->get();
+            $clientLots = Lot::where('user_id', $user->id)->with(['user', 'property', 'lotGroup', 'payments', 'paymentPlans.payment', 'paymentPlans.lot.lotGroup'])->get();
+        }
+
+
 
         // Overall Sales
         $overallSales = Payment::sum('amount');
@@ -125,7 +137,7 @@ class DashboardController extends Controller
             'clients' => $clients,
             'applications' => $applications,
             'payments' => $payments,
-            'properties' => $properties,
+            'properties' => isset($properties) ? $properties : null,
             'sales' => $sales,
             'for_review_application' => $forReviewApplicationCount,
             'rejected_application' => $rejectedApplicationCount,
@@ -134,7 +146,8 @@ class DashboardController extends Controller
             'pending_payment' => $pendingPaymentCount,
             'available_lot' => $availableLotCount,
             'pending_lot' => $pendingLotCount,
-            'occupied_lot' => $occupiedLotCount
+            'occupied_lot' => $occupiedLotCount,
+            'lots' => isset($clientLots) ? $clientLots : null
         ]);
     }
 }

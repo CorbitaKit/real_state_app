@@ -1,11 +1,11 @@
 
 const sidebar_menus = [
-    // {
-    //     name: 'Dashboard',
-    //     icon: 'fa-list-alt',
-    //     link: '/dashboard',
+    {
+        name: 'Dashboard',
+        icon: 'fa-list-alt',
+        link: '/dashboard',
 
-    // },
+    },
     {
         name: 'Properties',
         icon: 'fa-landmark',
@@ -27,7 +27,7 @@ const sidebar_menus = [
         link: '/lots/get-client-lots',
     },
 
-    
+
 ]
 
 const admin_side_bar_menus = [

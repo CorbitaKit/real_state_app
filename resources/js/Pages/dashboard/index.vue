@@ -11,6 +11,8 @@ import {getUser} from '../plugins/get-user-plugin'
 
 import Payment from './components/payment.vue'
 import Lot from './components/lot.vue'
+import { formatCurrency } from '../composables/currencyFormatter'
+
 import moment from 'moment'
 
 const { getUserInfo } = getUser()
@@ -34,6 +36,7 @@ const props = defineProps(
         available_lot : Number,
         pending_lot : Number,
         occupied_lot : Number,
+        lots: Object
     },
 
 
@@ -42,13 +45,26 @@ const props = defineProps(
 const convertDate = (date) => {
     return moment(date).format("MMMM D, YYYY");
 }
+
+const calculateTotalAmount = (lot_group) => {
+    return lot_group.sqr_meter * lot_group.amount_per_sqr_meter
+}
+
+const calculateRemainingBalance = (lot) => {
+    const total_amount = calculateTotalAmount(lot.lot_group)
+    const total_payment = lot.payments.reduce((sum, payment) => sum + payment.amount, 0)
+
+    return total_amount - total_payment
+}
+
+
 defineOptions({ layout: Layout })
 </script>
 
 
 <template>
     <div>
-        <div class="row">
+        <div class="row" >
             <div class="col-lg-5 col-xl-4 col-xxl-4 mb-3">
                 <div class="card-heading">
                     <h5 class="card-title">Applications Overview</h5>
@@ -62,10 +78,14 @@ defineOptions({ layout: Layout })
                                     <i v-if="application.application_type === 'Lot Application'" class="fe fe-map"></i>
                                     <i v-else class="fe fe-calendar"></i>
                                 </div>
-                                <div class="activity-info">
+                                <div class="activity-info" v-if="user.role.name != 'Client'">
                                     <a href="/applications"><h6 class="mb-0">{{ application.application_type }}</h6></a>
                                     <span>{{  application .user.personal_info.first_name }} </span>&nbsp;
                                     <span> {{  application .user.personal_info.last_name}}</span>
+                                </div>
+                                <div class="activity-info" v-else>
+                                    <a href="/application/get-by-user"><h6 class="mb-0">{{ application.application_type }}</h6></a>
+                                    <span>{{  application.status }} </span>
                                 </div>
                             </li>
 
@@ -77,7 +97,7 @@ defineOptions({ layout: Layout })
                 <div class="card-heading">
                     <h5 class="card-title">Payments Overview</h5>
                 </div>
-                <div class="scrollbar scroll_dark" style="height:436px;">
+                <div class="scrollbar scroll_dark" >
                     <div class="card card-statistics border-0 shadow-none mb-0">
                         <div class="card-body">
                             <div class="table-responsive">
@@ -88,7 +108,7 @@ defineOptions({ layout: Layout })
                                             <th>Payment ID</th>
                                             <th>Mode of Payment</th>
                                             <th>Payment Date</th>
-                                            <th>Client</th>
+                                            <th v-if="user.role.name != 'Client'">Client</th>
                                             <th>Amount</th>
                                             <th>Status</th>
                                         </tr>
@@ -111,11 +131,12 @@ defineOptions({ layout: Layout })
                                                 </div>
                                             </td>
                                             <td> {{ payment.id }} </td>
-                                            <td> {{ payment.date_of_payment }} </td>
                                             <td>
-                                                {{ payment.mode_of_payment }}
+                                                {{ payment.mode_of_payment }} </td>
+                                            <td>
+                                                {{ payment.date_of_payment }}
                                             </td>
-                                            <td>
+                                            <td v-if="user.role.name != 'Client'">
                                                 {{ payment.user?.personal_info.first_name }}
                                                 {{ payment.user?.personal_info.last_name }}
 
@@ -138,7 +159,69 @@ defineOptions({ layout: Layout })
             </div>
         </div>
         <div class="row">
-            <Widget :properties="properties.length" :clients="clients.length" :applications="applications.length" :sales="sales.overall"/>
+        <div class="col-xl-12">
+            <div class="card card-statistics border-0 shadow-none mb-0">
+                <div class="card-body">
+                    <div class="table-responsive">
+
+                        <table class="table mb-0 table-border-3">
+                            <thead>
+                                <tr>
+                                    <th scope="col">
+                                        Property
+                                    </th>
+                                    <th scope="col">
+                                        Square Meter
+                                    </th>
+                                    <th scope="col">
+                                        Amount Per Square Meter
+                                    </th>
+                                    <th scope="col">
+                                        Total Amount
+                                    </th>
+                                    <th scope="col">
+                                        Remaining Balance
+                                    </th>
+
+                                </tr>
+                            </thead>
+                            <tbody class="mb-0">
+                                <tr  v-for="lot in lots" :key="lot.id">
+                                    <td class="px-6 py-4">
+
+                                        Phase {{ lot.property.phase }},
+                                        purok {{ lot.property.purok }},
+                                        barangay {{ lot.property.barangay }},
+                                        {{ lot.property.city }},
+                                        {{ lot.property.province }},
+                                        {{ lot.name }}
+
+                                    </td>
+                                    <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                        {{ lot.lot_group.sqr_meter }} Square Meters
+                                    </th>
+                                    <td class="px-6 py-4">
+                                        {{ formatCurrency(lot.lot_group.amount_per_sqr_meter) }}
+                                    </td>
+
+                                    <td class="px-6 py-4">
+                                        {{ formatCurrency(calculateTotalAmount(lot.lot_group)) }}
+                                    </td>
+                                    <td class="px-6 py-4">
+                                        {{ formatCurrency(calculateRemainingBalance(lot)) }}
+                                    </td>
+
+                                </tr>
+
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+        <div class="row" v-if="user.role.name != 'Client'">
+            <Widget :properties="properties.length" :clients="clients.length" :applications="applications.length" :sales="sales.overall" v-if="user.role.name "/>
             <Sales :daily="daily" :weekly="weekly" :monthly="monthly"/>
             <!-- <Profile :clients="clients"/> -->
             <Application :for_review_application="for_review_application" :rejected_application="rejected_application" :approved_application="approved_application"/>
