@@ -36,7 +36,8 @@ const props = defineProps(
         available_lot : Number,
         pending_lot : Number,
         occupied_lot : Number,
-        lots: Object
+        lots: Object,
+        payment_plans: Object,
     },
 
 
@@ -65,6 +66,32 @@ defineOptions({ layout: Layout })
 <template>
     <div>
         <div class="row" >
+            <div class="col-lg-5 col-xl-4 col-xxl-4 mb-3" v-if="user.role.name === 'Client'">
+                <div class="card-heading">
+                    <h5 class="card-title">Upcoming Due Dates</h5>
+                </div>
+                <div class="card card-statistics border-0 shadow-none mb-0">
+
+                    <div class="card-body">
+                        <ul class="activity">
+                            <li class="activity-item primary" v-for="payment_plan in payment_plans">
+                                <div class="activity-icon text-warning">
+
+                                    <i class="fe fe-calendar"></i>
+                                </div>
+                                <div class="activity-info">
+
+                                    <span>Block {{  payment_plan.lot.block }} Phase{{  payment_plan.lot.property.phase }} Barangay {{ payment_plan.lot.property.barangay }} {{ payment_plan.lot.property.city }} City</span>&nbsp;
+                                    <span>Amount:  {{  formatCurrency(payment_plan.lot.lot_group.monthly_amortizations)}}</span><br>
+                                    <span>Payment Date: {{  payment_plan.due_date}}</span>
+                                </div>
+
+                            </li>
+
+                        </ul>
+                    </div>
+                </div>
+            </div>
             <div class="col-lg-5 col-xl-4 col-xxl-4 mb-3">
                 <div class="card-heading">
                     <h5 class="card-title">Applications Overview</h5>

@@ -62,6 +62,7 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
     Route::get('/documents', [FileController::class, 'viewUserDocuments']);
     Route::post('upload-property-map', [FileController::class,'uploadPropertyMap']);
     Route::get('/read-notification/{id}', [NotificationController::class, 'readNotification']);
+    Route::get('/clear-notification', [NotificationController::class, 'clearNotification']);
     Route::post('logout', function (Request $request) {
         Auth::guard('web')->logout();
         $request->session()->invalidate();

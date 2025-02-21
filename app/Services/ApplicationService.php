@@ -53,7 +53,7 @@ class ApplicationService extends Service
                 'user_id' => $application->user_id,
             ]);
 
-            $this->sendMessage($application->id);
+
         }
 
         $lot = Lot::with('property')->where('id', $application->lot_id)->first();
@@ -76,6 +76,8 @@ class ApplicationService extends Service
 
 
         }
+
+        $this->sendMessage($application->id);
 
         return $application;
     }

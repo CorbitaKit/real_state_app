@@ -80,15 +80,15 @@ const printDiv = () => {
                 <div class="page-title mb-2 mb-sm-0">
                     Reports
                 </div>
-                
+
                 <div class="ml-auto d-flex align-items-center">
-                    
+
                     <nav>
                         <ol class="breadcrumb p-0 m-b-0">
                             <li class="breadcrumb-item">
                                 <a href="#" @click="home('/dashboard')"><i class="ti ti-home"></i></a>
                             </li>
-                            
+
                             <li class="breadcrumb-item active text-primary" aria-current="page">Reports</li>
                         </ol>
                     </nav>
@@ -111,7 +111,7 @@ const printDiv = () => {
 
         <div class="tw-mb-4 tw-m-2">
             <label for="phase" class="tw-block tw-text-gray-700 tw-font-semibold tw-mb-2">Clients</label>
-            <InputText type="text" v-model="form.client" class="tw-block tw-appearance-none tw-w-full tw-px-3 tw-py-2 tw-border " placeholder="... Search Client"/>        
+            <InputText type="text" v-model="form.client" class="tw-block tw-appearance-none tw-w-full tw-px-3 tw-py-2 tw-border " placeholder="... Search Client"/>
         </div>
         <div class="tw-mb-4 tw-mt-3">
             <label for="region" class="tw-block tw-text-gray-700 tw-font-semibold tw-mb-2">Mode of payment</label>
@@ -125,21 +125,21 @@ const printDiv = () => {
         </div>
     </div>
     <div class="tw-mx-auto tw-bg-white tw-p-8 tw-my-8 tw-rounded tw-shadow-md"  >
-      
+
         <v-table id="printMe">
             <thead>
             <tr>
                 <th class="text-left">
                 Client Name
                 </th>
-                
+
                 <th class="text-left">
                 Mode Of Payment
                 </th>
                 <th class="text-left">
                 Payment Date
                 </th>
-              
+
                 <th class="text-left">
                 Invoice Number
                 </th>
@@ -151,15 +151,15 @@ const printDiv = () => {
             </thead>
             <tbody>
             <tr v-for="payment in payments">
-                <td>{{payment.user.personal_info.first_name}} {{payment.user.personal_info.last_name}}</td>
-                
+                <td>{{payment.user?.personal_info?.first_name}} {{payment.user?.personal_info?.last_name}}</td>
+
                 <td>{{ payment.mode_of_payment }}</td>
                 <td>{{ payment.date_of_payment }}</td>
                 <td>{{ payment.invoice_number }}</td>
                 <td>{{ payment.amount }}</td>
-            
+
             </tr>
-            
+
             </tbody>
         </v-table>
     </div>

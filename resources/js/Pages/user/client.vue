@@ -144,6 +144,12 @@ const calculateAge = (date) => {
 
     return currentDate.getFullYear() - birthDate.getFullYear();
 }
+
+const setMonthlyAmount = () => {
+    const lot = client_lots.value.find(lot => lot.id === form.lot_id)
+
+    form.amount = lot.lot_group.monthly_amortizations
+}
 </script>
 
 <template>
@@ -232,7 +238,7 @@ const calculateAge = (date) => {
     <Dialog v-model:visible="payment" modal header="Make Payment" :style="{ width: '50rem' }">
         <div class="tw-flex tw-items-center tw-gap-4 tw-mb-4">
             <label for="username" class="tw-font-semibold tw-w-24">Lot</label>
-            <select  class="js-basic-single form-control" name="lot" v-model="form.lot_id" >
+            <select  class="js-basic-single form-control" name="lot" v-model="form.lot_id" @change="setMonthlyAmount">
                 <option  v-for="lot in client_lots" :value="lot.id" :key="lot.id">{{ lot.name }}</option>
             </select>
         </div>

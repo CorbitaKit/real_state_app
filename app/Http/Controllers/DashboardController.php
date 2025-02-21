@@ -35,6 +35,9 @@ class DashboardController extends Controller
             $payments = Payment::with('user.personal_info', 'files', 'lots')->get();
             $properties = Property::with('lots', 'files')->get();
         } else {
+            $startOfWeek = Carbon::now()->startOfWeek(); // Monday
+            $endOfWeek = Carbon::now()->endOfWeek(); // Sunday
+            $paymentPlans =  PaymentPlan::with('lot', 'lot.lotGroup', 'lot.property')->whereBetween('due_date', [$startOfWeek, $endOfWeek])->where('user_id', $user->id)->get();
             $applications = Application::with('user.personal_info', 'lot.property')
             ->where('user_id', $user->id)
             ->latest()
@@ -42,6 +45,7 @@ class DashboardController extends Controller
             ->get();
             $payments = Payment::with('user.personal_info', 'files', 'lots')->where('user_id', $user->id)->get();
             $clientLots = Lot::where('user_id', $user->id)->with(['user', 'property', 'lotGroup', 'payments', 'paymentPlans.payment', 'paymentPlans.lot.lotGroup'])->get();
+
         }
 
 
@@ -147,7 +151,8 @@ class DashboardController extends Controller
             'available_lot' => $availableLotCount,
             'pending_lot' => $pendingLotCount,
             'occupied_lot' => $occupiedLotCount,
-            'lots' => isset($clientLots) ? $clientLots : null
+            'lots' => isset($clientLots) ? $clientLots : null,
+            'payment_plans' => isset($paymentPlans) ? $paymentPlans : null
         ]);
     }
 }

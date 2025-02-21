@@ -3,6 +3,7 @@ import { ref } from "vue";
 import {getUser} from '../plugins/get-user-plugin'
 import profileDropdown from '../layout/dropdowns/profile-image-dropdown.vue'
 import { router } from '@inertiajs/vue3'
+import axios from 'axios'
 
 const { getUserInfo, getNotifications } = getUser()
 const user = getUserInfo()
@@ -29,9 +30,13 @@ const readNotification = (notification) => {
     } else if (notification.is_admin === 0 && notification.type === 'payment') {
         window.location.href = '/payments/get-by-user'
     }
+}
 
-
-
+const clearNotification = () => {
+    axios.get('/clear-notification')
+    .then(res => {
+        location.reload();
+    })
 }
 </script>
 
@@ -99,7 +104,7 @@ const readNotification = (notification) => {
                             <div class="dropdown-menu extended animated fadeIn" aria-labelledby="navbarDropdown">
                                 <ul>
                                     <li class="dropdown-header bg-gradient p-3 text-white text-left">Notifications
-                                        <a href="#" class="float-right btn btn-square btn-inverse-light btn-xs m-0">
+                                        <a href="#" @click="clearNotification" class="float-right btn btn-square btn-inverse-light btn-xs m-0">
                                             <span class="font-13"> Clear all</span></a>
                                     </li>
                                     <li class="dropdown-body min-h-240 nicescroll" v-for="notification in notifications" :key="notification.id">

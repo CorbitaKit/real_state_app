@@ -46,7 +46,7 @@ const isActive = (path) => {
                         <span class="nav-title">Dashboard</span>
                     </a>
                 </li>
-                <li :class="{active: isActive('/properties') || isActive('/properties/create')}">
+                <li :class="{active: isActive('/properties') || isActive('/properties/create')}" v-if="user.role.name != 'Client'">
                     <a class="has-arrow" href="javascript:void(0)" aria-expanded="false">
                         <i class="nav-icon ti ti-home"></i>
                         <span class="nav-title">Properties</span>
@@ -56,6 +56,13 @@ const isActive = (path) => {
                         <li v-if="user.role.name === 'Admin'"> <a href='/properties/create'><i class="nav-icon ti ti-plus"></i>Add Property</a> </li>
 
                     </ul>
+                </li>
+                <li :class="{active: isActive('/properties') || isActive('/properties/create')}" v-if="user.role.name === 'Client'">
+                    <a  href="/properties" aria-expanded="false">
+                        <i class="nav-icon ti ti-home"></i>
+                        <span class="nav-title">Properties</span>
+                    </a>
+
                 </li>
                 <li v-if="user.role.name === 'Admin'" :class="{active: isActive('/clients') || isActive('/users/create')}">
                     <a class="has-arrow" href="javascript:void(0)" aria-expanded="false">
@@ -80,14 +87,11 @@ const isActive = (path) => {
                     </ul>
                 </li>
                 <li :class="{active: isActive('/applications')}" v-if="user.role.name === 'Admin' || user.role.name === 'Staff'">
-                    <a class="has-arrow" href="javascript:void(0)" aria-expanded="false">
-                        <i class="nav-icon ti ti-file"></i>
-                        <span class="nav-title">Applications</span>
+                    <a href="/applications" aria-expanded="false">
+                        <i class="nav-icon ti ti-receipt"></i>
+                        <span class="nav-title">Application List</span>
                     </a>
-                    <ul aria-expanded="false">
-                        <li> <a href='/applications'><i class="nav-icon ti ti-file"></i> Application List</a> </li>
 
-                    </ul>
                 </li>
                 <li :class="{active: isActive('/payments')}" v-if="user.role.name === 'Admin' || user.role.name === 'Staff'">
                     <a href="/payments" aria-expanded="false">

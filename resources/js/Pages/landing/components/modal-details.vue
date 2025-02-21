@@ -52,7 +52,7 @@ defineExpose({ showModal });
             <div class=" tw-mx-auto tw-px-6 tw-text-center">
             <link href="https://fonts.googleapis.com/css2?family=Ultra&display=swap" rel="stylesheet">
             <h2 class="modal-datail-title">
-                Discover, <span class="green-text">Dream, Own</span>
+                Phase {{ property.phase }}, <span class="green-text">{{ property.city }} Project</span>
             </h2>
             <p class="tw-text-gray-600 tw-mb-4 tw-text-[20px]">{{ property.barangay }}, {{ property.city }}, {{ property.province }}</p>
             </div>
