@@ -18,7 +18,7 @@ return new class extends Migration
             $table->foreignId('user_id');
             $table->float('total_amount');
             $table->float('balance');
-            $table->float('tcp');
+            $table->float('tcp')->nullable();
         });
     }
 
