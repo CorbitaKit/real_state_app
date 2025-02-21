@@ -192,7 +192,7 @@ defineOptions({layout: Layout})
             <!-- begin page title -->
             <div class="d-block d-sm-flex flex-nowrap align-items-center">
                 <div class="page-title mb-2 mb-sm-0">
-                    <h1>Applications</h1>
+                    <h1>Property Lots Information</h1>
                 </div>
 
                 <div class="ml-auto d-flex align-items-center">
@@ -203,7 +203,7 @@ defineOptions({layout: Layout})
                                 <a href="#" @click="home('/dashboard')"><i class="ti ti-home"></i></a>
                             </li>
                             <li class="breadcrumb-item">
-                                <a href="#" @click="home('/applications')">Applicaitons</a>
+                                <a href="#" @click="home('/applications')">Properties</a>
                             </li>
 
                             <li class="breadcrumb-item active text-primary" aria-current="page">Property</li>
