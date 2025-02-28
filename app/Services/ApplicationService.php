@@ -93,10 +93,10 @@ class ApplicationService extends Service
 
         try {
             $account_sid = 'ACd7c9236c417ab9a47ba9052300950307';
-            $auth_token = '9020711417f033be5e61ed9359298187';
+            $auth_token = '71715fb4759d52374ea27c4b33dfd291';
             $twilio_number = '+12602354531';
 
-            $client = new Client($account_sid, $auth_token);
+            $client = new \Twilio\Rest\Client($account_sid, $auth_token);
 
             $client->messages->create($application->user->personal_info->phone_number, [
                 "from" => $twilio_number, "body" => $message

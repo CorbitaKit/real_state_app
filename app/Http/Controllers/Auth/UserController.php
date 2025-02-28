@@ -57,17 +57,16 @@ class UserController extends Controller
     public function notify($user_id)
     {
         $user = User::with('personal_info')->where('id', $user_id)->first();
-        $cleanedNumber = preg_replace('/[^0-9]/', '', $user->personal_info->phone_number);
 
         try {
             $account_sid = 'ACd7c9236c417ab9a47ba9052300950307';
-            $auth_token = '9020711417f033be5e61ed9359298187';
+            $auth_token = '71715fb4759d52374ea27c4b33dfd291';
             $twilio_number = '+12602354531';
 
             $client = new \Twilio\Rest\Client($account_sid, $auth_token);
 
             $client->messages->create(
-                $cleanedNumber, // Recipient's phone number
+                $user->personal_info->phone_number, // Recipient's phone number
                 [
                     'from' => $twilio_number,
                     'body' => 'Good day! This is from Aldebal Real State Services. We just want to inform you that your property is ready for transfer. Please bring the following requirements: One Valid ID and your proof of income.',
