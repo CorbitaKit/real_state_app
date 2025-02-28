@@ -38,7 +38,7 @@ import Password from 'primevue/password';
 import Tooltip from 'primevue/tooltip';
 import ProgressBar from 'primevue/progressbar';
 import Checkbox from 'primevue/checkbox';
-
+import { FilterMatchMode } from 'primevue/api';
 
 // import 'vuetify/styles'
 

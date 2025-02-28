@@ -185,68 +185,69 @@ defineOptions({ layout: Layout })
                 </div>
             </div>
         </div>
-        <div class="row">
-        <div class="col-xl-12">
-            <div class="card card-statistics border-0 shadow-none mb-0">
-                <div class="card-body">
-                    <div class="table-responsive">
+        <div class="row" v-if="user.role.name === 'Client'">
+            <div class="col-xl-12">
+                <div class="card card-statistics border-0 shadow-none mb-0">
+                    <div class="card-body">
+                        <div class="table-responsive">
 
-                        <table class="table mb-0 table-border-3">
-                            <thead>
-                                <tr>
-                                    <th scope="col">
-                                        Property
-                                    </th>
-                                    <th scope="col">
-                                        Square Meter
-                                    </th>
-                                    <th scope="col">
-                                        Amount Per Square Meter
-                                    </th>
-                                    <th scope="col">
-                                        Total Amount
-                                    </th>
-                                    <th scope="col">
-                                        Remaining Balance
-                                    </th>
+                            <table class="table mb-0 table-border-3">
+                                <thead>
+                                    <tr>
+                                        <th scope="col">
+                                            Property
+                                        </th>
+                                        <th scope="col">
+                                            Square Meter
+                                        </th>
+                                        <th scope="col">
+                                            Amount Per Square Meter
+                                        </th>
+                                        <th scope="col">
+                                            Total Amount
+                                        </th>
+                                        <th scope="col">
+                                            Remaining Balance
+                                        </th>
 
-                                </tr>
-                            </thead>
-                            <tbody class="mb-0">
-                                <tr  v-for="lot in lots" :key="lot.id">
-                                    <td class="px-6 py-4">
+                                    </tr>
+                                </thead>
+                                <tbody class="mb-0">
+                                    <tr  v-for="lot in lots" :key="lot.id">
+                                        <td class="px-6 py-4">
 
-                                        Phase {{ lot.property.phase }},
-                                        purok {{ lot.property.purok }},
-                                        barangay {{ lot.property.barangay }},
-                                        {{ lot.property.city }},
-                                        {{ lot.property.province }},
-                                        {{ lot.name }}
+                                            Phase {{ lot.property.phase }},
+                                            purok {{ lot.property.purok }},
+                                            barangay {{ lot.property.barangay }},
+                                            {{ lot.property.city }},
+                                            {{ lot.property.province }},
+                                            {{ lot.name }}
 
-                                    </td>
-                                    <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                        {{ lot.lot_group.sqr_meter }} Square Meters
-                                    </th>
-                                    <td class="px-6 py-4">
-                                        {{ formatCurrency(lot.lot_group.amount_per_sqr_meter) }}
-                                    </td>
+                                        </td>
+                                        <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                            {{ lot.lot_group.sqr_meter }} Square Meters
+                                        </th>
+                                        <td class="px-6 py-4">
+                                            {{ formatCurrency(lot.lot_group.amount_per_sqr_meter) }}
+                                        </td>
 
-                                    <td class="px-6 py-4">
-                                        {{ formatCurrency(calculateTotalAmount(lot.lot_group)) }}
-                                    </td>
-                                    <td class="px-6 py-4">
-                                        {{ formatCurrency(calculateRemainingBalance(lot)) }}
-                                    </td>
+                                        <td class="px-6 py-4">
+                                            {{ formatCurrency(calculateTotalAmount(lot.lot_group)) }}
+                                        </td>
+                                        <td class="px-6 py-4">
+                                            {{ formatCurrency(calculateRemainingBalance(lot)) }}
+                                        </td>
 
-                                </tr>
+                                    </tr>
 
-                            </tbody>
-                        </table>
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
+        <br>
         <div class="row" v-if="user.role.name != 'Client'">
             <Widget :properties="properties.length" :clients="clients.length" :applications="applications.length" :sales="sales.overall" v-if="user.role.name "/>
             <Sales :daily="daily" :weekly="weekly" :monthly="monthly"/>

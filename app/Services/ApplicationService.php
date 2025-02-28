@@ -77,7 +77,7 @@ class ApplicationService extends Service
 
         }
 
-        // $this->sendMessage($application->id);
+        $this->sendMessage($application->id);
 
         return $application;
     }
@@ -92,11 +92,11 @@ class ApplicationService extends Service
         $application->lot->property->barangay ." ". $application->lot->property->city ." City, ". $application->lot->property->province . " has been approved.". " Please bring 1 valid ID. Thank you.";
 
         try {
-            $account_id = "ACb9e10d5a08d249e1bd6d413679bab45f";
-            $auth_token = "4b5f1fe7c0c3506be03a378e154c6f2f";
-            $twilio_number ="+17433304054";
+            $account_sid = 'ACd7c9236c417ab9a47ba9052300950307';
+            $auth_token = '9020711417f033be5e61ed9359298187';
+            $twilio_number = '+12602354531';
 
-            $client = new Client($account_id, $auth_token);
+            $client = new Client($account_sid, $auth_token);
 
             $client->messages->create($application->user->personal_info->phone_number, [
                 "from" => $twilio_number, "body" => $message

@@ -109,7 +109,7 @@ const clearNotification = () => {
                                     </li>
                                     <li class="dropdown-body min-h-240 nicescroll" v-for="notification in notifications" :key="notification.id">
                                         <ul class="scrollbar scroll_dark max-h-240 mCustomScrollbar _mCS_2 mCS-autoHide" style="position: relative; overflow: visible;">
-                                            <div id="mCSB_2" class="mCustomScrollBox mCS-minimal-dark mCSB_vertical mCSB_outside" tabindex="0" style="max-height: none;">
+                                            <div id="mCSB_2" class="mCustomScrollBox  mCSB_vertical mCSB_outside" tabindex="0" style="max-height: none;">
                                                 <div id="mCSB_2_container" class="mCSB_container" style="position:relative; top:0; left:0;" dir="ltr">
                                                     <li>
                                                         <a href="javascript:void(0)" @click="readNotification(notification)">
@@ -142,7 +142,8 @@ const clearNotification = () => {
                                     <small class="d-block">{{ user.role.name }}</small>
                                 </div>
                                     <div class="avatar position-relative">
-                                        <img class="avatar-img rounded-circle" src="/assets/img/avatar/02.jpg" alt="avatar-img">
+                                        <img class="avatar-img rounded-circle" src="/assets/img/avatar/02.jpg" alt="avatar-img" v-if="!user.profile_picture">
+                                        <img class="avatar-img rounded-circle" :src="'/storage/'+user.profile_picture.url" alt="avatar-img" v-else>
                                         <span class="bg-success user-status"></span>
                                     </div>
 

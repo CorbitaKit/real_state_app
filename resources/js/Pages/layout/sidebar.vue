@@ -40,7 +40,7 @@ const isActive = (path) => {
                         <span class="nav-title">{{ menu.name }}</span>
                     </a>
                 </li> -->
-                <li  :class="{active: isActive('/dashboard')}">
+                <li  :class="{active: isActive('/dashboard')}" v-if="user.role.name != 'Staff'">
                     <a href="/dashboard" aria-expanded="false">
                         <i class="nav-icon ti ti-list"></i>
                         <span class="nav-title">Dashboard</span>

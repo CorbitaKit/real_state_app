@@ -36,8 +36,12 @@ const togglePasswordVisibility = () => {
             <div class="row justify-content-center align-items-center h-100-vh">
                 <div class="col-lg-4">
                     <div class="d-flex align-items-center">
+
                         <div class="login pt-4">
-                            <h1 class="mb-2">Jef Aldebal Real State Service </h1>
+          <img src="/logo101.png" alt="RealEstateApp Logo" class="tw-h-12">
+
+
+
                             <p>Welcome back, please login to your account.</p>
                             <div v-if="error">
                                 <div v-for="(e, i) in error" :key="i" class="alert alert-danger mb-2 mt-2" role="alert">

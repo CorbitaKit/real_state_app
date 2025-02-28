@@ -44,6 +44,7 @@ class HandleInertiaRequests extends Middleware
             'personal_info' => Auth::check() ? Auth::user()->personal_info : null,
             'role' => Auth::check() ? Auth::user()->role : null,
             'notifications' => Auth::check() ? $this->getNotifications() : null,
+            'profile_picture' => Auth::check() ? Auth::user()->profilePicture : null,
         ]);
     }
 

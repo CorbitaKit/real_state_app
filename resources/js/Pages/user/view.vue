@@ -4,6 +4,8 @@ import Header from '../components/header.vue'
 import { ref } from 'vue'
 import { useForm, router } from '@inertiajs/vue3'
 import Swal from 'sweetalert2'
+import FileUpload from '../components/fileupload.vue'
+
 
 import axios from 'axios'
 const props = defineProps({
@@ -13,6 +15,31 @@ const props = defineProps({
 
 const tab = ref('option-1')
 const form = useForm(props.userInfo)
+const visible = ref(false)
+
+const profile_form = useForm({
+    file: {},
+    user_id: ''
+})
+
+
+const uploadPic = (id) => {
+    profile_form.user_id = props.userInfo.id
+    visible.value = true
+
+    profile_form.post('/upload-profile-picture/', {
+        onSuccess: () => {
+            Swal.fire({
+                title: "Success",
+                text: "Profile picture uploaded successfully!",
+                icon: "success"
+            })
+            visible.value = false
+            window.location.reload()
+        }
+    })
+
+}
 
 const updatePersonalInfo = () => {
     axios.patch('/update-personal-info/' + props.userInfo.id, form.personal_info)
@@ -29,6 +56,12 @@ defineOptions({layout: Layout})
 </script>
 
 <template>
+    <Dialog v-model:visible="visible" modal header="Upload Profile Picture" :style="{ width: '50rem' }">
+        <FileUpload :file="profile_form.file" />
+        <div class="tw-flex tw-justify-end tw-gap-2">
+            <Button type="button" label="Save" @click="uploadPic"></Button>
+        </div>
+    </Dialog>
    <div class="row">
       <div class="col-md-12 mb-2">
           <!-- begin page title -->
@@ -62,7 +95,9 @@ defineOptions({layout: Layout})
                         <div class="profile-img rounded-circle">
                             <div class="d-flex">
                                 <div class="avatar avatar-xl">
-                                    <img src="/assets/img/avatar/01.jpg" class="img-fluid avatar-img rounded-circle" alt="users-avatar">
+                                    <img src="/assets/img/avatar/01.jpg" class="img-fluid avatar-img rounded-circle" alt="users-avatar" v-if="!userInfo.profile_picture">
+                                    <img :src="'/storage/'+userInfo.profile_picture.url" class="img-fluid avatar-img rounded-circle" alt="users-avatar" v-else>
+
                                 </div>
                                 <div class="profile ml-2">
                                     <h5 class="mb-0">{{ userInfo.personal_info.first_name }} {{ userInfo.personal_info.last_name }}</h5>
@@ -74,12 +109,12 @@ defineOptions({layout: Layout})
                 </div>
                 <div class="col-lg-8 col-xl-6 col-xxl-6">
                     <div class="py-2 py-lg-3 profile-counter">
-                       
+
                     </div>
                 </div>
                 <div class="col-xl-4 col-xxl-3">
                     <div class="profile-btn text-center d-flex py-2  py-lg-3 justify-content-xl-end">
-                        <!-- <div><button class="btn btn-light text-primary mr-2">Upload New Avatar</button></div> -->
+                        <div><button class="btn btn-light text-primary mr-2" @click="visible = true">Upload New Avatar</button></div>
                     </div>
                 </div>
             </div>
@@ -168,16 +203,16 @@ defineOptions({layout: Layout})
                                         <label for="title1">Password</label>
                                         <input type="password" v-model="form.password" class="form-control" id="title1" >
                                     </div>
-                                    
+
                                 </div>
-                               
+
                                 <button type="submit" class="btn btn-primary">Save and Update</button>
                             </form>
                         </div>
                     </div>
                 </div>
-                
-                
+
+
             </div>
         </div>
     </div>

@@ -12,6 +12,7 @@ use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
+use Illuminate\Database\Eloquent\Relations\MorphOne;
 
 #[ObservedBy([UserObserver::class])]
 
@@ -28,7 +29,7 @@ class User extends Authenticatable implements MustVerifyEmail
         'role_id',
         'email',
         'password',
-        
+
     ];
 
     /**
@@ -87,5 +88,15 @@ class User extends Authenticatable implements MustVerifyEmail
     public function files(): MorphMany
     {
         return $this->morphMany(File::class, 'fileable');
+    }
+
+    public function profilePicture(): MorphOne
+    {
+        return $this->morphOne(File::class, 'fileable')->where('type', 'profile_picture');
+    }
+
+    public function documents(): MorphMany
+    {
+        return $this->morphMany(File::class, 'fileable')->where('type', 'document');
     }
 }

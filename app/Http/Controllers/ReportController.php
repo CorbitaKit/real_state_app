@@ -25,11 +25,12 @@ class ReportController extends Controller
         $end_date = Carbon::parse($request->date_to)->format('Y-m-d');
         $client = $request->client;
         $payments = Payment::with('user.personal_info')->whereBetween('date_of_payment', [$start_date, $end_date])
-        ->whereHas('user.personal_info', function ($query) use ($client) {
+        ->orWhereHas('user.personal_info', function ($query) use ($client) {
             $query->whereRaw("CONCAT(first_name, ' ', last_name) = ?", [$client]);
         })
-        ->where('mode_of_payment', $request->mode_of_payment)
+        ->orWhere('mode_of_payment', $request->mode_of_payment)
         ->get();
+
         return Inertia::render('reports/index', [
             'payments' => $payments
         ]);

@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class File extends Model
 {
     use HasFactory;
-    protected $fillable = ['filename', 'fileable_type', 'fileable_id', 'url'];
+    protected $fillable = ['filename', 'fileable_type', 'fileable_id', 'url', 'type'];
 
     public function fileable()
     {

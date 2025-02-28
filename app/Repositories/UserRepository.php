@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Collection;
 
 class UserRepository extends Repository
 {
-    protected $relations = ['role', 'personal_info', 'address', 'workDetails'];
+    protected $relations = ['role', 'personal_info', 'address', 'workDetails', 'profilePicture'];
     public function __construct(User $user)
     {
         parent::__construct($user, $this->relations);

@@ -175,16 +175,16 @@ const setMonthlyAmount = () => {
                     <tr>
 
                         <td>
-                            NAME:
+                            NAME: {{ reportsData.name }}
                         </td>
                         <td>
-                            PHASE:
+                            PHASE: {{ reportsData.phase }}
                         </td>
                         <td>
-                            BLOCK:
+                            BLOCK: {{ reportsData.block }}
                         </td>
                         <td>
-                            LOT:
+                            LOT: {{ reportsData.lot_number }}
                         </td>
                     </tr>
                 </tbody>
@@ -194,7 +194,7 @@ const setMonthlyAmount = () => {
 
                     <tr>
                         <th class="text-left">
-                            Due Date
+                           DUE DATE
                         </th>
                         <th class="text-left">
                             MONTHLY AMOUNT
@@ -294,15 +294,15 @@ const setMonthlyAmount = () => {
             <tbody>
                 <tr v-for="payment in payments" :key="payment.id">
                     <td>
-                        Phase {{ payment.plan.lot.property.phase }},
-                        Block {{ payment.plan.lot.block }},
-                        Purok {{ payment.plan.lot.property.purok }},
-                        Barangay {{ payment.plan.lot.property.barangay }},
-                        {{ payment.plan.lot.property.city }} City,
-                        {{ payment.plan.lot.property.province }}
+                        Phase {{ payment.plan[0].lot.property.phase }},
+                        Block {{ payment.plan[0].lot.block }},
+                        Purok {{ payment.plan[0].lot.property.purok }},
+                        Barangay {{ payment.plan[0].lot.property.barangay }},
+                        {{ payment.plan[0].lot.property.city }} City,
+                        {{ payment.plan[0].lot.property.province }}
                     </td>
                     <td>
-                        {{ payment.plan.due_date }}
+                        {{ payment.plan?.due_date }}
                     </td>
                     <td>
                         {{ formatCurrency(payment.amount) }}
@@ -552,11 +552,11 @@ const setMonthlyAmount = () => {
                                 <td>
                                     <div class="dropdown">
                                             <a class="p-2" href="#!" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                                <i class="fe fe-more-horizontal"></i>
+                                                <i class="fe fe-settings"></i>
                                             </a>
                                             <div class="dropdown-menu custom-dropdown dropdown-menu-right p-4">
                                                 <h6 class="mb-1">Action</h6>
-                                                <a @click.prevent="checkPaymentHistory(client.payments)" class="dropdown-item" href="#!"><i class="fa-fw far fa-file-alt pr-2"></i>View Payment History</a>
+                                                <!-- <a @click.prevent="checkPaymentHistory(client.payments)" class="dropdown-item" href="#!"><i class="fa-fw far fa-file-alt pr-2"></i>View Payment History</a> -->
                                                 <a @click.prevent="viewProperties(client.lots)" class="dropdown-item" href="#!"><i class="fa-fw far fa-file-alt pr-2"></i>View Properties</a>
                                                 <!-- <a class="dropdown-item" href="#!"><i class="fa-fw fas fa-trash pr-2"></i>Delete</a>  -->
                                                 <a @click.prevent="makePayment(client)" class="dropdown-item" href="#!"><i class="fa-fw fas fa-receipt pr-2"></i>Make Payment</a>

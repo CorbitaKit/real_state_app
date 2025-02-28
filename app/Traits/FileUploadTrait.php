@@ -9,7 +9,7 @@ trait FileUploadTrait
 {
     public function uploadFile(UploadedFile $file, $directory)
     {
-        $path = $file->store($directory, 'local');
+        $path = $file->store($directory, 'public');
         return $path;
     }
 }

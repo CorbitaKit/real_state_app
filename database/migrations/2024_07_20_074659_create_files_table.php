@@ -16,6 +16,7 @@ return new class extends Migration
             $table->timestamps();
             $table->string('filename');
             $table->string('url')->nullable();
+            $table->string('type')->nullable();
             $table->string('fileable_type')->nullable();
             $table->unsignedBigInteger('fileable_id')->nullable();
         });

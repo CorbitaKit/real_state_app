@@ -23,10 +23,23 @@ const handleProvinces = async () => {
 
 const handleCities = async () => {
     cities.value = await handleCity(props.personal_address.province.province_code)
+    props.personal_address.complete_address = props.personal_address.complete_address + ' ' + props.personal_address.province.province_name
+
 }
 
 const handleBarangays = async () => {
     barangays.value = await handleBarangay(props.personal_address.city.city_code)
+    props.personal_address.complete_address = props.personal_address.city.city_name + ' City, ' + props.personal_address.complete_address
+}
+
+const addBarangayCompleteAddress = () => {
+    props.personal_address.complete_address = 'Barangay ' + props.personal_address.barangay.brgy_name + ', ' + props.personal_address.complete_address
+
+}
+
+const setPurok = () => {
+    props.personal_address.complete_address = 'Purok ' + props.personal_address.purok + ', ' + props.personal_address.complete_address
+
 }
 
 
@@ -53,13 +66,13 @@ const handleBarangays = async () => {
         </div>
         <div class="mb-4">
             <label for="purok" class="tw-block tw-text-gray-700 tw-font-semibold tw-mb-2">Purok</label>
-            <InputText type="text" v-model="personal_address.purok" class="block appearance-none w-full px-3 py-2 border rounded-md"/>        
-                
+            <InputText type="text" v-model="personal_address.purok" class="block appearance-none w-full px-3 py-2 border rounded-md"/>
+
         </div>
         <div class="mb-4">
             <label for="purok" class="tw-block tw-text-gray-700 tw-font-semibold tw-mb-2">Complete Address</label>
-            <InputText type="text" v-model="personal_address.complete_address" class="block appearance-none w-full px-3 py-2 border rounded-md"/>        
-                
+            <InputText type="text" v-model="personal_address.complete_address" class="block appearance-none w-full px-3 py-2 border rounded-md"/>
+
         </div>
     </div> -->
     <div class="row">
@@ -97,11 +110,11 @@ const handleBarangays = async () => {
                                     <option  v-for="city in cities" :value="city">{{ city.city_name }}</option>
                                 </select>
                                 <span v-if="error && !personal_address.city" style="color: red;">City field is required</span>
-                                
+
                             </div>
                             <div class="form-group col-md-6">
                                 <label for="inputPassword4">Barangay</label>
-                                <select  class="js-basic-single form-control" name="province" v-model="personal_address.barangay" @change="handleCities">
+                                <select  class="js-basic-single form-control" name="province" v-model="personal_address.barangay" @change="addBarangayCompleteAddress">
                                     <option  v-for="brgy in barangays" :value="brgy">{{ brgy.brgy_name }}</option>
                                 </select>
                                 <span v-if="error && !personal_address.barangay" style="color: red;">Barangay field is required</span>
@@ -111,16 +124,16 @@ const handleBarangays = async () => {
                         <div class="form-row">
                             <div class="form-group col-md-6">
                                 <label for="inputCity">Purok</label>
-                                <input type="text" class="form-control" id="phase" v-model="personal_address.purok" >
+                                <input type="text" class="form-control" id="phase" v-model="personal_address.purok" @blur="setPurok">
                                 <span v-if="error && !personal_address.purok" style="color: red;">Purok field is required</span>
 
                             </div>
                             <div class="form-group col-md-6">
                                 <label for="inputCity">Complete Address</label>
-                                <input type="text" class="form-control" id="phase" v-model="personal_address.complete_address" >
+                                <input disabled ="text" class="form-control" id="phase" v-model="personal_address.complete_address" >
                                 <span v-if="error && !personal_address.complete_address" style="color: red;">Complete address field is required</span>
 
-                                
+
                             </div>
                         </div>
                     </form>

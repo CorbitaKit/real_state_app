@@ -10,10 +10,16 @@ import Swal from 'sweetalert2'
 import { toWords } from 'number-to-words';
 import { useVueToPrint } from "vue-to-print";
 import axios from 'axios'
+import { FilterMatchMode } from 'primevue/api';
 const { show } = useToaster()
 const { getUserInfo } = getUser()
 const confirm = useConfirm();
 
+const filters = ref({
+    global: { value: null, matchMode: FilterMatchMode.CONTAINS },
+    name: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
+    status: { value: null, matchMode: FilterMatchMode.EQUALS },
+});
 
 const user = getUserInfo()
 const visible = ref(false)
@@ -21,9 +27,12 @@ const payments = ref()
 const payment_view = ref(false)
 const admin_apply = ref(false)
 const is_contract = ref(false)
+const transactionRef = ref()
 const terms = ref(false)
 const contractRef = ref()
 const agree = ref(false)
+const filter = ref()
+const printableRef = ref()
 const contract_data = reactive({
     seller: '',
     seller_address: '',
@@ -48,10 +57,19 @@ const form = useForm({
 })
 
 const { handlePrint } = useVueToPrint({
-  content: contractRef,
+  content: printableRef,
   documentTitle: "AwesomeFileName",
 });
 
+const print = (printRef) => {
+    if (printRef === 'contract') {
+        printableRef.value = contractRef.value
+    } else if (printRef === 'payment-history') {
+        printableRef.value = transactionRef.value
+    }
+
+    handlePrint()
+}
 
 const checkUser = (lot) => {
     if (user.role.name === 'Client') {
@@ -182,6 +200,14 @@ const notifyClient = (user_id) => {
     })
 }
 
+const generateTodaysDate = () => {
+    const today = new Date();
+    const options = { year: 'numeric', month: 'long', day: 'numeric' };
+    const formattedDate = today.toLocaleDateString('en-US', options);
+
+    return formattedDate
+}
+
 
 defineOptions({layout: Layout})
 </script>
@@ -203,10 +229,10 @@ defineOptions({layout: Layout})
                                 <a href="#" @click="home('/dashboard')"><i class="ti ti-home"></i></a>
                             </li>
                             <li class="breadcrumb-item">
-                                <a href="#" @click="home('/applications')">Properties</a>
+                                <a href="#" @click="home('/properties')">Properties</a>
                             </li>
 
-                            <li class="breadcrumb-item active text-primary" aria-current="page">Property</li>
+                            <li class="breadcrumb-item active text-primary" aria-current="page">Property Lots</li>
                         </ol>
                     </nav>
                 </div>
@@ -242,6 +268,37 @@ If the buyer wishes to discontinue the said installment all previous payments ar
 
     </Dialog>
     <Dialog v-model:visible="payment_view" modal header="Payment History" :style="{ width: '50rem' }">
+        <div ref="transactionRef">
+            <v-table class="responsive">
+                <tbody>
+                    <tr>
+                        <td></td>
+                        <td>
+                            <img src="/header.png" style="height: 100px;"/>
+                        </td>
+                        <td>
+                            <h1 style="margin-left:100px;">JEFF ALDEBAL REALTY SERVICE</h1>
+                        Door 3, CEASAR APARMENT, Sto. Niño, Carmen, Davao del Norte
+                        </td>
+                    </tr>
+                </tbody>
+            </v-table>
+            <h1 class="text-center">Transaction Records</h1>
+            <v-table>
+                <tbody>
+
+                    <tr>
+
+                        <td>
+                            PREPARED BY: {{ user.personal_info.first_name }} {{  user.personal_info.last_name }}
+                        </td>
+                        <td>
+                            GENERATED ON: {{ generateTodaysDate() }}
+                        </td>
+                    </tr>
+                </tbody>
+            </v-table>
+
         <v-table>
             <thead>
             <tr>
@@ -269,6 +326,8 @@ If the buyer wishes to discontinue the said installment all previous payments ar
             </tr>
             </tbody>
         </v-table>
+        </div>
+        <button class="btn btn-block btn-info" @click="print('payment-history')">Print</button>
     </Dialog>
     <Dialog v-model:visible="visible" modal header="Site visit" :style="{ width: '50rem' }">
         <span class="tw-text-surface-500 tw-dark:text-surface-400 tw-block mb-8">Set a date for your site visit.</span>
@@ -299,6 +358,7 @@ If the buyer wishes to discontinue the said installment all previous payments ar
             <div class="card card-statistics border-0 shadow-none mb-0">
                 <div class="card-body">
                     <div class="table-responsive">
+                        <input type="text" v-model="filter" class="form-control mb-2 tw-w-[300px] float-right" placeholder="...Search"/>
                         <table class="table mb-0 table-border-3">
                             <thead>
                                 <tr>
@@ -353,7 +413,7 @@ If the buyer wishes to discontinue the said installment all previous payments ar
                                     <td>
                                         <div class="dropdown">
                                             <a class="p-2" href="#!" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                                <i class="fe fe-more-horizontal"></i>
+                                                <i class="fe fe-settings"></i>
                                             </a>
                                             <div class="dropdown-menu custom-dropdown dropdown-menu-right p-4">
                                                 <h6 class="mb-1">Action</h6>
@@ -370,6 +430,7 @@ If the buyer wishes to discontinue the said installment all previous payments ar
 
                             </tbody>
                         </table>
+
                     </div>
                 </div>
             </div>
@@ -474,7 +535,7 @@ If the buyer wishes to discontinue the said installment all previous payments ar
 
     </div>
 </div>
-            <a @click="handlePrint" href="javascript:void(0);" class="btn btn-block btn-round btn-outline-info">Print</a>
+            <a @click="print('contract')" href="javascript:void(0);" class="btn btn-block btn-round btn-outline-info">Print</a>
         </div>
 
 </template>

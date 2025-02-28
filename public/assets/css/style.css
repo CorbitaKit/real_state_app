@@ -11189,7 +11189,7 @@ b {
   /* Opera 11.10+ */
   /* IE10+ */
   background: -webkit-gradient(linear, left top, right top, from(#064CDB), to(#012c84)) !important;
-  background: linear-gradient(to right, #064CDB 0%, #012c84 100%) !important;
+  background: linear-gradient(to right, #4dbf29 0%, #0d540f 100%) !important;
   /* W3C */
   filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', endColorstr='#000000',GradientType=0 ) !important;
   /* IE6-9 */ }
@@ -17416,7 +17416,7 @@ table.dataTable {
     /* Opera 11.10+ */
     /* IE10+ */
     background: -webkit-gradient(linear, left top, right top, from(#064CDB), to(#012c84)) !important;
-    background: linear-gradient(to right, #064CDB 0%, #012c84 100%) !important;
+    background: linear-gradient(to right, #4dbf29 0%, #0d540f 100%) !important;
     /* W3C */
     filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', endColorstr='#000000',GradientType=0 ) !important;
     /* IE6-9 */ }

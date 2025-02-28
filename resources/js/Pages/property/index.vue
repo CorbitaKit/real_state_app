@@ -99,6 +99,7 @@ const setTransaction = (property) => {
 const uploadPropertyMap = () => {
     form.post('/upload-property-map', {
         onSuccess: (() => {
+            visible.value = false
             Swal.fire({
                 title: "Uploaded!",
                 text: "Map Uploaded Successfully!.",
@@ -109,6 +110,14 @@ const uploadPropertyMap = () => {
 }
 const isAllLotsOccupied = (property) => {
     return property.lots.every(lot => lot.status === "Occupied");
+}
+
+const generateTodaysDate = () => {
+    const today = new Date();
+    const options = { year: 'numeric', month: 'long', day: 'numeric' };
+    const formattedDate = today.toLocaleDateString('en-US', options);
+
+    return formattedDate
 }
 defineOptions({layout: Layout})
 </script>
@@ -146,6 +155,16 @@ defineOptions({layout: Layout})
                         </td>
                         <td>
                             MONTHS: {{ transaction.months }} Month(s)
+                        </td>
+                    </tr>
+
+                    <tr>
+
+                        <td>
+                            PREPARED BY: {{ user.personal_info.first_name }} {{  user.personal_info.last_name }}
+                        </td>
+                        <td>
+                            GENERATED ON: {{ generateTodaysDate() }}
                         </td>
                     </tr>
                 </tbody>
@@ -241,7 +260,7 @@ defineOptions({layout: Layout})
                 <a v-if="user.role.name !== 'Client'" @click.prevent="uploadPic(property.id)" data-toggle="tooltip" data-placement="top" title="" data-original-title="Upload Property Map" href="javascript:void(0);" class="btn btn-xs btn-icon btn-round btn-outline-info"><i class="fas fa-upload"></i></a>
                 <a v-if="user.role.name !== 'Client'" @click.prevent="setTransaction(property)" data-toggle="tooltip" data-placement="top" title="" data-original-title="Print Transaction Records" href="javascript:void(0);" class="btn btn-xs btn-icon btn-round btn-outline-info ml-1"><i class="fas fa-file"></i></a>
                 <a @click.prevent="show(property)" data-toggle="tooltip" data-placement="top" title="" data-original-title="View Property Details" href="javascript:void(0);" class="btn btn-xs btn-icon btn-round btn-outline-info ml-1"><i class="fas fa-eye"></i></a>
-                <a v-if="user.role.name !== 'Client'" @click.prevent="deleteProperty(property.id)" data-toggle="tooltip" data-placement="top" title="" data-original-title="Delete Property" href="javascript:void(0);" class="btn btn-xs btn-icon btn-round btn-outline-danger ml-1"><i class="fas fa-trash"></i></a>
+                <a v-if="user.role.name === 'Admin'" @click.prevent="deleteProperty(property.id)" data-toggle="tooltip" data-placement="top" title="" data-original-title="Delete Property" href="javascript:void(0);" class="btn btn-xs btn-icon btn-round btn-outline-danger ml-1"><i class="fas fa-trash"></i></a>
             </div>
         </div>
         <div class="card-body">

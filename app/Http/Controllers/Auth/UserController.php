@@ -4,8 +4,11 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\UserRequest;
+use App\Models\File;
 use App\Models\User;
 use App\Services\Auth\UserService;
+use App\Services\FileService;
+use App\Traits\FileUploadTrait;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -16,10 +19,12 @@ use Twilio\Rest\Client;
 class UserController extends Controller
 {
     protected $userService;
-
-    public function __construct(UserService $userService)
+    use FileUploadTrait;
+    protected $fileService;
+    public function __construct(UserService $userService, FileService $fileService)
     {
         $this->userService = $userService;
+        $this->fileService = $fileService;
     }
 
     public function index()
@@ -55,9 +60,9 @@ class UserController extends Controller
         $cleanedNumber = preg_replace('/[^0-9]/', '', $user->personal_info->phone_number);
 
         try {
-            $account_sid = 'ACb9e10d5a08d249e1bd6d413679bab45f';
-            $auth_token = '4b5f1fe7c0c3506be03a378e154c6f2f';
-            $twilio_number = '+17433304054';
+            $account_sid = 'ACd7c9236c417ab9a47ba9052300950307';
+            $auth_token = '9020711417f033be5e61ed9359298187';
+            $twilio_number = '+12602354531';
 
             $client = new \Twilio\Rest\Client($account_sid, $auth_token);
 
@@ -72,5 +77,25 @@ class UserController extends Controller
             dd($e->getMessage()); // Dump the error message for debugging
         }
 
+    }
+
+    public function uploadPicture(Request $request)
+    {
+        $fileUpload = $request->file['value'];
+        $path = $this->uploadFile($fileUpload, 'files/user/profile');
+        $fileExist = File::where('fileable_id', $request->user_id)->where('type', 'profile_picture')->first();
+        if($fileExist) {
+            File::findOrFail($fileExist->id)->delete();
+        }
+
+
+        $file = $this->fileService->doCreate([
+            'filename' => $fileUpload->getClientOriginalName(),
+            'url' => $path,
+            'type' => 'profile_picture'
+        ]);
+
+        $user = User::findOrFail($request->user_id);
+        $user->files()->save($file);
     }
 }
