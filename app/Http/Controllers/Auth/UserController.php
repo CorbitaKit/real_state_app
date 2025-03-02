@@ -13,8 +13,6 @@ use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Http;
-use Twilio\Rest\Client;
 
 class UserController extends Controller
 {
@@ -59,9 +57,9 @@ class UserController extends Controller
         $user = User::with('personal_info')->where('id', $user_id)->first();
 
         try {
-            $account_sid = 'ACd7c9236c417ab9a47ba9052300950307';
-            $auth_token = '71715fb4759d52374ea27c4b33dfd291';
-            $twilio_number = '+12602354531';
+            $account_sid = config('app.twilio.sid');
+            $auth_token = config('app.twilio.token');
+            $twilio_number = config('app.twilio.number');
 
             $client = new \Twilio\Rest\Client($account_sid, $auth_token);
 

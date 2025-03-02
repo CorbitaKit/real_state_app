@@ -92,9 +92,9 @@ class ApplicationService extends Service
         $application->lot->property->barangay ." ". $application->lot->property->city ." City, ". $application->lot->property->province . " has been approved.". " Please bring 1 valid ID. Thank you.";
 
         try {
-            $account_sid = 'ACd7c9236c417ab9a47ba9052300950307';
-            $auth_token = '71715fb4759d52374ea27c4b33dfd291';
-            $twilio_number = '+12602354531';
+            $account_sid = config('app.twilio.sid');
+            $auth_token = config('app.twilio.token');
+            $twilio_number = config('app.twilio.number');
 
             $client = new \Twilio\Rest\Client($account_sid, $auth_token);
 

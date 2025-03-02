@@ -11,16 +11,10 @@ import { toWords } from 'number-to-words';
 import { useVueToPrint } from "vue-to-print";
 import axios from 'axios'
 import { FilterMatchMode } from 'primevue/api';
+
 const { show } = useToaster()
 const { getUserInfo } = getUser()
 const confirm = useConfirm();
-
-const filters = ref({
-    global: { value: null, matchMode: FilterMatchMode.CONTAINS },
-    name: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
-    status: { value: null, matchMode: FilterMatchMode.EQUALS },
-});
-
 const user = getUserInfo()
 const visible = ref(false)
 const payments = ref()
@@ -33,6 +27,7 @@ const contractRef = ref()
 const agree = ref(false)
 const filter = ref()
 const printableRef = ref()
+
 const contract_data = reactive({
     seller: '',
     seller_address: '',
@@ -55,6 +50,10 @@ const form = useForm({
     reserved_date: moment().format('YYYY-MM-DD'),
     status: 'For Review'
 })
+
+
+
+const lots = props.property.lots.filter(lot => !(user.role.name === 'Client' && lot.status === 'Occupied'))
 
 const { handlePrint } = useVueToPrint({
   content: printableRef,
@@ -82,42 +81,23 @@ const checkUser = (lot) => {
 }
 
 const applyForLot = (lot) => {
-
-
-        // confirm.require({
-        //     message: 'Are you sure you want to apply for this lot?',
-        //     header: 'Confirmation',
-        //     icon: 'pi pi-exclamation-triangle',
-        //     rejectProps: {
-        //         label: 'Cancel',
-        //         severity: 'secondary',
-        //         outlined: true
-        //     },
-        //     acceptProps: {
-        //         label: 'Save'
-        //     },
-        //     accept: () => {
-        //         form.lot_id = lot.id
-        //         sendApplication()
-        //     },
-        // });
-        Swal.fire({
-            title: "Are you sure?",
-            text: "You want to apply for this lot?",
-            icon: "warning",
-            showCancelButton: true,
-            confirmButtonColor: "#3085d6",
-            cancelButtonColor: "#d33",
-            confirmButtonText: "Yes!"
-            }).then((result) => {
-            if (result.isConfirmed) {
-                form.lot_id = lot.id
-                // sendApplication()
-                terms.value = true
-            }
-            });
-
+    Swal.fire({
+        title: "Are you sure?",
+        text: "You want to apply for this lot?",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Yes!"
+    }).then((result) => {
+        if (result.isConfirmed) {
+            form.lot_id = lot.id
+            terms.value = true
         }
+    });
+
+}
+
 const siteVisit = () => {
     form.application_type = 'Site Visit',
     form.reserved_date = moment(form.reserved_date).format('YYYY-MM-DD')
@@ -125,6 +105,7 @@ const siteVisit = () => {
     sendApplication()
     visible.value = false
 }
+
 const sendApplication = () => {
     terms.value = false
     form.post('/applications', {
@@ -241,31 +222,24 @@ defineOptions({layout: Layout})
         </div>
     </div>
     <Dialog v-model:visible="terms" modal :style="{ width: '50rem' }">
-
-
-                <div class="card-header">
-                    <h5 class="card-title">Terms and Conditions</h5>
-                </div>
-                <div class="card-body" style="max-height: 200px; overflow-y: auto;">
-                    <p>
-                        I HEREBY declare that the above statement is TRUE AND CORRECT, I agree to inform the owner if my reservation of the said Lots listed above will not be paid in full within 3 days from the time of reservation period, this reservation shall be automatically cancelled and forfeited.
-
-If the buyer wishes to discontinue the said installment all previous payments are non-refundable and subject for forfeiture.
-                    </p>
-                </div>
-
-
-            <!-- Checkbox for Agreement -->
-            <div class="form-check mb-3">
-                <input class="form-check-input" v-model="agree" type="checkbox" id="termsCheckbox" required>
-                <label class="form-check-label" for="termsCheckbox">
-                    I agree to the Terms and Conditions
-                </label>
-            </div>
-
-            <!-- Submit Button -->
-            <button type="submit" @click="sendApplication" class="btn btn-primary" :disabled="!agree" id="submitBtn">Submit</button>
-
+        <div class="card-header">
+            <h5 class="card-title">Terms and Conditions</h5>
+        </div>
+        <div class="card-body" style="max-height: 200px; overflow-y: auto;">
+            <p>
+                I HEREBY declare that the above statement is TRUE AND CORRECT, I agree to inform the owner if my reservation of the said Lots
+                listed above will not be paid in full within 3 days from the time of reservation period, this reservation shall be automatically
+                cancelled and forfeited.
+                If the buyer wishes to discontinue the said installment all previous payments are non-refundable and subject for forfeiture.
+            </p>
+        </div>
+        <div class="form-check mb-3">
+            <input class="form-check-input" v-model="agree" type="checkbox" id="termsCheckbox" required>
+            <label class="form-check-label" for="termsCheckbox">
+                I agree to the Terms and Conditions
+            </label>
+        </div>
+        <button type="submit" @click="sendApplication" class="btn btn-primary" :disabled="!agree" id="submitBtn">Submit</button>
     </Dialog>
     <Dialog v-model:visible="payment_view" modal header="Payment History" :style="{ width: '50rem' }">
         <div ref="transactionRef">
@@ -286,9 +260,7 @@ If the buyer wishes to discontinue the said installment all previous payments ar
             <h1 class="text-center">Transaction Records</h1>
             <v-table>
                 <tbody>
-
                     <tr>
-
                         <td>
                             PREPARED BY: {{ user.personal_info.first_name }} {{  user.personal_info.last_name }}
                         </td>
@@ -298,34 +270,32 @@ If the buyer wishes to discontinue the said installment all previous payments ar
                     </tr>
                 </tbody>
             </v-table>
-
-        <v-table>
-            <thead>
-            <tr>
-                <th class="text-left">
-                Amount
-                </th>
-                <th class="text-left">
-                Mode Of Payment
-                </th>
-                <th class="text-left">
-                Payment Date
-                </th>
-                <th class="text-left">
-                Invoice Number
-                </th>
-
-            </tr>
-            </thead>
-            <tbody>
-            <tr v-for="payment in payments" :key="payment.id" >
-                <td>{{ formatCurrency(payment.amount) }}</td>
-                <td>{{ payment.mode_of_payment }}</td>
-                <td>{{ payment.date_of_payment }}</td>
-                <td>{{ payment.invoice_number }}</td>
-            </tr>
-            </tbody>
-        </v-table>
+            <v-table>
+                <thead>
+                    <tr>
+                        <th class="text-left">
+                        Amount
+                        </th>
+                        <th class="text-left">
+                        Mode Of Payment
+                        </th>
+                        <th class="text-left">
+                        Payment Date
+                        </th>
+                        <th class="text-left">
+                        Invoice Number
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr v-for="payment in payments" :key="payment.id" >
+                        <td>{{ formatCurrency(payment.amount) }}</td>
+                        <td>{{ payment.mode_of_payment }}</td>
+                        <td>{{ payment.date_of_payment }}</td>
+                        <td>{{ payment.invoice_number }}</td>
+                    </tr>
+                </tbody>
+            </v-table>
         </div>
         <button class="btn btn-block btn-info" @click="print('payment-history')">Print</button>
     </Dialog>
@@ -339,7 +309,6 @@ If the buyer wishes to discontinue the said installment all previous payments ar
             <Button type="button" label="Save" @click="siteVisit"></Button>
         </div>
     </Dialog>
-
     <Dialog v-model:visible="admin_apply" modal header="Select Client" :style="{ width: '50rem' }">
         <div class="tw-flex items-center tw-gap-4 tw-mb-4">
             <select  class="js-basic-single form-control" name="region" v-model="form.user_id">
@@ -351,8 +320,6 @@ If the buyer wishes to discontinue the said installment all previous payments ar
             <Button type="button" label="Save" @click="sendApplication"></Button>
         </div>
     </Dialog>
-
-
     <div class="row" v-if="!is_contract">
         <div class="col-xl-12">
             <div class="card card-statistics border-0 shadow-none mb-0">
@@ -374,7 +341,7 @@ If the buyer wishes to discontinue the said installment all previous payments ar
                                 </tr>
                             </thead>
                             <tbody class="mb-0">
-                                <tr v-for="lot in property.lots.filter(lot => !(user.role.name === 'Client' && lot.status === 'Occupied'))" :key="lot.id">
+                                <tr v-for="lot in lots" :key="lot.id">
                                     <td>
                                         {{ lot.name }}
                                     </td>
@@ -437,9 +404,7 @@ If the buyer wishes to discontinue the said installment all previous payments ar
         </div>
     </div>
     <div class="row" v-if="is_contract">
-
         <div class="col-xl-12 col-sm-12" style="color:black;" ref="contractRef">
-
             <div class="card card-statistics">
                 <v-table class="responsive">
                     <tbody>
@@ -457,85 +422,82 @@ If the buyer wishes to discontinue the said installment all previous payments ar
                 </v-table>
 
                 <div class="card-body p-5" id="printMe" style="font-family: 'Times New Roman', serif; line-height: 1.5; padding: 20px; max-width: 800px; margin: 0 auto;">
-    <h1>
-        <p class="MsoNormal" align="center" style="text-align:center; margin: 0; padding: 0;">
-            <b><span style="font-size:18pt;">CONTRACT TO SELL</span></b>
-        </p>
-        <br>
-        <p class="MsoNormal" style="text-align: justify; margin-bottom: 1em;">
-            <span style="font-size:14pt;">KNOW ALL MEN BY THESE PRESENTS:</span>
-        </p>
+                    <h1>
+                        <p class="MsoNormal" align="center" style="text-align:center; margin: 0; padding: 0;">
+                            <b><span style="font-size:18pt;">CONTRACT TO SELL</span></b>
+                        </p>
+                        <br>
+                        <p class="MsoNormal" style="text-align: justify; margin-bottom: 1em;">
+                            <span style="font-size:14pt;">KNOW ALL MEN BY THESE PRESENTS:</span>
+                        </p>
 
-        <p class="MsoNormal" style="text-align: justify; margin-bottom: 1em;">
-            <span style="font-size:14pt;">This contract to sell is made, executed, and entered into by and between:</span>
-        </p>
+                        <p class="MsoNormal" style="text-align: justify; margin-bottom: 1em;">
+                            <span style="font-size:14pt;">This contract to sell is made, executed, and entered into by and between:</span>
+                        </p>
 
-        <p class="MsoNormal" style="text-align: justify; margin-bottom: 1em;">
-            <span style="font-size:14pt;">
-                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                <b>{{ contract_data.seller }}</b>, of legal age, Filipino, single, and a resident of Panabo City, Davao del Norte, hereinafter referred to as the <b>SELLER</b>.
-            </span>
-        </p>
+                        <p class="MsoNormal" style="text-align: justify; margin-bottom: 1em;">
+                            <span style="font-size:14pt;">
+                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                <b>{{ contract_data.seller }}</b>, of legal age, Filipino, single, and a resident of Panabo City, Davao del Norte, hereinafter referred to as the <b>SELLER</b>.
+                            </span>
+                        </p>
 
-        <p class="MsoNormal" align="center" style="text-align:center; margin-bottom: 1em;">
-            <b><span style="font-size:14pt;">-AND-</span></b>
-        </p>
+                        <p class="MsoNormal" align="center" style="text-align:center; margin-bottom: 1em;">
+                            <b><span style="font-size:14pt;">-AND-</span></b>
+                        </p>
 
-        <p class="MsoNormal" style="text-align: justify; margin-bottom: 1em;">
-            <span style="font-size:14pt;">
-                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                <b>{{ contract_data.buyer }}</b>, of legal age, Filipino, <b>married</b>, and a resident of <b>{{ contract_data.buyer_address }}</b>, hereinafter referred to as the <b>BUYER</b>.
-            </span>
-        </p>
+                        <p class="MsoNormal" style="text-align: justify; margin-bottom: 1em;">
+                            <span style="font-size:14pt;">
+                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                <b>{{ contract_data.buyer }}</b>, of legal age, Filipino, <b>married</b>, and a resident of <b>{{ contract_data.buyer_address }}</b>, hereinafter referred to as the <b>BUYER</b>.
+                            </span>
+                        </p>
 
-        <p class="MsoNormal" align="center" style="text-align:center; margin-bottom: 1em;">
-            <b><span style="font-size:14pt;">-WITNESSETH-</span></b>
-        </p>
+                        <p class="MsoNormal" align="center" style="text-align:center; margin-bottom: 1em;">
+                            <b><span style="font-size:14pt;">-WITNESSETH-</span></b>
+                        </p>
 
-        <p class="MsoNormal" style="text-align: justify; margin-bottom: 1em;">
-            <b><span style="font-size:14pt;">WHEREAS</span></b>
-            <span style="font-size:14pt;">
-                the <b>SELLER</b> is authorized to enter into a contract to sell involving a parcel of land located at <b>{{ contract_data.property_address }}</b>, and covered by <b>Transfer Certificate of Title No. 256092</b>, containing a total area of <b>Fifty thousand square meters</b>, more or less, issued by the Registry of Deeds of the province of Davao del Norte.
-            </span>
-        </p>
+                        <p class="MsoNormal" style="text-align: justify; margin-bottom: 1em;">
+                            <b><span style="font-size:14pt;">WHEREAS</span></b>
+                            <span style="font-size:14pt;">
+                                the <b>SELLER</b> is authorized to enter into a contract to sell involving a parcel of land located at <b>{{ contract_data.property_address }}</b>, and covered by <b>Transfer Certificate of Title No. 256092</b>, containing a total area of <b>Fifty thousand square meters</b>, more or less, issued by the Registry of Deeds of the province of Davao del Norte.
+                            </span>
+                        </p>
 
-        <p class="MsoNormal" style="text-align: justify; margin-bottom: 1em;">
-            <span style="font-size:14pt;">
-                Whereas, the <b>BUYER</b> has offered to buy a portion of said parcel of land containing an area of <b>{{ contract_data.size }}</b>, more or less, identified as <b>{{ contract_data.lot_address }}</b>, of the aforesaid property, and the <b>SELLER</b> has agreed to sell the above-mentioned property under the terms and conditions herein below set forth:
-            </span>
-        </p>
+                        <p class="MsoNormal" style="text-align: justify; margin-bottom: 1em;">
+                            <span style="font-size:14pt;">
+                                Whereas, the <b>BUYER</b> has offered to buy a portion of said parcel of land containing an area of <b>{{ contract_data.size }}</b>, more or less, identified as <b>{{ contract_data.lot_address }}</b>, of the aforesaid property, and the <b>SELLER</b> has agreed to sell the above-mentioned property under the terms and conditions herein below set forth:
+                            </span>
+                        </p>
 
-        <p class="MsoNormal" style="text-align: justify; margin-bottom: 1em;">
-            <span style="font-size:14pt;">
-                NOW THEREFORE, for and in consideration of the total sum of <b>{{ contract_data.amount_in_word }} ({{ contract_data.amount }})</b> Philippine currency, and of the covenants herein after set forth, the <b>SELLER</b> agrees to sell, and the <b>BUYER</b> agrees to buy the aforesaid parcel of land, being a portion of the parcel of land covered by <b>Transfer Certificate of Title No. 256092</b>, subject to the following terms:
-            </span>
-        </p>
+                        <p class="MsoNormal" style="text-align: justify; margin-bottom: 1em;">
+                            <span style="font-size:14pt;">
+                                NOW THEREFORE, for and in consideration of the total sum of <b>{{ contract_data.amount_in_word }} ({{ contract_data.amount }})</b> Philippine currency, and of the covenants herein after set forth, the <b>SELLER</b> agrees to sell, and the <b>BUYER</b> agrees to buy the aforesaid parcel of land, being a portion of the parcel of land covered by <b>Transfer Certificate of Title No. 256092</b>, subject to the following terms:
+                            </span>
+                        </p>
 
-        <br>
+                        <br>
 
-        <p class="MsoNormal" align="center" style="text-align:center;">
-            <b>----------------------------------------</b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-            <b>---------------------------------------</b>
-            <br>
-            <span style="font-size:14pt;">SELLER</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-            <span style="font-size:14pt;">BUYER</span>
-        </p>
-        <br><br>
-        <p class="MsoNormal" align="center" style="text-align:center;">
-            <b>----------------------------------------</b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-            <b>---------------------------------------</b>
-            <br>
-            <span style="font-size:14pt;">WITNESS 1</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-            <span style="font-size:14pt;">WINTESS 2</span>
-        </p>
-    </h1>
-</div>
-
-
-
-    </div>
-</div>
-            <a @click="print('contract')" href="javascript:void(0);" class="btn btn-block btn-round btn-outline-info">Print</a>
+                        <p class="MsoNormal" align="center" style="text-align:center;">
+                            <b>----------------------------------------</b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                            <b>---------------------------------------</b>
+                            <br>
+                            <span style="font-size:14pt;">SELLER</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                            <span style="font-size:14pt;">BUYER</span>
+                        </p>
+                        <br><br>
+                        <p class="MsoNormal" align="center" style="text-align:center;">
+                            <b>----------------------------------------</b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                            <b>---------------------------------------</b>
+                            <br>
+                            <span style="font-size:14pt;">WITNESS 1</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                            <span style="font-size:14pt;">WINTESS 2</span>
+                        </p>
+                    </h1>
+                </div>
+            </div>
         </div>
+        <a @click="print('contract')" href="javascript:void(0);" class="btn btn-block btn-round btn-outline-info">Print</a>
+    </div>
 
 </template>
