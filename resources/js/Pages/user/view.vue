@@ -27,7 +27,7 @@ const uploadPic = (id) => {
     profile_form.user_id = props.userInfo.id
     visible.value = true
 
-    profile_form.post('/upload-profile-picture/', {
+    profile_form.post('/upload-profile-picture', {
         onSuccess: () => {
             Swal.fire({
                 title: "Success",
