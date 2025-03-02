@@ -23,7 +23,7 @@
     <div class="tw-grid tw-grid-cols-1 md:tw-grid-cols-2 tw-gap-10">
       <!-- Property Image -->
       <div>
-        <img :src="'/storage/' + property.file.url" alt="Property Image" class="tw-w-full tw-h-64 tw-object-cover tw-rounded-lg tw-shadow-lg tw-mb-6">
+        <img :src="'/storage/app/public/' + property.file.url" alt="Property Image" class="tw-w-full tw-h-64 tw-object-cover tw-rounded-lg tw-shadow-lg tw-mb-6">
           <DataTable showGridlines  :value="property.lot_groups" tableStyle="min-width: 30rem">
             <Column field="sqr_meter" header="Square Meter">
               <template #body="slotProps">
@@ -46,16 +46,16 @@
         <LandMark :address="setLocation(property)" :key="property.id" :map="property.id" :property="property"/>
       </div>
 
-      
+
     </div>
-    
-    
+
+
     <div class="tw-mt-8">
       <h3 class="tw-text-2xl tw-font-semibold tw-text-green-600">Location</h3>
       <p class="tw-text-gray-700">Phase {{ property.phase }}, Purok {{ property.purok }}, Barangay {{ property.barangay }}, {{ property.city }}, {{ property.province }}</p>
     </div>
   </div>
-  
+
   <Contact />
   <Footer />
 </template>

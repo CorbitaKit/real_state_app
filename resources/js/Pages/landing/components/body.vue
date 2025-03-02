@@ -36,7 +36,7 @@ const openModal = (property) => {
             class="tw-bg-white tw-rounded-lg tw-p-4 tw-text-left tw-w-100 tw-shadow-[0_4px_6px_-1px_rgba(0,0,0,0.1),0_2px_4px_-1px_rgba(0,0,0,0.06)]"
             v-for="property in properties" :key="property.id"
           >
-            <img :src="'/storage/'+property.files[0]?.url" alt="Phase 1 Image" class="tw-rounded-md tw-mb-4" />
+            <img :src="'/storage/app/public/'+property.files[0]?.url" alt="Phase 1 Image" class="tw-rounded-md tw-mb-4" />
             <h4 class="tw-text-lg tw-font-semibold tw-mb-2">
                  Phase {{ property.phase }} {{ property.barangay }} Project
             </h4>
