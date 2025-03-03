@@ -100,7 +100,7 @@ const calculateTotalPayment = (lot) => {
         <div class="row"  style="display: flex; height: 500px; overflow: hidden;">
 
     <div class="col-md-6 tw-flex-shrink-0" >
-        <Image :src="'/storage/'+property.files[1]?.url" alt="Image" preview class="tw-w-full tw-h-full tw-object-cover"  v-if="property.files[1]"/>
+        <Image :src="'/storage/app/public/'+property.files[1]?.url" alt="Image" preview class="tw-w-full tw-h-full tw-object-cover"  v-if="property.files[1]"/>
     </div>
 
     <!-- Scrollable Lots Section -->

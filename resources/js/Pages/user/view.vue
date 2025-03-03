@@ -96,7 +96,7 @@ defineOptions({layout: Layout})
                             <div class="d-flex">
                                 <div class="avatar avatar-xl">
                                     <img src="/assets/img/avatar/01.jpg" class="img-fluid avatar-img rounded-circle" alt="users-avatar" v-if="!userInfo.profile_picture">
-                                    <img :src="'/storage/'+userInfo.profile_picture.url" class="img-fluid avatar-img rounded-circle" alt="users-avatar" v-else>
+                                    <img :src="'/storage/app/public/'+userInfo.profile_picture.url" class="img-fluid avatar-img rounded-circle" alt="users-avatar" v-else>
 
                                 </div>
                                 <div class="profile ml-2">

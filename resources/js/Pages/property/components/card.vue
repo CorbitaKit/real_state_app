@@ -15,8 +15,8 @@ const fetchProperty = () => {
 
 <template>
     <div class="card">
-        <a :href="'/storage/'+property.file.url" target="__blank" class="group relative block overflow-hidden">
-            <img :src="'/storage/'+property.file.url" alt="" class="w-full object-cover transition duration-500 group-hover:scale-105 sm:h-72"/>
+        <a :href="'/storage/app/public/'+property.file.url" target="__blank" class="group relative block overflow-hidden">
+            <img :src="'/storage/app/public/'+property.file.url" alt="" class="w-full object-cover transition duration-500 group-hover:scale-105 sm:h-72"/>
         </a>
         <div class="relative border border-gray-100 bg-white p-6">
             <h3 class="mt-4 text-lg font-medium text-gray-900">Phase {{ property.phase }}</h3>

@@ -46,7 +46,7 @@ defineExpose({ showModal });
             <img src="/Sidebar Logo.png" alt="RealEstateApp Logo" class="tw-h-12">
             </div>
           <!-- Image -->
-          <img :src="'/storage/'+property.files[0]?.url" alt="Project Image" class="tw-w-full tw-rounded-lg tw-mb-2" />
+          <img :src="'/storage/app/public/'+property.files[0]?.url" alt="Project Image" class="tw-w-full tw-rounded-lg tw-mb-2" />
 
           <!-- Header -->
             <div class=" tw-mx-auto tw-px-6 tw-text-center">
@@ -60,7 +60,7 @@ defineExpose({ showModal });
           <!-- Details Grid -->
           <div class="tw-grid tw-grid-cols-2 tw-gap-4 tw-mb-6">
             <!-- Image -->
-          <img :src="'/storage/'+property.files[1]?.url" alt="Project Image" class="tw-w-full tw-rounded-lg tw-h-full tw-object-cover tw-mb-2" />
+          <img :src="'/storage/app/public/'+property.files[1]?.url" alt="Project Image" class="tw-w-full tw-rounded-lg tw-h-full tw-object-cover tw-mb-2" />
 
           <!-- Details Grid -->
           <div class="tw-grid tw-grid-cols-2 tw-gap-4 tw-mb-6">

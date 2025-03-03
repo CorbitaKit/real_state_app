@@ -231,10 +231,10 @@ defineOptions({layout: Layout})
                                             <i class="pi pi-search"></i>
                                         </template>
                                         <template #image>
-                                            <img :src="'/storage/'+client.files[0]?.url" alt="image" class="tw-h-[50px]"/>
+                                            <img :src="'/storage/app/public/'+client.files[0]?.url" alt="image" class="tw-h-[50px]"/>
                                         </template>
                                         <template #preview="slotProps">
-                                            <img :src="'/storage/'+client.files[0]?.url" alt="preview" :style="slotProps.style" @click="slotProps.onClick" />
+                                            <img :src="'/storage/app/public/'+client.files[0]?.url" alt="preview" :style="slotProps.style" @click="slotProps.onClick" />
                                         </template>
                                     </Image>
                                   </td>

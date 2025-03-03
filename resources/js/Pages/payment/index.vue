@@ -174,10 +174,10 @@ const setButton = () => {
                                             <i class="pi pi-search"></i>
                                         </template>
                                         <template #image>
-                                            <img :src="'/storage/'+payment.files[1]?.url" alt="image" class="tw-h-[50px]"/>
+                                            <img :src="'/storage/app/public/'+payment.files[1]?.url" alt="image" class="tw-h-[50px]"/>
                                         </template>
                                         <template #preview="slotProps">
-                                            <img :src="'/storage/'+payment.files[1]?.url" alt="preview" :style="slotProps.style" @click="slotProps.onClick" />
+                                            <img :src="'/storage/app/public/'+payment.files[1]?.url" alt="preview" :style="slotProps.style" @click="slotProps.onClick" />
                                         </template>
                                     </Image>
                                 </td>
@@ -209,10 +209,10 @@ const setButton = () => {
                                             <i class="pi pi-search"></i>
                                         </template>
                                         <template #image>
-                                            <img :src="'/storage/'+payment.files[0]?.url" alt="image" class="tw-h-[50px]"/>
+                                            <img :src="'/storage/app/public/'+payment.files[0]?.url" alt="image" class="tw-h-[50px]"/>
                                         </template>
                                         <template #preview="slotProps">
-                                            <img :src="'/storage/'+payment.files[0]?.url" alt="preview" :style="slotProps.style" @click="slotProps.onClick" />
+                                            <img :src="'/storage/app/public/'+payment.files[0]?.url" alt="preview" :style="slotProps.style" @click="slotProps.onClick" />
                                         </template>
                                     </Image>
                                 </td>

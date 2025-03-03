@@ -143,7 +143,7 @@ const clearNotification = () => {
                                 </div>
                                     <div class="avatar position-relative">
                                         <img class="avatar-img rounded-circle" src="/assets/img/avatar/02.jpg" alt="avatar-img" v-if="!user.profile_picture">
-                                        <img class="avatar-img rounded-circle" :src="'/storage/'+user.profile_picture.url" alt="avatar-img" v-else>
+                                        <img class="avatar-img rounded-circle" :src="'/storage/app/public/'+user.profile_picture.url" alt="avatar-img" v-else>
                                         <span class="bg-success user-status"></span>
                                     </div>
 
