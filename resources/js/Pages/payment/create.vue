@@ -69,7 +69,6 @@ const calculateRemainingBalance = (lot) => {
     const total_payment = lot.payments.reduce((sum, payment) => sum + payment.amount, 0)
 
 
-    form.amount = lot.lot_group.monthly_amortizations
 
     total.value =  lot.lot_group.monthly_amortizations
     return total_amount - total_payment
@@ -109,6 +108,7 @@ const checkAmountPaid = () => {
 
 const setLot = (lot) => {
     form.lot_id = lot.id
+    form.amount = lot.lot_group.monthly_amortizations
     remaining_balance.value = calculateRemainingBalance(lot)
 }
 

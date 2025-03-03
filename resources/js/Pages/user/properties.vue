@@ -157,6 +157,10 @@ const doTransfer = (lot) => {
                     </th>
 
                     <th class="text-left">
+                        Amount Paid
+                    </th>
+
+                    <th class="text-left">
                         Mode of Payment
                     </th>
 
@@ -179,6 +183,10 @@ const doTransfer = (lot) => {
                         </td>
                         <td>
                             <span v-if="plan.payment">{{ plan.payment.date_of_payment }}</span>
+                            <span v-else>-</span>
+                        </td>
+                        <td>
+                            <span v-if="plan.payment">{{ formatCurrency(plan.payment.amount) }}</span>
                             <span v-else>-</span>
                         </td>
                         <td>

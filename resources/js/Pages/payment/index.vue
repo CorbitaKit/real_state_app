@@ -194,7 +194,7 @@ const setButton = () => {
                                     Barangay {{ payment.lots[0].property.barangay }},<br>
                                     {{ payment.lots[0].property.city }},
                                     {{ payment.lots[0].property.province }},
-                                    Lot {{ payment.lots[0].id }}
+                                    Lot {{ payment.lot_id }}
 
                                 </td>
 

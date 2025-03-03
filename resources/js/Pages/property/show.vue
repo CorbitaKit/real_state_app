@@ -341,7 +341,7 @@ defineOptions({layout: Layout})
                                 </tr>
                             </thead>
                             <tbody class="mb-0">
-                                <tr v-for="lot in lots" :key="lot.id">
+                                <tr v-for="lot in property.lots.filter(lot => !(user.role.name === 'Client' && lot.status === 'Occupied'))" :key="lot.id">
                                     <td>
                                         {{ lot.name }}
                                     </td>

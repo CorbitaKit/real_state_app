@@ -14,7 +14,8 @@ class Transaction extends Model
         'property_id',
         'user_id',
         'total_amount',
-        'balance'
+        'balance',
+        'tcp'
     ];
 
     public function user(): HasOne
