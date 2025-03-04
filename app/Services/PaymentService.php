@@ -38,7 +38,6 @@ class PaymentService extends Service
 
         while ($amountPaid > 0) {
 
-            $amountPaid = $amountPaid - $lot->lotGroup->monthly_amortizations;
 
             if ($amountPaid <= 0) {
                 break;
@@ -76,8 +75,10 @@ class PaymentService extends Service
             ]);
             $payment->files()->save($file);
 
-            return $payment;
+            $amountPaid = $amountPaid - $lot->lotGroup->monthly_amortizations;
+
         }
+        return $payment;
 
 
     }
