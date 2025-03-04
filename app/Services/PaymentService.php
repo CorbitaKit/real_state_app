@@ -36,11 +36,11 @@ class PaymentService extends Service
         $amountPaid = $data['amount'];
         $lot = Lot::with('lotGroup')->where('id', $data['lot_id'])->first();
 
-        while ($amountPaid >= 0) {
+        while ($amountPaid > 0) {
 
             $amountPaid = $amountPaid - $lot->lotGroup->monthly_amortizations;
 
-            if ($amountPaid < 0) {
+            if ($amountPaid <= 0) {
                 break;
             }
 

@@ -37,6 +37,11 @@ class Payment extends Model
         return $this->hasMany(Lot::class, 'id');
     }
 
+    public function lot(): HasOne
+    {
+        return $this->hasOne(Lot::class, 'id', 'lot_id');
+    }
+
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);

@@ -24,6 +24,8 @@ const props = defineProps({
                 </div>
             </div>
         </div>
+    </div>
+    <div class="col-lg-5 col-xl-4 col-xxl-3 mb-3">
         <div class="card card-statistics border-0 shadow-none">
             <div class="card-body">
                 <div class="d-flex align-items-center w-100">
@@ -37,6 +39,8 @@ const props = defineProps({
                 </div>
             </div>
         </div>
+    </div>
+    <div class="col-lg-5 col-xl-4 col-xxl-3 mb-3">
         <div class="card card-statistics border-0 shadow-none">
             <div class="card-body">
                 <div class="d-flex align-items-center w-100">
@@ -50,6 +54,8 @@ const props = defineProps({
                 </div>
             </div>
         </div>
+    </div>
+    <div class="col-lg-5 col-xl-4 col-xxl-3 mb-3">
         <div class="card card-statistics mb-0 border-0 shadow-none">
             <div class="card-body">
                 <div class="d-flex align-items-center w-100">
