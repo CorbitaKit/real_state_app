@@ -76,9 +76,9 @@ class PaymentService extends Service
             ]);
             $payment->files()->save($file);
 
-
+            return $payment;
         }
-        return $payment;
+
 
     }
 
