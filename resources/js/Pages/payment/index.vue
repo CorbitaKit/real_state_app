@@ -189,12 +189,12 @@ const setButton = () => {
                                     {{ payment.date_of_payment }}
                                 </td>
                                 <td>
-                                    Phase {{ payment.lots[0].property.phase }},
-                                    Purok {{ payment.lots[0].property.purok }},
-                                    Barangay {{ payment.lots[0].property.barangay }},<br>
-                                    {{ payment.lots[0].property.city }},
-                                    {{ payment.lots[0].property.province }},
-                                    Lot {{ payment.lot_id }}
+                                    Phase {{ payment.lot.property.phase }},
+                                    Purok {{ payment.lot.property.purok }},
+                                    Barangay {{ payment.lot.property.barangay }},<br>
+                                    {{ payment.lot.property.city }},
+                                    {{ payment.lot.property.province }},
+                                    Lot {{ payment.lot.name }}
 
                                 </td>
 
