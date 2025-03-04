@@ -43,7 +43,7 @@ class DashboardController extends Controller
 
         } else {
 
-            $paymentPlans =  PaymentPlan::with('lot', 'lot.lotGroup', 'lot.property')->whereBetween('due_date', [$startOfWeek, $endOfWeek])->where('user_id', $user->id)->get();
+            $paymentPlans =  PaymentPlan::with('lot', 'lot.lotGroup', 'lot.property')->whereNull('payment_id')->whereBetween('due_date', [$startOfWeek, $endOfWeek])->where('user_id', $user->id)->get();
             $applications = Application::with('user.personal_info', 'lot.property')
             ->where('user_id', $user->id)
             ->latest()
@@ -53,8 +53,6 @@ class DashboardController extends Controller
             $clientLots = Lot::where('user_id', $user->id)->with(['user', 'property', 'lotGroup', 'payments', 'paymentPlans.payment', 'paymentPlans.lot.lotGroup'])->get();
 
         }
-
-
 
         // Overall Sales
         $overallSales = Payment::sum('amount');

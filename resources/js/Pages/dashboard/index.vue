@@ -65,7 +65,7 @@ defineOptions({ layout: Layout })
 
 <template>
     <div>
-        <div class="row">
+        <div class="row" v-if="user.role.name === 'Admin'">
             <Widget :properties="properties.length" :clients="clients.length" :applications="applications.length" :sales="sales.overall" v-if="user.role.name "/>
         </div>
         <div class="row" >
