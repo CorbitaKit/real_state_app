@@ -73,7 +73,7 @@
     "isEntry": true
   },
   "resources/js/app.js": {
-    "file": "assets/app-R6FFdzxT.js",
+    "file": "assets/app-CP25fdTN.js",
     "name": "app",
     "src": "resources/js/app.js",
     "isEntry": true,
@@ -81,7 +81,7 @@
       "node_modules/chart.js/auto/auto.mjs"
     ],
     "css": [
-      "assets/app-F61luX7h.css"
+      "assets/app-DEKaC1CC.css"
     ],
     "assets": [
       "assets/layers-BWBAp2CZ.png",
