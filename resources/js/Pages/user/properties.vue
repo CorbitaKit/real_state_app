@@ -22,10 +22,11 @@ const props = defineProps({
     users: Object
 })
 const chartOfAccountRef = ref()
-
+const paymentHistoryRef = ref()
+const printableRef = ref()
 
 const { handlePrint } = useVueToPrint({
-  content: chartOfAccountRef,
+  content: printableRef,
   documentTitle: "AwesomeFileName",
 });
 
@@ -84,6 +85,16 @@ const doTransfer = (lot) => {
     lot_id.value = lot.id
     transferOwnership.value = true
 }
+
+const doPrint = (printRef) => {
+    if (printRef == 'payment-history') {
+        printableRef.value = paymentHistoryRef.value
+    } else {
+        printableRef.value = chartOfAccountRef.value
+    }
+
+    handlePrint()
+}
 </script>
 
 <template>
@@ -95,34 +106,52 @@ const doTransfer = (lot) => {
         </select>
     </Dialog>
     <Dialog v-model:visible="visible" modal header="Payment History" :style="{ width: '50rem' }">
+        <div ref="paymentHistoryRef">
+            <v-table class="responsive">
+                                <tbody>
+                                    <tr>
+                                        <td></td>
+                                        <td>
+                                            <img src="/header.png" style="height: 100px;"/>
+                                        </td>
+                                        <td>
+                                            <h1 style="margin-left:100px;">JEFF ALDEBAL REALTY SERVICE</h1>
+                                        Door 3, CEASAR APARMENT, Sto. Niño, Carmen, Davao del Norte
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </v-table>
+                            <h1 class="text-center">PAYMENT HISTORY</h1>
+            <v-table>
+                <thead>
+                <tr>
+                    <th class="text-left">
+                    Amount
+                    </th>
+                    <th class="text-left">
+                    Mode Of Payment
+                    </th>
+                    <th class="text-left">
+                    Payment Date
+                    </th>
+                    <th class="text-left">
+                    Invoice Number
+                    </th>
 
-        <v-table>
-            <thead>
-            <tr>
-                <th class="text-left">
-                Amount
-                </th>
-                <th class="text-left">
-                Mode Of Payment
-                </th>
-                <th class="text-left">
-                Payment Date
-                </th>
-                <th class="text-left">
-                Invoice Number
-                </th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr v-for="payment in payments" :key="payment.id" >
+                    <td>{{ formatCurrency(payment.amount) }}</td>
+                    <td>{{ payment.mode_of_payment }}</td>
+                    <td>{{ payment.date_of_payment }}</td>
+                    <td>{{ payment.invoice_number }}</td>
+                </tr>
+                </tbody>
+            </v-table>
+        </div>
+        <button class="btn btn-block btn-info" @click="doPrint('payment-history')">Print</button>
 
-            </tr>
-            </thead>
-            <tbody>
-            <tr v-for="payment in payments" :key="payment.id" >
-                <td>{{ formatCurrency(payment.amount) }}</td>
-                <td>{{ payment.mode_of_payment }}</td>
-                <td>{{ payment.date_of_payment }}</td>
-                <td>{{ payment.invoice_number }}</td>
-            </tr>
-            </tbody>
-        </v-table>
     </Dialog>
     <Dialog v-model:visible="payment_plan" modal header="Payment Plan" :style="{ width: '60rem' }">
         <div ref="chartOfAccountRef">
@@ -206,7 +235,7 @@ const doTransfer = (lot) => {
                 </tbody>
             </v-table>
         </div>
-        <button class="btn btn-block btn-info" @click="handlePrint">Print</button>
+        <button class="btn btn-block btn-info" @click="doPrint('payment-breakdown')">Print</button>
     </Dialog>
     <!-- <div class="tw-mx-auto tw-bg-whitetw- tw-p-8 tw-my-8 tw-rounded tw-shadow-md">
         <div class="tw-relative tw-overflow-x-auto tw-mt-5">

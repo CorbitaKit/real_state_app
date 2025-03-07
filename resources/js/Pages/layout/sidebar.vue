@@ -64,7 +64,13 @@ const isActive = (path) => {
                     </a>
 
                 </li>
-                <li v-if="user.role.name === 'Admin'" :class="{active: isActive('/clients') || isActive('/users/create')}">
+                <li v-if="user.role.name === 'Admin'" >
+                    <a class="has-arrow" href="javascript:void(0)" aria-expanded="false">
+                        <i class="nav-icon ti ti-user"></i>
+                        <span class="nav-title">Users</span>
+                    </a>
+                    <ul aria-expanded="false">
+                        <li v-if="user.role.name === 'Admin'" :class="{active: isActive('/clients') || isActive('/users/create')}">
                     <a class="has-arrow" href="javascript:void(0)" aria-expanded="false">
                         <i class="nav-icon ti ti-user"></i>
                         <span class="nav-title">Staffs</span>
@@ -86,9 +92,13 @@ const isActive = (path) => {
 
                     </ul>
                 </li>
+
+                    </ul>
+                </li>
+
                 <li :class="{active: isActive('/applications')}" v-if="user.role.name === 'Admin' || user.role.name === 'Staff'">
                     <a href="/applications" aria-expanded="false">
-                        <i class="nav-icon ti ti-receipt"></i>
+                        <i class="nav-icon ti ti-file"></i>
                         <span class="nav-title">Application List</span>
                     </a>
 

@@ -8,6 +8,7 @@ import Property from './components/property.vue'
 import Staffs from './components/staff.vue'
 import Application from './components/application.vue'
 import {getUser} from '../plugins/get-user-plugin'
+import { convertAddress } from '../composables/sentenceCase.js'
 
 import Payment from './components/payment.vue'
 import Lot from './components/lot.vue'
@@ -56,6 +57,14 @@ const calculateRemainingBalance = (lot) => {
     const total_payment = lot.payments.reduce((sum, payment) => sum + payment.amount, 0)
 
     return total_amount - total_payment
+}
+
+const calculatePercentage = (lot) => {
+    const total_amount = lot.lot_group.sqr_meter * lot.lot_group.amount_per_sqr_meter;
+    const total_payment = lot.payments.reduce((sum, payment) => sum + payment.amount, 0);
+
+    const percentage = (total_payment / total_amount) * 100;
+    return percentage.toFixed(2);
 }
 
 
@@ -130,7 +139,7 @@ defineOptions({ layout: Layout })
                                                 {{ formatCurrency( plan.lot.lot_group.monthly_amortizations) }}
                                             </td>
                                             <td>
-                                                <span>Block {{  plan.lot.block }} Phase{{  plan.lot.property.phase }} Barangay {{ plan.lot.property.barangay }} {{ plan.lot.property.city }} City</span>&nbsp;
+                                                <span>Block {{  plan.lot.block }}, phase{{  plan.lot.property.phase }}, barangay {{ plan.lot.property.barangay }}, {{ plan.lot.property.city }} city</span>&nbsp;
                                             </td>
                                             <td v-if="user.role.name === 'Admin'">
                                                 {{ plan.user.personal_info?.first_name }}
@@ -169,6 +178,10 @@ defineOptions({ layout: Layout })
                                         <th scope="col">
                                             Remaining Balance
                                         </th>
+                                        <th scope="col">
+                                            Payment Percentage
+                                        </th>
+
 
                                     </tr>
                                 </thead>
@@ -197,6 +210,9 @@ defineOptions({ layout: Layout })
                                         <td class="px-6 py-4">
                                             {{ formatCurrency(calculateRemainingBalance(lot)) }}
                                         </td>
+                                        <td class="px-6 py-4">
+                                            <ProgressBar :value="calculatePercentage(lot)" />
+                                        </td>
 
                                     </tr>
 
@@ -209,7 +225,6 @@ defineOptions({ layout: Layout })
         </div>
         <br>
         <div class="row" v-if="user.role.name != 'Client'">
-
             <Sales :daily="daily" :weekly="weekly" :monthly="monthly"/>
             <Application :clients="clients"/>
             <Payment :pending_payment="pending_payment" :approved_payment="approved_payment"/>

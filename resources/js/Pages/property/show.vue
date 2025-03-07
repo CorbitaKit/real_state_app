@@ -5,7 +5,7 @@ import { useConfirm } from "primevue/useconfirm";
 import { useForm, router } from '@inertiajs/vue3';
 import moment from 'moment';
 import { useToaster } from '../composables/toast'
-import { reactive, ref } from 'vue';
+import { reactive, ref, computed } from 'vue';
 import Swal from 'sweetalert2'
 import { toWords } from 'number-to-words';
 import { useVueToPrint } from "vue-to-print";
@@ -27,6 +27,17 @@ const contractRef = ref()
 const agree = ref(false)
 const filter = ref()
 const printableRef = ref()
+
+
+const selectedLanguage = ref("en");
+
+const termsText = {
+    en: "I HEREBY declare that the above statement is TRUE AND CORRECT, I agree to inform the owner if my reservation of the said Lots listed above will not be paid in full within 3 days from the time of reservation period, this reservation shall be automatically cancelled and forfeited. If the buyer wishes to discontinue the said installment all previous payments are non-refundable and subject for forfeiture.",
+    tl: "AKO AY NAGPAPATUNAY na ang nasa itaas na pahayag ay TOTOO AT TAMA, sumasang-ayon ako na ipaalam sa may-ari kung ang aking reserbasyon sa nasabing mga Lupa ay hindi mababayaran nang buo sa loob ng 3 araw mula sa oras ng reserbasyon, ang reserbasyon na ito ay awtomatikong makakansela at mawawala. Kung nais ng mamimili na itigil ang nasabing hulugan, lahat ng nakaraang pagbabayad ay hindi na maibabalik at mawawala.",
+    bis: "AKO NAGAPAMATUOD nga ang gitas-on nga pahayag mao ang TINUOD UG SAKTO, akong gikasabutan nga ipahibalo ang tag-iya kung ang akong reserbasyon sa maong mga Yuta dili mabayran sa tibuok sulod sa 3 ka adlaw gikan sa oras sa reserbasyon, ang reserbasyon awtomatikong makanselar ug mawala. Kung gusto sa mopalit nga undangon ang maong hulugan, tanan nga miaging bayad dili na mabalik ug mawala."
+};
+
+const translatedTerms = computed(() => termsText[selectedLanguage.value]);
 
 const contract_data = reactive({
     seller: '',
@@ -222,25 +233,33 @@ defineOptions({layout: Layout})
         </div>
     </div>
     <Dialog v-model:visible="terms" modal :style="{ width: '50rem' }">
-        <div class="card-header">
-            <h5 class="card-title">Terms and Conditions</h5>
-        </div>
-        <div class="card-body" style="max-height: 200px; overflow-y: auto;">
-            <p>
-                I HEREBY declare that the above statement is TRUE AND CORRECT, I agree to inform the owner if my reservation of the said Lots
-                listed above will not be paid in full within 3 days from the time of reservation period, this reservation shall be automatically
-                cancelled and forfeited.
-                If the buyer wishes to discontinue the said installment all previous payments are non-refundable and subject for forfeiture.
-            </p>
-        </div>
-        <div class="form-check mb-3">
-            <input class="form-check-input" v-model="agree" type="checkbox" id="termsCheckbox" required>
-            <label class="form-check-label" for="termsCheckbox">
-                I agree to the Terms and Conditions
-            </label>
-        </div>
-        <button type="submit" @click="sendApplication" class="btn btn-primary" :disabled="!agree" id="submitBtn">Submit</button>
-    </Dialog>
+    <div class="card-header">
+        <h5 class="card-title">Terms and Conditions</h5>
+    </div>
+
+    <!-- Language Selection -->
+    <div class="mb-3">
+        <label for="languageSelect" class="tw-font-bold">Select Language:</label>
+        <select v-model="selectedLanguage" class="form-select">
+            <option value="en">English</option>
+            <option value="tl">Tagalog</option>
+            <option value="bis">Bisaya</option>
+        </select>
+    </div>
+
+    <div class="card-body" style="max-height: 200px; overflow-y: auto;">
+        <p class="tw-font-bold">{{ translatedTerms }}</p>
+    </div>
+
+    <div class="form-check mb-3">
+        <input class="form-check-input" v-model="agree" type="checkbox" id="termsCheckbox" required>
+        <label class="form-check-label" for="termsCheckbox">
+            I agree to the Terms and Conditions
+        </label>
+    </div>
+
+    <button type="submit" @click="sendApplication" class="btn btn-primary" :disabled="!agree" id="submitBtn">Submit</button>
+</Dialog>
     <Dialog v-model:visible="payment_view" modal header="Payment History" :style="{ width: '50rem' }">
         <div ref="transactionRef">
             <v-table class="responsive">
@@ -312,7 +331,7 @@ defineOptions({layout: Layout})
     <Dialog v-model:visible="admin_apply" modal header="Select Client" :style="{ width: '50rem' }">
         <div class="tw-flex items-center tw-gap-4 tw-mb-4">
             <select  class="js-basic-single form-control" name="region" v-model="form.user_id">
-                <option  v-for="client in clients" :key="client.id" :value="client.id">{{ client.personal_info.first_name }} {{ client.personal_info.last_name }}</option>
+                <option  v-for="client in clients" :key="client.id" :value="client.id">{{ client.personal_info?.first_name }} {{ client.personal_info?.last_name }}</option>
             </select>
 
         </div>

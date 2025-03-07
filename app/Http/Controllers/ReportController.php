@@ -23,7 +23,7 @@ class ReportController extends Controller
     {
         $start_date = Carbon::parse($request->date_from)->format('Y-m-d');
         $end_date = Carbon::parse($request->date_to)->format('Y-m-d');
-        $client = $request->client;
+        $client = $request->client['first_name'] . ' ' . $request->client['last_name'];
         $payments = Payment::with('user.personal_info')->whereBetween('date_of_payment', [$start_date, $end_date])
         ->orWhereHas('user.personal_info', function ($query) use ($client) {
             $query->whereRaw("CONCAT(first_name, ' ', last_name) = ?", [$client]);

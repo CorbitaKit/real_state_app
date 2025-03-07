@@ -5,7 +5,10 @@ import FileUpload from '../components/fileupload.vue'
 import { router, useForm } from '@inertiajs/vue3'
 import { reactive, ref } from 'vue'
 import moment from 'moment'
+import { transformAddress } from '../composables/sentenceCase.js'
 import Swal from 'sweetalert2'
+import {getUser} from '../plugins/get-user-plugin'
+
 import { useVueToPrint } from "vue-to-print";
 
 const props = defineProps({
@@ -23,6 +26,8 @@ const printableRef = ref()
 const infoSheetRef = ref()
 const infosheet_view = ref(false)
 const clientInfo = ref()
+const { getUserInfo } = getUser()
+const user = getUserInfo()
 const form = useForm({
     file: {},
     lot_id: 0,
@@ -30,7 +35,8 @@ const form = useForm({
     amount: 0,
     user_id: 0,
     status: 'Pending',
-    date_of_payment: ''
+    date_of_payment: '',
+    reference_number: ''
 })
 
 const reportsData = reactive({
@@ -150,6 +156,19 @@ const setMonthlyAmount = () => {
 
     form.amount = lot.lot_group.monthly_amortizations
 }
+
+const convertAddress = (lot) => {
+    const transformedAddress = 'Phase ' + lot.property.phase + ', block ' + lot.block + ', ' + lot.name
+    return transformAddress(transformedAddress)
+}
+
+const generateTodaysDate = () => {
+    const today = new Date();
+    const options = { year: 'numeric', month: 'long', day: 'numeric' };
+    const formattedDate = today.toLocaleDateString('en-US', options);
+
+    return formattedDate
+}
 </script>
 
 <template>
@@ -187,6 +206,15 @@ const setMonthlyAmount = () => {
                             LOT: {{ reportsData.lot_number }}
                         </td>
                     </tr>
+                    <tr>
+
+<td>
+    PREPARED BY: {{ user.personal_info.first_name }} {{  user.personal_info.last_name }}
+</td>
+<td>
+    GENERATED ON: {{ generateTodaysDate() }}
+</td>
+</tr>
                 </tbody>
             </v-table>
             <v-table>
@@ -239,13 +267,18 @@ const setMonthlyAmount = () => {
         <div class="tw-flex tw-items-center tw-gap-4 tw-mb-4">
             <label for="username" class="tw-font-semibold tw-w-24">Lot</label>
             <select  class="js-basic-single form-control" name="lot" v-model="form.lot_id" @change="setMonthlyAmount">
-                <option  v-for="lot in client_lots" :value="lot.id" :key="lot.id">{{ lot.name }}</option>
+                <option  v-for="lot in client_lots" :value="lot.id" :key="lot.id">{{ convertAddress(lot) }}</option>
             </select>
         </div>
 
         <div class="tw-flex tw-items-center tw-gap-4 tw-mb-4">
             <label for="username" class="tw-font-semibold tw-w-24">Amount</label>
             <InputText class="tw-w-full tw-rounded-md" v-model="form.amount"/>
+
+        </div>
+        <div class="tw-flex tw-items-center tw-gap-4 tw-mb-4">
+            <label for="username" class="tw-font-semibold tw-w-24">Reference Number</label>
+            <InputText class="tw-w-full tw-rounded-md" v-model="form.reference_number"/>
 
         </div>
         <div class="tw-flex tw-items-center tw-gap-4 tw-mb-4">
@@ -407,6 +440,15 @@ const setMonthlyAmount = () => {
             <h1 class="text-center">BUYER'S INFORMATION SHEET</h1>
             <v-table class="border-none">
                 <tbody>
+                    <tr>
+
+<td colspan="3">
+    PREPARED BY: {{ user.personal_info.first_name }} {{  user.personal_info.last_name }}
+</td>
+<td colspan="3">
+    GENERATED ON: {{ generateTodaysDate() }}
+</td>
+</tr>
                     <tr>
                         <td>
                             FIRSTNAME: {{ clientInfo.first_name }}

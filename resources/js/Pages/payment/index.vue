@@ -127,6 +127,9 @@ const setButton = () => {
                                     Invoice Number
                                 </th>
                                 <th scope="col">
+                                    Reference Number
+                                </th>
+                                <th scope="col">
                                     Amount
                                 </th>
                                 <th scope="col">
@@ -164,6 +167,9 @@ const setButton = () => {
                                 </td>
                                 <td >
                                     {{ payment.invoice_number }}
+                                </td>
+                                <td >
+                                    {{ payment.reference_number }}
                                 </td>
                                 <td >
                                     {{formatCurrency(payment.amount) }}

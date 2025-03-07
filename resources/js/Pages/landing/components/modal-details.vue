@@ -1,6 +1,7 @@
 <script setup>
 import { defineExpose, ref } from "vue";
 import { router } from "@inertiajs/vue3";
+import Landmark from '../../property/components/landmark.vue'
 const showModal = ref(false);
 const props = defineProps({
     property: Object
@@ -52,7 +53,7 @@ defineExpose({ showModal });
             <div class=" tw-mx-auto tw-px-6 tw-text-center">
             <link href="https://fonts.googleapis.com/css2?family=Ultra&display=swap" rel="stylesheet">
             <h2 class="modal-datail-title">
-                Phase {{ property.phase }}, <span class="green-text">{{ property.city }} Project</span>
+                Phase {{ property.phase }}, <span class="green-text">{{ property.barangay }} Project</span>
             </h2>
             <p class="tw-text-gray-600 tw-mb-4 tw-text-[20px]">{{ property.barangay }}, {{ property.city }}, {{ property.province }}</p>
             </div>
@@ -60,8 +61,8 @@ defineExpose({ showModal });
           <!-- Details Grid -->
           <div class="tw-grid tw-grid-cols-2 tw-gap-4 tw-mb-6">
             <!-- Image -->
-          <img :src="'/storage/app/public/'+property.files[1]?.url" alt="Project Image" class="tw-w-full tw-rounded-lg tw-h-full tw-object-cover tw-mb-2" />
-
+          <!-- <img :src="'/storage/app/public/'+property.files[1]?.url" alt="Project Image" class="tw-w-full tw-rounded-lg tw-h-full tw-object-cover tw-mb-2" /> -->
+            <Landmark :property="property" />
           <!-- Details Grid -->
           <div class="tw-grid tw-grid-cols-2 tw-gap-4 tw-mb-6">
             <!-- Lot Sizes and Payments -->
@@ -94,9 +95,9 @@ defineExpose({ showModal });
           <div class="tw-mt-6 tw-flex tw-justify-between">
             <button
               class="tw-bg-[#093E00] tw-text-white tw-py-2 tw-px-6 tw-rounded-md hover:tw-bg-[#072A00]"
-              @click="redirect"
+
             >
-              View Actual Map
+              Click the map marker to view property details
             </button>
             <button
               class="tw-bg-[#FFB800] tw-text-white tw-py-2 tw-px-6 tw-rounded-md hover:tw-bg-[#e6a400]"
