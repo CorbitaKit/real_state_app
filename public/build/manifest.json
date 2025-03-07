@@ -62,7 +62,7 @@
     "src": "node_modules/primevue/resources/themes/aura-light-green/fonts/Inter-roman.var.woff2"
   },
   "resources/css/app.css": {
-    "file": "assets/app-Bz8NLA-n.css",
+    "file": "assets/app-BN0KEiZJ.css",
     "src": "resources/css/app.css",
     "isEntry": true
   },
@@ -73,7 +73,7 @@
     "isEntry": true
   },
   "resources/js/app.js": {
-    "file": "assets/app-C4Aam6GZ.js",
+    "file": "assets/app-BXlc8L2c.js",
     "name": "app",
     "src": "resources/js/app.js",
     "isEntry": true,

@@ -23,7 +23,7 @@
     <div class="tw-grid tw-grid-cols-1 md:tw-grid-cols-2 tw-gap-10">
       <!-- Property Image -->
       <div>
-        <img :src="'/storage/app/public/' + property.file.url" alt="Property Image" class="tw-w-full tw-h-64 tw-object-cover tw-rounded-lg tw-shadow-lg tw-mb-6">
+        <img :src="'/storage/app/public/' + property.file.url" alt="Property Image" class="tw-w-[100px] tw-h-[100px] tw-object-cover tw-rounded-lg tw-shadow-lg tw-mb-6">
           <DataTable showGridlines  :value="property.lot_groups" tableStyle="min-width: 30rem">
             <Column field="sqr_meter" header="Square Meter">
               <template #body="slotProps">
