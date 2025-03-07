@@ -62,7 +62,7 @@
     "src": "node_modules/primevue/resources/themes/aura-light-green/fonts/Inter-roman.var.woff2"
   },
   "resources/css/app.css": {
-    "file": "assets/app-BN0KEiZJ.css",
+    "file": "assets/app-c9m1hU0H.css",
     "src": "resources/css/app.css",
     "isEntry": true
   },
@@ -73,7 +73,7 @@
     "isEntry": true
   },
   "resources/js/app.js": {
-    "file": "assets/app-BXlc8L2c.js",
+    "file": "assets/app-DoVF_w-n.js",
     "name": "app",
     "src": "resources/js/app.js",
     "isEntry": true,
@@ -81,7 +81,7 @@
       "node_modules/chart.js/auto/auto.mjs"
     ],
     "css": [
-      "assets/app-CdINYdDp.css"
+      "assets/app-aKK-H0VU.css"
     ],
     "assets": [
       "assets/layers-BWBAp2CZ.png",

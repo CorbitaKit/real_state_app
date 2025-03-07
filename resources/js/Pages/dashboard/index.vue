@@ -78,11 +78,11 @@ defineOptions({ layout: Layout })
             <Widget :properties="properties.length" :clients="clients.length" :applications="applications.length" :sales="sales.overall" v-if="user.role.name "/>
         </div>
         <div class="row" >
-            <div class="col-lg-5 col-xl-4 col-xxl-4 mb-3">
+            <div class="col-lg-5 col-xl-4 col-xxl-4 mb-3 ">
                 <div class="card-heading">
                     <h5 class="card-title">Applications Overview</h5>
                 </div>
-                <div class="card card-statistics border-0 shadow-none mb-0">
+                <div class="card card-statistics border-1 shadow-none mb-0 tw-shadow-xl">
 
                     <div class="card-body">
                         <div v-if="applications.length == 0">
@@ -114,7 +114,7 @@ defineOptions({ layout: Layout })
                     <h5 class="card-title">Upcoming Payments</h5>
                 </div>
                 <div class="scrollbar scroll_dark" >
-                    <div class="card card-statistics border-0 shadow-none mb-0">
+                    <div class="card card-statistics border-1 tw-shadow-xl mb-0 ">
                         <div class="card-body">
                             <div v-if="payment_plans.length == 0" class="flex items-center gap-4">
                                 No Upcoming Payment Yet
