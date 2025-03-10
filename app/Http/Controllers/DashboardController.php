@@ -132,6 +132,9 @@ class DashboardController extends Controller
         $daily = Payment::with('user.personal_info', 'lots.property')->get();
         $weekly = Payment::with('user.personal_info', 'lots.property')->orderBy('created_at','desc')->get();
         $monthly =  Payment::with('user.personal_info', 'lots.property')->get();
+
+
+
         return Inertia::render('dashboard/index', [
             'daily' => $daily,
             'weekly' => $weekly,

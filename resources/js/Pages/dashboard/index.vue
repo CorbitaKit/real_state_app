@@ -189,12 +189,12 @@ defineOptions({ layout: Layout })
                                     <tr  v-for="lot in lots" :key="lot.id">
                                         <td class="px-6 py-4">
 
-                                            Phase {{ lot.property.phase }},
-                                            purok {{ lot.property.purok }},
-                                            barangay {{ lot.property.barangay }},
-                                            {{ lot.property.city }},
-                                            {{ lot.property.province }},
-                                            {{ lot.name }}
+                                            Phase {{ lot.property.phase.toLowerCase() }},
+                                            purok {{ lot.property.purok.toLowerCase() }},
+                                            barangay {{ lot.property.barangay.toLowerCase() }},
+                                            {{ lot.property.city.toLowerCase() }},
+                                            {{ lot.property.province.toLowerCase() }},
+                                            {{ lot.name.toLowerCase() }}
 
                                         </td>
                                         <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">

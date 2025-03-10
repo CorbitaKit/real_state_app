@@ -199,7 +199,8 @@ defineOptions({layout: Layout})
                                     Length Of Service
                                   </td>
                                   <td>
-                                    {{ client.work_details.length_of_stay }}
+                                    <span v-if="client.work_details.length_of_stay_month">{{ client.work_details.length_of_stay_month }} Month(s)</span>
+                                    <span v-if="client.work_details.length_of_stay_year">{{ client.work_details.length_of_stay_year }} Year(s)</span>
 
                                   </td>
                                 </tr>
@@ -348,12 +349,12 @@ defineOptions({layout: Layout})
                                         {{ application.reserved_date }}
                                     </td>
                                     <td>
-                                        Phase {{ application.lot.property.phase }},
-                                        purok {{ application.lot.property.purok }},
-                                        barangay {{ application.lot.property.barangay }},<br>
-                                        {{ application.lot.property.city }},
-                                        {{ application.lot.property.province }},
-                                        <span v-if="application.type === 'Lot Application'">Lot {{ application.lot.id }} </span>
+                                        Phase {{ application.lot.property.phase.toLowerCase() }},
+                                        purok {{ application.lot.property.purok.toLowerCase() }},
+                                        barangay {{ application.lot.property.barangay.toLowerCase() }},<br>
+                                        {{ application.lot.property.city.toLowerCase() }},
+                                        {{ application.lot.property.province.toLowerCase() }},
+                                        <span v-if="application.type === 'Lot Application'">lot {{ application.lot.id }} </span>
                                     </td>
                                     <td >
                                         <span class="badge badge-info" v-if="application.status === 'For Review'">

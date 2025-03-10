@@ -68,8 +68,8 @@ defineExpose({ showModal });
             rel="stylesheet"
           />
           <h2 class="modal-datail-title">
-            Phase {{ property.phase }},
-            <span class="green-text">{{ property.barangay }} Project</span>
+            Phase {{ property.phase.toLowerCase() }} -
+            <span class="green-text">{{ property.barangay.toLowerCase() }} Project</span>
           </h2>
           <p class="tw-text-gray-600 tw-mb-4 tw-text-[20px]">
             {{ property.barangay }}, {{ property.city }}, {{ property.province }}
@@ -77,9 +77,9 @@ defineExpose({ showModal });
         </div>
 
         <!-- Details Grid and Lot Sizes & Payments Side by Side -->
-<div class="tw-grid md:tw-grid-cols-2 tw-gap-4 tw-mb-6">
+<div class="tw-grid tw-mb-6">
   <!-- Landmark Section -->
-  <div>
+  <div class="tw-grid tw-mb-6">
     <Landmark :property="property" />
   </div>
 

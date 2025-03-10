@@ -52,7 +52,7 @@
 
     <div class="tw-mt-8">
       <h3 class="tw-text-2xl tw-font-semibold tw-text-green-600">Location</h3>
-      <p class="tw-text-gray-700">Phase {{ property.phase }}, Purok {{ property.purok }}, Barangay {{ property.barangay }}, {{ property.city }}, {{ property.province }}</p>
+      <p class="tw-text-gray-700">Phase {{ property.phase.toLowerCase() }}, purok {{ property.purok.toLowerCase() }}, barangay {{ property.barangay.toLowerCase() }}, {{ property.city.toLowerCase() }}, {{ property.province.toLowerCase() }}</p>
     </div>
   </div>
 

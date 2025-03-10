@@ -23,7 +23,8 @@ const form = useForm({
     file: {},
     account_info: {
         email :'',
-        password:''
+        password:'',
+        password_confirmation: ''
     },
     personal_info: {
         first_name: '',
@@ -149,6 +150,14 @@ const validateAccountInfoData = () => {
             text: "Please fill out all fields",
         });
         return false;
+    } else if (form.account_info.password != form.account_info.password_confirmation) {
+        account_info_error.value = true
+        Swal.fire({
+            icon: "error",
+            title: "Oops...",
+            text: "Password does not match",
+        });
+        return false
     }
         return true;
 }

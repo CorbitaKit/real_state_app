@@ -64,7 +64,7 @@ const isActive = (path) => {
                     </a>
 
                 </li>
-                <li v-if="user.role.name === 'Admin'" >
+                <li v-if="user.role.name != 'Client'" >
                     <a class="has-arrow" href="javascript:void(0)" aria-expanded="false">
                         <i class="nav-icon ti ti-user"></i>
                         <span class="nav-title">Users</span>

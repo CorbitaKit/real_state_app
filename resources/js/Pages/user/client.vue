@@ -34,7 +34,7 @@ const form = useForm({
     mode_of_payment: 'Over the counter',
     amount: 0,
     user_id: 0,
-    status: 'Pending',
+    status: 'Confirmed',
     date_of_payment: '',
     reference_number: ''
 })
@@ -81,13 +81,14 @@ const calculateTotalAmount = (lot_group) => {
 }
 
 const makePayment = (client) => {
-    form.user = client.id
+    form.user_id = client.id
 
     payment.value = true
     client_lots.value = client.lots
 }
 
 const submitPayment = () => {
+
     form.transform((data) => {
 
       return {
@@ -208,13 +209,13 @@ const generateTodaysDate = () => {
                     </tr>
                     <tr>
 
-<td>
-    PREPARED BY: {{ user.personal_info.first_name }} {{  user.personal_info.last_name }}
-</td>
-<td>
-    GENERATED ON: {{ generateTodaysDate() }}
-</td>
-</tr>
+                        <td>
+                            PREPARED BY: {{ user.personal_info.first_name }} {{  user.personal_info.last_name }}
+                        </td>
+                        <td>
+                            GENERATED ON: {{ generateTodaysDate() }}
+                        </td>
+                    </tr>
                 </tbody>
             </v-table>
             <v-table>
@@ -327,12 +328,12 @@ const generateTodaysDate = () => {
             <tbody>
                 <tr v-for="payment in payments" :key="payment.id">
                     <td>
-                        Phase {{ payment.plan[0].lot.property.phase }},
-                        Block {{ payment.plan[0].lot.block }},
-                        Purok {{ payment.plan[0].lot.property.purok }},
-                        Barangay {{ payment.plan[0].lot.property.barangay }},
-                        {{ payment.plan[0].lot.property.city }} City,
-                        {{ payment.plan[0].lot.property.province }}
+                        Phase {{ payment.plan[0].lot.property.phase.toLowerCase() }},
+                        block {{ payment.plan[0].lot.block }},
+                        purok {{ payment.plan[0].lot.property.purok.toLowerCase() }},
+                        barangay {{ payment.plan[0].lot.property.barangay.toLowerCase() }},
+                        {{ payment.plan[0].lot.property.city.toLowerCase() }} city,
+                        {{ payment.plan[0].lot.property.province.toLowerCase() }}
                     </td>
                     <td>
                         {{ payment.plan?.due_date }}
@@ -385,6 +386,9 @@ const generateTodaysDate = () => {
                     Remaining Balance
                 </th>
                 <th class="text-left">
+                    Payment Percentage
+                </th>
+                <th class="text-left">
                     Action
                 </th>
 
@@ -393,12 +397,12 @@ const generateTodaysDate = () => {
             <tbody>
                 <tr v-for="lot in properties" :key="lot.id">
                     <td>
-                        Phase {{ lot.property.phase }},
-                        Block {{ lot.block }},
-                        Purok {{ lot.property.purok }},
-                        Barangay {{ lot.property.barangay }},<br>
-                        {{ lot.property.city }} City,
-                        {{ lot.property.province }}
+                        Phase {{ lot.property.phase.toLowerCase() }},
+                        block {{ lot.block }},
+                        purok {{ lot.property.purok.toLowerCase() }},
+                        barangay {{ lot.property.barangay.toLowerCase() }},<br>
+                        {{ lot.property.city.toLowerCase() }} city,
+                        {{ lot.property.province.toLowerCase() }}
                     </td>
 
                     <td> {{ lot.lot_group.sqr_meter }} Square Meter</td>
@@ -411,6 +415,9 @@ const generateTodaysDate = () => {
                     </td>
                     <td>
                        {{ formatCurrency(calculateRemainingBalance(lot)) }}
+                    </td>
+                    <td>
+                        <ProgressBar :value="lot.payment_percentage" />
                     </td>
                     <td>
                         <a  @click.prevent="generateReport(lot)" href="javascript:void(0);" class="tooltip-wrapper btn btn-icon btn-round btn-light" data-toggle="tooltip" data-placement="top" title="" data-original-title="Generate Chart Of Accounts"><i class="fas fa-print"></i></a>
@@ -442,13 +449,13 @@ const generateTodaysDate = () => {
                 <tbody>
                     <tr>
 
-<td colspan="3">
-    PREPARED BY: {{ user.personal_info.first_name }} {{  user.personal_info.last_name }}
-</td>
-<td colspan="3">
-    GENERATED ON: {{ generateTodaysDate() }}
-</td>
-</tr>
+                        <td colspan="3">
+                            PREPARED BY: {{ user.personal_info.first_name }} {{  user.personal_info.last_name }}
+                        </td>
+                        <td colspan="3">
+                            GENERATED ON: {{ generateTodaysDate() }}
+                        </td>
+                        </tr>
                     <tr>
                         <td>
                             FIRSTNAME: {{ clientInfo.first_name }}
@@ -571,6 +578,10 @@ const generateTodaysDate = () => {
                                     Gross Monthly Income
                                 </th>
                                 <th class="text-left">
+                                    Completed 80% Payment
+                                </th>
+
+                                <th class="text-left">
                                     Actions
                                 </th>
                             </tr>
@@ -590,6 +601,10 @@ const generateTodaysDate = () => {
                                 <td>{{ client.personal_info?.phone_number }}</td>
                                 <td>
                                     {{ formatCurrency(client.work_details?.gross_monthly_income) }}
+                                </td>
+                                <td>
+                                    <span class="mr-2 mb-2 mr-sm-0 mb-sm-0 badge badge-success" v-if="client.is_eighty_percent">Yes</span>
+                                    <span class="mr-2 mb-2 mr-sm-0 mb-sm-0 badge badge-warning" v-else>No</span>
                                 </td>
                                 <td>
                                     <div class="dropdown">

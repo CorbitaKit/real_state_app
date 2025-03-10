@@ -15,6 +15,6 @@ class PaymentRepository extends Repository
 
     public function getUserPayment(int $userId): Collection
     {
-        return $this->model->with($this->relations)->where('user_id', $userId)->get();
+        return $this->model->with($this->relations)->where('user_id', $userId)->orderBy('created_at', 'desc')->get();
     }
 }

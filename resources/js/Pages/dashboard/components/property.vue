@@ -44,12 +44,12 @@ const props = defineProps({
                             </td>
                             <td>{{ property.id }}</td>
                             <td>
-                                Phase {{ property.phase }},
+                                Phase {{ property.phase.toLowerCase() }},
 
-                                purok {{ property.purok }},
-                                barangay {{ property.barangay }},
-                                {{ property.city }} city,
-                                {{ property.province }}
+                                purok {{ property.purok.toLowerCase() }},
+                                barangay {{ property.barangay.toLowerCase() }},
+                                {{ property.city.toLowerCase() }} city,
+                                {{ property.province.toLowerCase() }}
 
                             </td>
                             <td>

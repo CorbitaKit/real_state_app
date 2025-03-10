@@ -203,6 +203,10 @@ defineOptions({layout: Layout})
                                         <label for="title1">Password</label>
                                         <input type="password" v-model="form.password" class="form-control" id="title1" >
                                     </div>
+                                    <div class="form-group col-md-12">
+                                        <label for="title1">Confirm Password</label>
+                                        <input type="password" v-model="form.password_confirmation" class="form-control" id="title1" >
+                                    </div>
 
                                 </div>
 
