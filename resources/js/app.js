@@ -38,6 +38,9 @@ import Password from 'primevue/password';
 import Tooltip from 'primevue/tooltip';
 import ProgressBar from 'primevue/progressbar';
 import Checkbox from 'primevue/checkbox';
+
+import ToggleButton from 'primevue/togglebutton';
+
 import { FilterMatchMode } from 'primevue/api';
 
 // import 'vuetify/styles'
@@ -90,6 +93,7 @@ createInertiaApp({
       .component('ColumnGroup', ColumnGroup)
       .component('Checkbox', Checkbox)
       .component('Row', Row)
+      .component('ToggleButton', ToggleButton)
       .mount(el)
   },
 })

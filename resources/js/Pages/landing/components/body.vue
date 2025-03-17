@@ -40,7 +40,7 @@ const openModal = (property) => {
                 >
                     <img :src="'/storage/app/public/'+property.files[0]?.url" alt="Phase 1 Image" class="tw-rounded-md tw-mb-4" />
                     <h4 class="tw-text-lg tw-font-semibold tw-mb-2">
-                        Phase {{ property.phase.toLowerCase() }} {{ property.barangay.toLowerCase() }} Project
+                        Phase {{ property.phase }} - {{ property.barangay }} Project
                     </h4>
                     <p class="tw-text-gray-600 tw-text-sm">
                     {{ property.barangay }}, {{ property.city }}, {{ property.province }}

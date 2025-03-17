@@ -68,8 +68,8 @@ defineExpose({ showModal });
             rel="stylesheet"
           />
           <h2 class="modal-datail-title">
-            Phase {{ property.phase.toLowerCase() }} -
-            <span class="green-text">{{ property.barangay.toLowerCase() }} Project</span>
+            Phase {{ property.phase }} -
+            <span class="green-text">{{ property.barangay }} Project</span>
           </h2>
           <p class="tw-text-gray-600 tw-mb-4 tw-text-[20px]">
             {{ property.barangay }}, {{ property.city }}, {{ property.province }}

@@ -177,6 +177,8 @@ const generateTodaysDate = () => {
                 </tbody>
             </v-table>
         </div>
+        <span>THIS IS SYSTEM GENERATED REPORT</span>
+
     </div>
     <button @click="handlePrint" type="button" class="btn btn-secondary pull-right">Print</button>
 </template>

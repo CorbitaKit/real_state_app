@@ -315,6 +315,8 @@ defineOptions({layout: Layout})
                     </tr>
                 </tbody>
             </v-table>
+            <span>THIS IS SYSTEM GENERATED REPORT</span>
+
         </div>
         <button class="btn btn-block btn-info" @click="print('payment-history')">Print</button>
     </Dialog>
@@ -498,16 +500,16 @@ defineOptions({layout: Layout})
                         <br>
 
                         <p class="MsoNormal" align="center" style="text-align:center;">
-                            <b>----------------------------------------</b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                            <b>---------------------------------------</b>
+                            <b><input style="border: none; border-bottom: 1px dotted black; outline: none;" /></b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                            <b><input style="border: none; border-bottom: 1px dotted black; outline: none;" /></b>
                             <br>
                             <span style="font-size:14pt;">SELLER</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                             <span style="font-size:14pt;">BUYER</span>
                         </p>
                         <br><br>
                         <p class="MsoNormal" align="center" style="text-align:center;">
-                            <b>----------------------------------------</b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                            <b>---------------------------------------</b>
+                            <b><input style="border: none; border-bottom: 1px dotted black; outline: none;" /></b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                            <b><input style="border: none; border-bottom: 1px dotted black; outline: none;" /></b>
                             <br>
                             <span style="font-size:14pt;">WITNESS 1</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                             <span style="font-size:14pt;">WINTESS 2</span>
@@ -515,6 +517,7 @@ defineOptions({layout: Layout})
                     </h1>
                 </div>
             </div>
+            <span>THIS IS SYSTEM GENERATED REPORT</span>
         </div>
         <a @click="print('contract')" href="javascript:void(0);" class="btn btn-block btn-round btn-outline-info">Print</a>
     </div>

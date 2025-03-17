@@ -17,6 +17,7 @@ return new class extends Migration
             $table->foreignId('user_id');
             $table->string('first_name');
             $table->string('last_name');
+            $table->string('middle_name')->nullable();
             $table->string('phone_number');
             $table->date('birth_day');
             $table->longText('address');

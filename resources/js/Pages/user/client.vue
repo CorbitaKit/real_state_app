@@ -3,16 +3,18 @@ import Layout from '../layout/main.vue'
 import Header from '../components/header.vue'
 import FileUpload from '../components/fileupload.vue'
 import { router, useForm } from '@inertiajs/vue3'
-import { reactive, ref } from 'vue'
+import { reactive, ref, watch } from 'vue'
 import moment from 'moment'
 import { transformAddress } from '../composables/sentenceCase.js'
 import Swal from 'sweetalert2'
 import {getUser} from '../plugins/get-user-plugin'
+import { debounce } from "lodash";
+import axios from 'axios'
 
 import { useVueToPrint } from "vue-to-print";
 
 const props = defineProps({
-    clients: Object
+    clients: Object,
 })
 const payment = ref(false)
 const payment_history = ref(false)
@@ -20,14 +22,21 @@ const payments = ref()
 const properties = ref()
 const property_view = ref(false)
 const client_lots = ref()
+const isPrinted = ref(false)
 const chart_view = ref(false)
 const chartOfAccountRef = ref()
 const printableRef = ref()
 const infoSheetRef = ref()
+const clientRef = ref()
+const client_view = ref(false)
 const infosheet_view = ref(false)
 const clientInfo = ref()
 const { getUserInfo } = getUser()
+const checked = ref(false)
+const filterText = ref()
 const user = getUserInfo()
+const clientPrint = ref()
+const clientList = ref(props.clients)
 const form = useForm({
     file: {},
     lot_id: 0,
@@ -46,6 +55,10 @@ const reportsData = reactive({
     lot_number: '',
     payments: {}
 })
+
+const clientFilter = () => {
+    console.log(filterText.value)
+}
 defineOptions({layout: Layout})
 
 
@@ -127,6 +140,8 @@ const print = (printRef) => {
         printableRef.value = chartOfAccountRef.value
     }else if (printRef === 'info-sheet') {
         printableRef.value = infoSheetRef.value
+    }else if(printRef === 'client-print') {
+        printableRef.value = clientRef.value
     }
     handlePrint()
 }
@@ -170,9 +185,94 @@ const generateTodaysDate = () => {
 
     return formattedDate
 }
+
+const viewClientWithEightPercent  = () => {
+    clientList.value = clientList.value.filter(client => client.is_eighty_percent === true);
+}
+
+const reset = () => {
+    clientList.value = props.clients
+}
+
+const printClientWith80Percent = () => {
+    clientPrint.value = props.clients.filter(client => client.is_eighty_percent === true);
+    client_view.value = true
+}
+watch(filterText, (newVal, oldVal) => {
+    if (!newVal) {
+        clientList.value = props.clients
+        return
+    }
+    axios.get('/filter-clients/' + newVal)
+    .then(res => {
+        console.log(res.data)
+        clientList.value = res.data
+    })
+})
 </script>
 
 <template>
+     <Dialog v-model:visible="client_view" modal :style="{ width: '60rem' }">
+        <div ref="clientRef">
+            <v-table class="responsive">
+                <tbody>
+                    <tr>
+                        <td></td>
+                        <td>
+                            <img src="/header.png" style="height: 100px;"/>
+                        </td>
+                        <td>
+                            <h1 style="margin-left:100px;">JEFF ALDEBAL REALTY SERVICE</h1>
+                        Door 3, CEASAR APARMENT, Sto. Niño, Carmen, Davao del Norte
+                        </td>
+                    </tr>
+                </tbody>
+            </v-table>
+            <h1 class="text-center">CLIENTS THAT COMPLETES 80% PAYMENT</h1>
+            <v-table>
+                <tbody>
+                    <tr>
+
+                        <td>
+                            PREPARED BY: {{ user.personal_info.first_name }} {{  user.personal_info.last_name }}
+                        </td>
+                        <td>
+                            GENERATED ON: {{ generateTodaysDate() }}
+                        </td>
+                    </tr>
+                </tbody>
+            </v-table>
+            <v-table>
+                <thead>
+
+                    <tr>
+                        <th class="text-left">
+                            FIRST NAME
+                        </th>
+                        <th class="text-left">
+                            LAST NAME
+                        </th>
+                        <th class="text-left">
+                            PHONE NUMBER
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr v-for="(client, i) in clientPrint" :key="i">
+                        <td>{{ client.personal_info.first_name }}</td>
+                        <td>{{ client.personal_info.last_name }}</td>
+                        <td>{{ client.personal_info.phone_number }}</td>
+
+                    </tr>
+                </tbody>
+            </v-table>
+            <br>
+            <span class="mt-4">THIS IS A SYSTEM GENERATED REPORT</span>
+
+        </div>
+        <button class="btn btn-block btn-info" @click="print('client-print')">Print</button>
+
+    </Dialog>
     <Dialog v-model:visible="chart_view" modal :style="{ width: '60rem' }">
         <div ref="chartOfAccountRef">
             <v-table class="responsive">
@@ -260,8 +360,12 @@ const generateTodaysDate = () => {
                     </tr>
                 </tbody>
             </v-table>
+            <br>
+            <span class="mt-4">THIS IS A SYSTEM GENERATED REPORT</span>
+
         </div>
         <button class="btn btn-block btn-info" @click="print('chart-of-account')">Print</button>
+
     </Dialog>
 
     <Dialog v-model:visible="payment" modal header="Make Payment" :style="{ width: '50rem' }">
@@ -328,12 +432,12 @@ const generateTodaysDate = () => {
             <tbody>
                 <tr v-for="payment in payments" :key="payment.id">
                     <td>
-                        Phase {{ payment.plan[0].lot.property.phase.toLowerCase() }},
-                        block {{ payment.plan[0].lot.block }},
-                        purok {{ payment.plan[0].lot.property.purok.toLowerCase() }},
-                        barangay {{ payment.plan[0].lot.property.barangay.toLowerCase() }},
-                        {{ payment.plan[0].lot.property.city.toLowerCase() }} city,
-                        {{ payment.plan[0].lot.property.province.toLowerCase() }}
+                        Phase {{ payment.plan[0].lot.property.phase }},
+                        Block {{ payment.plan[0].lot.block }},
+                        Purok {{ payment.plan[0].lot.property.purok }},
+                        Barangay {{ payment.plan[0].lot.property.barangay }},
+                        {{ payment.plan[0].lot.property.city }} City,
+                        {{ payment.plan[0].lot.property.province }}
                     </td>
                     <td>
                         {{ payment.plan?.due_date }}
@@ -397,12 +501,12 @@ const generateTodaysDate = () => {
             <tbody>
                 <tr v-for="lot in properties" :key="lot.id">
                     <td>
-                        Phase {{ lot.property.phase.toLowerCase() }},
-                        block {{ lot.block }},
-                        purok {{ lot.property.purok.toLowerCase() }},
-                        barangay {{ lot.property.barangay.toLowerCase() }},<br>
-                        {{ lot.property.city.toLowerCase() }} city,
-                        {{ lot.property.province.toLowerCase() }}
+                        Phase {{ lot.property.phase }},
+                        Block {{ lot.block }},
+                        Purok {{ lot.property.purok }},
+                        Barangay {{ lot.property.barangay }},<br>
+                        {{ lot.property.city }} City,
+                        {{ lot.property.province }}
                     </td>
 
                     <td> {{ lot.lot_group.sqr_meter }} Square Meter</td>
@@ -461,7 +565,7 @@ const generateTodaysDate = () => {
                             FIRSTNAME: {{ clientInfo.first_name }}
                         </td>
                         <td>
-                            MI:
+                            MI: {{ clientInfo.middle_name }}
                         </td>
                         <td colspan="4">
                             SURNAME: {{ clientInfo.last_name }}
@@ -510,17 +614,18 @@ const generateTodaysDate = () => {
                     </tr>
                     <tr>
                         <td colspan="2">
-                           SALES DIRECTOR
+                           SALES DIRECTOR <Input style="border:0;"/>
                         </td>
                         <td colspan="2">
-                           AGENT NAME
+                           AGENT NAME <Input style="border:0;"/>
                         </td>
                         <td colspan="2">
-                           AGENT NAME
+                           AGENT NAME <Input style="border:0;"/>
                         </td>
                     </tr>
                 </tbody>
             </v-table>
+            <span class="text-center">THIS IS A SYSTEM GENERATED REPORT</span>
 
         </div>
         <button class="btn btn-block btn-info" @click="print('info-sheet')">Print</button>
@@ -559,9 +664,28 @@ const generateTodaysDate = () => {
                             <h5 class="card-title">Client Lists</h5>
                         </div>
 
+                        <div class="card flex justify-content-center">
+                            <div class="dropdown">
+                                <a class="p-2" href="#!" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    <i class="fe fe-settings"></i>
+                                </a>
+                                <div class="dropdown-menu custom-dropdown dropdown-menu-right p-4">
+                                    <h6 class="mb-1">Action</h6>
+                                    <a @click.prevent="reset" class="dropdown-item" href="#!"><i class="fa-fw far fa-undo pr-2"></i>Reset Filter</a>
+                                    <a @click.prevent="viewClientWithEightPercent" class="dropdown-item" href="#!"><i class="fa-fw far fa-buffer pr-2"></i>View Clients with eighty percent payment</a>
+                                    <a @click.prevent="printClientWith80Percent" class="dropdown-item" href="#!"><i class=" pr-2"></i>Print Clients with eighty percent payment</a>
+                                </div>
+                            </div>
+                        </div>
+
                     </div>
                 </div>
                 <div class="card-body table-responsive">
+                    <div class="row mb-4">
+                        <div class="col-md-12">
+                            <InputText placeholder="...Search" v-model="filterText" class="tw-w-[300px] float-right" />
+                        </div>
+                    </div>
                     <table class="table mb-0 table-border-3">
                         <thead>
                             <tr>
@@ -588,7 +712,7 @@ const generateTodaysDate = () => {
                         </thead>
                         <tbody>
 
-                            <tr v-for="client in clients" :key="client.id">
+                            <tr v-for="client in clientList" :key="client.id">
                                 <td>
                                     <div class="">
                                         <div class="avatar avatar-lg mr-2">

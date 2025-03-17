@@ -29,6 +29,7 @@ const form = useForm({
     personal_info: {
         first_name: '',
         last_name: '',
+        middle_name: '',
         phone_number: '',
         birth_day: '',
     },

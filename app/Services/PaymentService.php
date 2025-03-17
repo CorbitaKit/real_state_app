@@ -63,9 +63,15 @@ class PaymentService extends Service
 
                 // Attach to a payment plan if available
                 $paymentPlan = PaymentPlan::where('lot_id', $payment->lot_id)->whereNull('payment_id')->first();
+                $totalPayment = Payment::where('lot_id', $payment->lot_id)->sum('amount');
                 if ($paymentPlan) {
                     $paymentPlan->payment_id = $payment->id;
+
+                    $paymentPlan->total_amount_paid = $totalPayment;
+                    $paymentPlan->remaining_balance -= $payment->amount;
                     $paymentPlan->save();
+
+
                 }
 
                 // Handle file upload if a file exists

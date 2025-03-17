@@ -248,11 +248,11 @@ defineOptions({layout: Layout})
         <div class="card-header d-flex justify-content-between tw-text-xl tw-font-weight-bold">
             <div class="card-heading">
                 <h5 >
-                    Phase {{ property.phase.toLowerCase() }},
-                    purok {{ property.purok.toLowerCase() }},
-                    barangay {{ property.barangay.toLowerCase() }},
-                    {{ property.city }} city,
-                    {{ property.province.toLowerCase() }}
+                    Phase {{ property.phase }},
+                    Purok {{ property.purok }},
+                    Barangay {{ property.barangay }},
+                    {{ property.city }} City,
+                    {{ property.province }}
                 </h5>
                 <h4>{{ property.description }}</h4>
             </div>
