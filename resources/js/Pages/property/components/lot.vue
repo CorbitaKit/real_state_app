@@ -103,7 +103,7 @@ const calculateMonthly = (lot_group) => {
     //     lot.monthly_amortizations = monthly
     // })
 
-    lot_group.monthly_amortizations = lot_group.total_amount / useProperty.property.balance_payable
+    lot_group.monthly_amortizations = (lot_group.total_amount / useProperty.property.balance_payable) / 2
     useProperty.property.down_payment = lot_group.monthly_amortizations
 
 }
@@ -124,7 +124,7 @@ const calculateMonthly = (lot_group) => {
                         <div class="form-row">
                             <div class="form-group col-md-6">
                                 <label for="inputEmail4">Number of Lots</label>
-                                <InputNumber :min="0" :max="100" @blur="setLots" v-model="useProperty.property.number_of_lot" inputId="integeronly" class="w-100" />
+                                <InputNumber :min="0" :max="500" @blur="setLots" v-model="useProperty.property.number_of_lot" inputId="integeronly" class="w-100" />
 
                             </div>
                             <!-- <div class="form-group col-md-6">
