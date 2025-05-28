@@ -17,38 +17,44 @@ class DashboardController extends Controller
 {
     public function index()
     {
+        $startOfWeek = Carbon::now()->startOfWeek(); // Monday
+        $endOfWeek = Carbon::now()->endOfWeek(); // Sunday
         $user = Auth::user();
         $currentUser = User::with('personal_info')->where('id', $user->id)->first();
 
         if (!$currentUser->personal_info) {
             return redirect()->back();
         }
-        $clients = User::with('personal_info', 'lots')
+        $clients = User::with('personal_info', 'lots.lotGroup', 'payments')
             ->where('role_id', 3)
             ->whereHas('personal_info')
             ->get();
+
         if ($user->role->name != 'Client') {
             $applications = Application::with('user.personal_info', 'lot.property')
             ->latest()
-            ->take(10)
+            ->take(5)
             ->get();
+            $applicationCounts = Application::get()->count();
             $payments = Payment::with('user.personal_info', 'files', 'lots')->get();
             $properties = Property::with('lots', 'files')->get();
+            $paymentPlans =  PaymentPlan::with('lot', 'lot.lotGroup', 'lot.property', 'user.personal_info')->whereBetween('due_date', [$startOfWeek, $endOfWeek])->
+            whereNull('payment_id')->limit(3)->get();
+
+
         } else {
-            $startOfWeek = Carbon::now()->startOfWeek(); // Monday
-            $endOfWeek = Carbon::now()->endOfWeek(); // Sunday
-            $paymentPlans =  PaymentPlan::with('lot', 'lot.lotGroup', 'lot.property')->whereBetween('due_date', [$startOfWeek, $endOfWeek])->where('user_id', $user->id)->get();
+
+            $paymentPlans =  PaymentPlan::with('lot', 'lot.lotGroup', 'lot.property')->whereNull('payment_id')->whereBetween('due_date', [$startOfWeek, $endOfWeek])->where('user_id', $user->id)->get();
             $applications = Application::with('user.personal_info', 'lot.property')
             ->where('user_id', $user->id)
             ->latest()
-            ->take(10)
+            ->take(5)
             ->get();
+
             $payments = Payment::with('user.personal_info', 'files', 'lots')->where('user_id', $user->id)->get();
             $clientLots = Lot::where('user_id', $user->id)->with(['user', 'property', 'lotGroup', 'payments', 'paymentPlans.payment', 'paymentPlans.lot.lotGroup'])->get();
 
         }
-
-
 
         // Overall Sales
         $overallSales = Payment::sum('amount');
@@ -125,14 +131,11 @@ class DashboardController extends Controller
 
 
 
-        $daily = Payment::with('user.personal_info', 'lots.property')->whereDate('created_at', Carbon::today())->orderBy('created_at','desc')->get();
-        $weekly = Payment::with('user.personal_info', 'lots.property')->whereBetween('created_at', [
-                    Carbon::now()->startOfWeek(),
-                    Carbon::now()->endOfWeek()
-                ])->orderBy('created_at','desc')->get();
-        $monthly =  Payment::with('user.personal_info', 'lots.property')->whereYear('created_at', Carbon::now()->year)
-                ->whereMonth('created_at', Carbon::now()->month)
-                ->orderBy('created_at','desc')->get();
+        $daily = Payment::with('user.personal_info', 'lots.property')->get();
+        $weekly = Payment::with('user.personal_info', 'lots.property')->orderBy('created_at','desc')->get();
+        $monthly =  Payment::with('user.personal_info', 'lots.property')->get();
+
+
 
         return Inertia::render('dashboard/index', [
             'daily' => $daily,
@@ -152,7 +155,8 @@ class DashboardController extends Controller
             'pending_lot' => $pendingLotCount,
             'occupied_lot' => $occupiedLotCount,
             'lots' => isset($clientLots) ? $clientLots : null,
-            'payment_plans' => isset($paymentPlans) ? $paymentPlans : null
+            'payment_plans' => isset($paymentPlans) ? $paymentPlans : null,
+            'total_applications' => isset($applicationCounts) ? $applicationCounts : 0
         ]);
     }
 }

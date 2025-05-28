@@ -127,6 +127,9 @@ const setButton = () => {
                                     Invoice Number
                                 </th>
                                 <th scope="col">
+                                    Reference Number
+                                </th>
+                                <th scope="col">
                                     Amount
                                 </th>
                                 <th scope="col">
@@ -166,6 +169,9 @@ const setButton = () => {
                                     {{ payment.invoice_number }}
                                 </td>
                                 <td >
+                                    {{ payment.reference_number }}
+                                </td>
+                                <td >
                                     {{formatCurrency(payment.amount) }}
                                 </td>
                                 <td >
@@ -174,10 +180,10 @@ const setButton = () => {
                                             <i class="pi pi-search"></i>
                                         </template>
                                         <template #image>
-                                            <img :src="'/storage/'+payment.files[1]?.url" alt="image" class="tw-h-[50px]"/>
+                                            <img :src="'/storage/app/public/'+payment.files[1]?.url" alt="image" class="tw-h-[50px]"/>
                                         </template>
                                         <template #preview="slotProps">
-                                            <img :src="'/storage/'+payment.files[1]?.url" alt="preview" :style="slotProps.style" @click="slotProps.onClick" />
+                                            <img :src="'/storage/app/public/'+payment.files[1]?.url" alt="preview" :style="slotProps.style" @click="slotProps.onClick" />
                                         </template>
                                     </Image>
                                 </td>
@@ -189,12 +195,12 @@ const setButton = () => {
                                     {{ payment.date_of_payment }}
                                 </td>
                                 <td>
-                                    Phase {{ payment.lots[0].property.phase }},
-                                    Purok {{ payment.lots[0].property.purok }},
-                                    Barangay {{ payment.lots[0].property.barangay }},<br>
-                                    {{ payment.lots[0].property.city }},
-                                    {{ payment.lots[0].property.province }},
-                                    Lot {{ payment.lot_id }}
+                                    Phase {{ payment.lot.property.phase }},
+                                    Purok {{ payment.lot.property.purok }},
+                                    Barangay {{ payment.lot.property.barangay }},<br>
+                                    {{ payment.lot.property.city }},
+                                    {{ payment.lot.property.province }},
+                                    {{ payment.lot.name }}
 
                                 </td>
 
@@ -209,10 +215,10 @@ const setButton = () => {
                                             <i class="pi pi-search"></i>
                                         </template>
                                         <template #image>
-                                            <img :src="'/storage/'+payment.files[0]?.url" alt="image" class="tw-h-[50px]"/>
+                                            <img :src="'/storage/app/public/'+payment.files[0]?.url" alt="image" class="tw-h-[50px]"/>
                                         </template>
                                         <template #preview="slotProps">
-                                            <img :src="'/storage/'+payment.files[0]?.url" alt="preview" :style="slotProps.style" @click="slotProps.onClick" />
+                                            <img :src="'/storage/app/public/'+payment.files[0]?.url" alt="preview" :style="slotProps.style" @click="slotProps.onClick" />
                                         </template>
                                     </Image>
                                 </td>

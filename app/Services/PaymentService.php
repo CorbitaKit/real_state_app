@@ -36,49 +36,69 @@ class PaymentService extends Service
         $amountPaid = $data['amount'];
         $lot = Lot::with('lotGroup')->where('id', $data['lot_id'])->first();
 
-        while ($amountPaid >= 0) {
+        // Get the latest payment for this lot
+        $lastPayment = Payment::where('lot_id', $data['lot_id'])->latest()->first();
+        $remainingBalance = $lot->lotGroup->monthly_amortizations - ($lastPayment->amount ?? 0);
 
-            $amountPaid = $amountPaid - $lot->lotGroup->monthly_amortizations;
+        while ($amountPaid > 0) {
+            $isPartialPaid = false;
 
-            if ($amountPaid < 0) {
-                break;
-            }
-
-            if ($amountPaid >= $lot->lotGroup->monthly_amortizations || $amountPaid == 0) {
-
-                $data['amount'] = $lot->lotGroup->monthly_amortizations;
+            if ($lastPayment && $lastPayment->amount < $lot->lotGroup->monthly_amortizations) {
+                // Adjust last payment to match expected amount
+                $lastPayment->amount += $remainingBalance;
+                $lastPayment->save();
+                $isPartialPaid = true;
             } else {
+                // Create a new payment entry
+                $data['amount'] = min($amountPaid, $lot->lotGroup->monthly_amortizations);
+                $payment = parent::doCreate($data);
 
-                $data['amount'] = $amountPaid;
+                // Send notification
+                Notification::create([
+                    'text' => 'There is a payment made by a client',
+                    'type' => 'payment',
+                    'is_read' => 0,
+                    'is_admin' => 1,
+                ]);
+
+                // Attach to a payment plan if available
+                $paymentPlan = PaymentPlan::where('lot_id', $payment->lot_id)->whereNull('payment_id')->first();
+                $totalPayment = Payment::where('lot_id', $payment->lot_id)->sum('amount');
+                if ($paymentPlan) {
+                    $paymentPlan->payment_id = $payment->id;
+
+                    $paymentPlan->total_amount_paid = $totalPayment;
+                    $paymentPlan->remaining_balance -= $payment->amount;
+                    $paymentPlan->save();
+
+
+                }
+
+                // Handle file upload if a file exists
+                if (!empty($data['file']['value'])) {
+                    $fileUpload = $data['file']['value'];
+                    $path = $this->uploadFile($fileUpload, 'files/payments');
+
+                    $file = $this->fileService->doCreate([
+                        'filename' => $fileUpload->getClientOriginalName(),
+                        'url' => $path
+                    ]);
+                    $payment->files()->save($file);
+                }
             }
-            $payment = parent::doCreate($data);
 
-            Notification::create([
-                'text' => 'There is a payment made by a client',
-                'type' => 'payment',
-                'is_read' => 0,
-                'is_admin' => 1,
-            ]);
-
-            $paymentPlans = PaymentPlan::where('lot_id', $payment->lot_id)->whereNull('payment_id')->first();
-
-            if ($paymentPlans) {
-                $paymentPlans->payment_id = $payment->id;
-                $paymentPlans->save();
+            // Deduct the amount paid
+            if ($isPartialPaid) {
+                $amountPaid -= $remainingBalance;
+            } else {
+                $amountPaid -= $data['amount'];
             }
 
-            $fileUpload = $data['file']['value'];
-            $path = $this->uploadFile($fileUpload, 'files/payments');
-
-            $file = $this->fileService->doCreate([
-                'filename' => $fileUpload->getClientOriginalName(),
-                'url' => $path
-            ]);
-            $payment->files()->save($file);
-
-
+            // Update last payment reference
+            $lastPayment = isset($payment) ? $payment : $lastPayment;
         }
-        return $payment;
+
+        return $lastPayment;
 
     }
 

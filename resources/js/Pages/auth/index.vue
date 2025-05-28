@@ -38,7 +38,7 @@ const togglePasswordVisibility = () => {
                     <div class="d-flex align-items-center">
 
                         <div class="login pt-4">
-          <img src="/logo101.png" alt="RealEstateApp Logo" class="tw-h-12">
+                        <img src="/logo101.png" alt="RealEstateApp Logo" class="tw-h-12">
 
 
 
@@ -77,7 +77,7 @@ const togglePasswordVisibility = () => {
                                                     Remember Me
                                                 </label>
                                             </div>
-                                            <a href="javascript:void(0);" class="ml-auto">Forgot Password ?</a>
+
                                         </div>
                                     </div>
                                     <div class="col-12 mt-3">

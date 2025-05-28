@@ -18,10 +18,10 @@ const submit = () => {
         const { number_of_lot, number_of_lot_groups, ...rest } = data;
         return {
             ...rest,
-            province: data.province.province_name,
-            city: data.city.city_name,
-            barangay: data.barangay.brgy_name,
-            region: data.region.region_name
+            province: data.province.province_name.toLowerCase(),
+            city: data.city.city_name.toLowerCase(),
+            barangay: data.barangay.brgy_name.toLowerCase(),
+            region: data.region.region_name.toLowerCase()
         };
     }).post('/properties', {
         onSuccess: (() => {
@@ -55,9 +55,9 @@ const redirect = (route) => {
                 <div class="page-title mb-2 mb-sm-0">
                     <h1>Properties</h1>
                 </div>
-                
+
                 <div class="ml-auto d-flex align-items-center">
-                    
+
                     <nav>
                         <ol class="breadcrumb p-0 m-b-0">
                             <li class="breadcrumb-item">
@@ -66,7 +66,7 @@ const redirect = (route) => {
                             <li class="breadcrumb-item">
                                 <a href="#" @click.prevent="redirect('/properties')">Properties</a>
                             </li>
-                        
+
                             <li class="breadcrumb-item active text-primary" aria-current="page">Create Property</li>
                         </ol>
                     </nav>

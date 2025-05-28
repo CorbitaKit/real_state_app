@@ -61,8 +61,20 @@
     "file": "assets/Inter-roman.var-C-r5W2Hj.woff2",
     "src": "node_modules/primevue/resources/themes/aura-light-green/fonts/Inter-roman.var.woff2"
   },
+  "resources/assets/images/marker-icon-2x.png": {
+    "file": "assets/marker-icon-2x-_ZA0WGCc.png",
+    "src": "resources/assets/images/marker-icon-2x.png"
+  },
+  "resources/assets/images/marker-icon.png": {
+    "file": "assets/marker-icon-hN30_KVU.png",
+    "src": "node_modules/leaflet/dist/images/marker-icon.png"
+  },
+  "resources/assets/images/marker-shadow.png": {
+    "file": "assets/marker-shadow-f7SaPCxT.png",
+    "src": "resources/assets/images/marker-shadow.png"
+  },
   "resources/css/app.css": {
-    "file": "assets/app-BWDyShrt.css",
+    "file": "assets/app-c9m1hU0H.css",
     "src": "resources/css/app.css",
     "isEntry": true
   },
@@ -73,7 +85,7 @@
     "isEntry": true
   },
   "resources/js/app.js": {
-    "file": "assets/app-fa0vBMXd.js",
+    "file": "assets/app-Bjng3nhD.js",
     "name": "app",
     "src": "resources/js/app.js",
     "isEntry": true,
@@ -81,12 +93,14 @@
       "node_modules/chart.js/auto/auto.mjs"
     ],
     "css": [
-      "assets/app-VC9skH5K.css"
+      "assets/app-BdFpWI73.css"
     ],
     "assets": [
+      "assets/marker-icon-2x-_ZA0WGCc.png",
+      "assets/marker-icon-hN30_KVU.png",
+      "assets/marker-shadow-f7SaPCxT.png",
       "assets/layers-BWBAp2CZ.png",
       "assets/layers-2x-Bpkbi35X.png",
-      "assets/marker-icon-hN30_KVU.png",
       "assets/Inter-roman.var-C-r5W2Hj.woff2",
       "assets/Inter-italic.var-DhD-tpjY.woff2",
       "assets/primeicons-DMOk5skT.eot",

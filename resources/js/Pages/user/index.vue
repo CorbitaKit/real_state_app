@@ -43,15 +43,15 @@ const deleteStaff = (id) => {
                 <div class="page-title mb-2 mb-sm-0">
                     <h1>Staffs</h1>
                 </div>
-                
+
                 <div class="ml-auto d-flex align-items-center">
-                    
+
                     <nav>
                         <ol class="breadcrumb p-0 m-b-0">
                             <li class="breadcrumb-item">
                                 <a href="#" @click="home('/dashboard')"><i class="ti ti-home"></i></a>
                             </li>
-                            
+
                             <li class="breadcrumb-item active text-primary" aria-current="page">Staffs</li>
                         </ol>
                     </nav>
@@ -68,7 +68,7 @@ const deleteStaff = (id) => {
                         <div class="card-heading">
                             <h5 class="card-title">Client Lists</h5>
                         </div>
-                       
+
                     </div>
                 </div>
                 <div class="card-body table-responsive">
@@ -90,7 +90,7 @@ const deleteStaff = (id) => {
                             </tr>
                         </thead>
                         <tbody>
-                            
+
                             <tr v-for="client in staffs">
                                 <td>
                                     <div class="d-flex align-items-center">
@@ -102,7 +102,7 @@ const deleteStaff = (id) => {
                                 </td>
                                 <td> {{ client.email }}</td>
                                 <td>{{ client.personal_info.phone_number }}</td>
-                               
+
                                 <td>
                                     <div class="dropdown">
                                             <a class="p-2" href="#!" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -111,7 +111,7 @@ const deleteStaff = (id) => {
                                             <div class="dropdown-menu custom-dropdown dropdown-menu-right p-4">
                                                 <h6 class="mb-1">Action</h6>
                                                 <a @click.prevent="deleteStaff(client.id)" class="dropdown-item" href="#!"><i class="fa-fw fas fa-trash pr-2"></i>Delete</a>
-                                                
+
                                             </div>
                                         </div>
                                 </td>

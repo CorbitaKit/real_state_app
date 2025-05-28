@@ -33,7 +33,8 @@ const form = useForm({
     mode_of_payment: '',
     amount: 0,
     user_id: user.id,
-    status: 'Pending'
+    status: 'Pending',
+    reference_number: ''
 })
 
 defineOptions({layout: Layout})
@@ -69,8 +70,6 @@ const calculateRemainingBalance = (lot) => {
     const total_payment = lot.payments.reduce((sum, payment) => sum + payment.amount, 0)
 
 
-
-    total.value =  lot.lot_group.monthly_amortizations
     return total_amount - total_payment
 }
 
@@ -109,6 +108,7 @@ const checkAmountPaid = () => {
 const setLot = (lot) => {
     form.lot_id = lot.id
     form.amount = lot.lot_group.monthly_amortizations
+    total.value = lot.lot_group.monthly_amortizations
     remaining_balance.value = calculateRemainingBalance(lot)
 }
 
@@ -179,7 +179,17 @@ const advancePayment = () => {
                 </div>
             </tab-content>
             <tab-content title="Upload Payment">
-                <FileUpload :file="form.file" />
+                <div class="tw-grid tw-grid-cols-2 tw-gap-4 tw-mx-9">
+                    <div class="tw-mb-4">
+                        <label for="phase" class="tw-block tw-text-gray-700 tw-font-semibold tw-mb-2">Reference Number</label>
+                        <InputText  v-model="form.reference_number"  fluid  class="tw-w-full"/>
+
+                    </div>
+                    <div class="tw-mb-4">
+                        <FileUpload :file="form.file" />
+                    </div>
+                </div>
+
             </tab-content>
 
         </form-wizard>

@@ -119,6 +119,10 @@ const generateTodaysDate = () => {
 
     return formattedDate
 }
+const capitalize = (value) => {
+  if (!value) return ''
+  return value.charAt(0).toUpperCase() + value.slice(1).toLowerCase()
+}
 defineOptions({layout: Layout})
 </script>
 
@@ -247,14 +251,14 @@ defineOptions({layout: Layout})
     <div class="card card-statistics">
         <div class="card-header d-flex justify-content-between tw-text-xl tw-font-weight-bold">
             <div class="card-heading">
-                <h5 class="card-title">
-                    Phase {{ property.phase }},
-                    Purok {{ property.purok }},
-                    Barangay {{ property.barangay }},
-                    {{ property.city }} City,
-                    {{ property.region }}
+                <h5 >
+                    Phase {{ capitalize(property.phase) }},
+                    Purok {{ capitalize(property.purok) }},
+                    Barangay {{ capitalize(property.barangay) }},
+                    {{ capitalize(property.city) }} City,
+                    {{ capitalize(property.province) }}
                 </h5>
-                <h4>{{ property.description }}</h4>
+                <h4>{{ capitalize(property.description) }}</h4>
             </div>
             <div>
                 <a v-if="user.role.name !== 'Client'" @click.prevent="uploadPic(property.id)" data-toggle="tooltip" data-placement="top" title="" data-original-title="Upload Property Map" href="javascript:void(0);" class="btn btn-xs btn-icon btn-round btn-outline-info"><i class="fas fa-upload"></i></a>

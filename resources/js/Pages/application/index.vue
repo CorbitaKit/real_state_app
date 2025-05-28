@@ -199,7 +199,8 @@ defineOptions({layout: Layout})
                                     Length Of Service
                                   </td>
                                   <td>
-                                    {{ client.work_details.length_of_stay }}
+                                    <span v-if="client.work_details.length_of_stay_month">{{ client.work_details.length_of_stay_month }} Month(s)</span>
+                                    <span v-if="client.work_details.length_of_stay_year">{{ client.work_details.length_of_stay_year }} Year(s)</span>
 
                                   </td>
                                 </tr>
@@ -231,10 +232,10 @@ defineOptions({layout: Layout})
                                             <i class="pi pi-search"></i>
                                         </template>
                                         <template #image>
-                                            <img :src="'/storage/'+client.files[0]?.url" alt="image" class="tw-h-[50px]"/>
+                                            <img :src="'/storage/app/public/'+client.files[0]?.url" alt="image" class="tw-h-[50px]"/>
                                         </template>
                                         <template #preview="slotProps">
-                                            <img :src="'/storage/'+client.files[0]?.url" alt="preview" :style="slotProps.style" @click="slotProps.onClick" />
+                                            <img :src="'/storage/app/public/'+client.files[0]?.url" alt="preview" :style="slotProps.style" @click="slotProps.onClick" />
                                         </template>
                                     </Image>
                                   </td>
@@ -349,8 +350,8 @@ defineOptions({layout: Layout})
                                     </td>
                                     <td>
                                         Phase {{ application.lot.property.phase }},
-                                        purok {{ application.lot.property.purok }},
-                                        barangay {{ application.lot.property.barangay }},<br>
+                                        Purok {{ application.lot.property.purok }},
+                                        Barangay {{ application.lot.property.barangay }},<br>
                                         {{ application.lot.property.city }},
                                         {{ application.lot.property.province }},
                                         <span v-if="application.type === 'Lot Application'">Lot {{ application.lot.id }} </span>
@@ -370,7 +371,7 @@ defineOptions({layout: Layout})
 
 
                                     <td v-if="user.role_id != 3">
-                                        <div class="dropdown">
+                                        <div class="dropdown" v-if="application.status === 'For Review'">
                                             <a class="p-2" href="#!" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                                 <i class="fe fe-more-horizontal"></i>
                                             </a>

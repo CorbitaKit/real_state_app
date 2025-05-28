@@ -56,7 +56,7 @@ class ApplicationService extends Service
 
         }
 
-        $lot = Lot::with('property')->where('id', $application->lot_id)->first();
+        $lot = Lot::with('property', 'lotGroup')->where('id', $application->lot_id)->first();
 
         $startDate = Carbon::now();
         $endDate = $startDate->copy()->addMonth((int)$lot->property->balance_payable);
@@ -71,13 +71,13 @@ class ApplicationService extends Service
             $newPaymentPlan->due_date = $startDate->copy();
             $newPaymentPlan->lot_id = $application->lot_id;
             $newPaymentPlan->user_id = $application->user_id;
-
+            $newPaymentPlan->remaining_balance = ($lot->lotGroup->sqr_meter * $lot->lotGroup->amount_per_sqr_meter);
             $newPaymentPlan->save();
 
 
         }
 
-        $this->sendMessage($application->id);
+        // $this->sendMessage($application->id);
 
         return $application;
     }

@@ -34,10 +34,10 @@ const props = defineProps({
                                             <i class="pi pi-search"></i>
                                         </template>
                                         <template #image>
-                                            <img :src="'/storage/'+property.files[0]?.url" alt="image" class="tw-h-[50px]"/>
+                                            <img :src="'/storage/app/public/'+property.files[0]?.url" alt="image" class="tw-h-[50px]"/>
                                         </template>
                                         <template #preview="slotProps">
-                                            <img :src="'/storage/'+property.files[0]?.url" alt="preview" :style="slotProps.style" @click="slotProps.onClick" />
+                                            <img :src="'/storage/app/public/'+property.files[0]?.url" alt="preview" :style="slotProps.style" @click="slotProps.onClick" />
                                         </template>
                                     </Image>
                                 </div>
@@ -45,10 +45,11 @@ const props = defineProps({
                             <td>{{ property.id }}</td>
                             <td>
                                 Phase {{ property.phase }},
+
                                 Purok {{ property.purok }},
-                                Barangay {{ property.barangay }}
+                                Barangay {{ property.barangay }},
                                 {{ property.city }} City,
-                                {{ property.region }}
+                                {{ property.province }}
 
                             </td>
                             <td>

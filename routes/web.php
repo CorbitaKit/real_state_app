@@ -75,4 +75,6 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
 
     Route::get('/notify-user/{user_id}', [UserController::class, 'notify']);
     Route::get('/lot-transfer/{user_id}/{lot_id}', [LotController::class, 'transferLot']);
+    Route::get('/filter-clients/{filter}', [ClientController::class, 'filterClient']);
+
 });

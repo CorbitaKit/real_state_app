@@ -3,16 +3,29 @@ import Layout from '../layout/main.vue'
 import Header from '../components/header.vue'
 import { router, useForm } from '@inertiajs/vue3'
 import { ref } from 'vue'
+import {getUser} from '../plugins/get-user-plugin'
+
+import { useVueToPrint } from "vue-to-print";
+const { getUserInfo } = getUser()
+const user = getUserInfo()
 
 const props = defineProps({
-    payments: Object
+    payments: Object,
+    clients: Object
 })
+const transactionRef = ref()
+const isPrinting = ref(false)
 const form = useForm({
     date_from: '',
     date_to: '',
     client: '',
     mode_of_payment: ''
 })
+
+const { handlePrint } = useVueToPrint({
+  content: transactionRef,
+  documentTitle: "AwesomeFileName",
+});
 
 const mode_of_payments = ref([
     {
@@ -34,42 +47,13 @@ const submit = () => {
 const filterReport = () => {
     form.post('/reports/filter')
 }
+const generateTodaysDate = () => {
+    const today = new Date();
+    const options = { year: 'numeric', month: 'long', day: 'numeric' };
+    const formattedDate = today.toLocaleDateString('en-US', options);
 
-const printDiv = () => {
-    const printContent = document.getElementById("printMe").outerHTML;
-    const printWindow = window.open("", "_blank");
-    printWindow.document.open();
-    printWindow.document.write(`
-        <html>
-            <head>
-                <title>Print Report</title>
-                <style>
-                    body {
-                        font-family: Arial, sans-serif;
-                        margin: 20px;
-                    }
-                    table {
-                        width: 100%;
-                        border-collapse: collapse;
-                    }
-                    th, td {
-                        border: 1px solid #ddd;
-                        padding: 8px;
-                    }
-                    th {
-                        background-color: #f2f2f2;
-                        text-align: left;
-                    }
-                </style>
-            </head>
-            <body>${printContent}</body>
-        </html>
-    `);
-    printWindow.document.close();
-    printWindow.focus();
-    printWindow.print();
-    printWindow.close();
-};
+    return formattedDate
+}
 </script>
 
 <template>
@@ -111,7 +95,9 @@ const printDiv = () => {
 
         <div class="tw-mb-4 tw-m-2">
             <label for="phase" class="tw-block tw-text-gray-700 tw-font-semibold tw-mb-2">Clients</label>
-            <InputText type="text" v-model="form.client" class="tw-block tw-appearance-none tw-w-full tw-px-3 tw-py-2 tw-border " placeholder="... Search Client"/>
+            <select  class="js-basic-single form-control tw-w-full" name="region" v-model="form.client">
+                <option  v-for="client in clients" :value="client.personal_info">{{ client.personal_info.first_name }} {{ client.personal_info.last_name }}</option>
+            </select>
         </div>
         <div class="tw-mb-4 tw-mt-3">
             <label for="region" class="tw-block tw-text-gray-700 tw-font-semibold tw-mb-2">Mode of payment</label>
@@ -124,51 +110,76 @@ const printDiv = () => {
             <button @click="filterReport" type="button" class="btn btn-secondary">Filter</button>
         </div>
     </div>
-    <div class="tw-mx-auto tw-bg-white tw-p-8 tw-my-8 tw-rounded tw-shadow-md"  >
+    <div class="tw-mx-auto tw-bg-white tw-p-8 tw-my-8 tw-rounded tw-shadow-md">
+        <div ref="transactionRef">
+            <v-table class="responsive">
+                <tbody>
+                    <tr>
+                        <td></td>
+                        <td>
+                            <img src="/header.png" style="height: 100px;"/>
+                        </td>
+                        <td>
+                            <h1 style="margin-left:100px;">JEFF ALDEBAL REALTY SERVICE</h1>
+                        Door 3, CEASAR APARMENT, Sto. Niño, Carmen, Davao del Norte
+                        </td>
+                    </tr>
+                </tbody>
+            </v-table>
+            <h1 class="text-center">Sales Report</h1>
+            <v-table>
+                <tbody>
 
-        <v-table id="printMe">
-            <thead>
-            <tr>
-                <th class="text-left">
-                Client Name
-                </th>
+                    <tr>
 
-                <th class="text-left">
-                Mode Of Payment
-                </th>
-                <th class="text-left">
-                Payment Date
-                </th>
+                        <td>
+                            PREPARED BY: {{ user.personal_info.first_name }} {{  user.personal_info.last_name }}
+                        </td>
+                        <td>
+                            GENERATED ON: {{ generateTodaysDate() }}
+                        </td>
+                    </tr>
+                </tbody>
+            </v-table>
+            <v-table>
+                <thead>
+                <tr>
+                    <th class="text-left">
+                    Client Name
+                    </th>
 
-                <th class="text-left">
-                Invoice Number
-                </th>
-                <th class="text-left">
-                Amount
-                </th>
+                    <th class="text-left">
+                    Mode Of Payment
+                    </th>
+                    <th class="text-left">
+                    Payment Date
+                    </th>
 
-            </tr>
-            </thead>
-            <tbody>
-            <tr v-for="payment in payments">
-                <td>{{payment.user?.personal_info?.first_name}} {{payment.user?.personal_info?.last_name}}</td>
+                    <th class="text-left">
+                    Invoice Number
+                    </th>
+                    <th class="text-left">
+                    Amount
+                    </th>
 
-                <td>{{ payment.mode_of_payment }}</td>
-                <td>{{ payment.date_of_payment }}</td>
-                <td>{{ payment.invoice_number }}</td>
-                <td>{{ payment.amount }}</td>
+                </tr>
+                </thead>
+                <tbody>
+                <tr v-for="payment in payments">
+                    <td>{{payment.user?.personal_info?.first_name}} {{payment.user?.personal_info?.last_name}}</td>
 
-            </tr>
+                    <td>{{ payment.mode_of_payment }}</td>
+                    <td>{{ payment.date_of_payment }}</td>
+                    <td>{{ payment.invoice_number }}</td>
+                    <td>{{ payment.amount }}</td>
+                </tr>
 
-            </tbody>
-        </v-table>
+                </tbody>
+            </v-table>
+        </div>
+        <span>THIS IS SYSTEM GENERATED REPORT</span>
+
     </div>
-    <button @click="printDiv" type="button" class="btn btn-secondary pull-right">Print</button>
+    <button @click="handlePrint" type="button" class="btn btn-secondary pull-right">Print</button>
 </template>
 
-<style scoped>
-@media print{
-  *{ display: none; }
-  table { display: block; }
-}
-</style>

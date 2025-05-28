@@ -96,7 +96,7 @@ defineOptions({layout: Layout})
                             <div class="d-flex">
                                 <div class="avatar avatar-xl">
                                     <img src="/assets/img/avatar/01.jpg" class="img-fluid avatar-img rounded-circle" alt="users-avatar" v-if="!userInfo.profile_picture">
-                                    <img :src="'/storage/'+userInfo.profile_picture.url" class="img-fluid avatar-img rounded-circle" alt="users-avatar" v-else>
+                                    <img :src="'/storage/app/public/'+userInfo.profile_picture.url" class="img-fluid avatar-img rounded-circle" alt="users-avatar" v-else>
 
                                 </div>
                                 <div class="profile ml-2">
@@ -162,7 +162,7 @@ defineOptions({layout: Layout})
                             <form>
                                 <div class="form-row">
                                     <div class="form-group col-md-12">
-                                        <label for="name1">Phase</label>
+                                        <label for="name1">Complete Address</label>
                                         <input type="text" v-model="form.address.complete_address" class="form-control" id="name1">
                                     </div>
                                     <div class="form-group col-md-12">
@@ -202,6 +202,10 @@ defineOptions({layout: Layout})
                                     <div class="form-group col-md-12">
                                         <label for="title1">Password</label>
                                         <input type="password" v-model="form.password" class="form-control" id="title1" >
+                                    </div>
+                                    <div class="form-group col-md-12">
+                                        <label for="title1">Confirm Password</label>
+                                        <input type="password" v-model="form.password_confirmation" class="form-control" id="title1" >
                                     </div>
 
                                 </div>

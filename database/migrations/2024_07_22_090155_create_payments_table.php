@@ -22,6 +22,7 @@ return new class extends Migration
             $table->string('status');
             $table->string('invoice_number')->nullable();
             $table->foreignId('acknowledged_by')->nullable();
+            $table->string('reference_number')->nullable();
         });
     }
 

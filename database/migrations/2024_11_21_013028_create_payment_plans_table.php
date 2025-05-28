@@ -18,6 +18,8 @@ return new class extends Migration
             $table->foreignId('payment_id')->nullable();
             $table->foreignId('lot_id');
             $table->foreignId('user_id');
+            $table->float('total_amount_paid')->nullable();
+            $table->float('remaining_balance');
             $table->boolean('is_sms_sent')->default(false);
         });
     }

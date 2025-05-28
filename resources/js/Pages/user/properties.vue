@@ -22,10 +22,11 @@ const props = defineProps({
     users: Object
 })
 const chartOfAccountRef = ref()
-
+const paymentHistoryRef = ref()
+const printableRef = ref()
 
 const { handlePrint } = useVueToPrint({
-  content: chartOfAccountRef,
+  content: printableRef,
   documentTitle: "AwesomeFileName",
 });
 
@@ -84,6 +85,18 @@ const doTransfer = (lot) => {
     lot_id.value = lot.id
     transferOwnership.value = true
 }
+
+const doPrint = (printRef) => {
+    if (printRef == 'payment-history') {
+        printableRef.value = paymentHistoryRef.value
+    } else {
+        printableRef.value = chartOfAccountRef.value
+    }
+
+    handlePrint()
+}
+
+
 </script>
 
 <template>
@@ -95,36 +108,55 @@ const doTransfer = (lot) => {
         </select>
     </Dialog>
     <Dialog v-model:visible="visible" modal header="Payment History" :style="{ width: '50rem' }">
+        <div ref="paymentHistoryRef">
+            <v-table class="responsive">
+                                <tbody>
+                                    <tr>
+                                        <td></td>
+                                        <td>
+                                            <img src="/header.png" style="height: 100px;"/>
+                                        </td>
+                                        <td>
+                                            <h1 style="margin-left:100px;">JEFF ALDEBAL REALTY SERVICE</h1>
+                                        Door 3, CEASAR APARMENT, Sto. Niño, Carmen, Davao del Norte
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </v-table>
+                            <h1 class="text-center">PAYMENT HISTORY</h1>
+            <v-table>
+                <thead>
+                <tr>
+                    <th class="text-left">
+                    Amount
+                    </th>
+                    <th class="text-left">
+                    Mode Of Payment
+                    </th>
+                    <th class="text-left">
+                    Payment Date
+                    </th>
+                    <th class="text-left">
+                    Invoice Number
+                    </th>
 
-        <v-table>
-            <thead>
-            <tr>
-                <th class="text-left">
-                Amount
-                </th>
-                <th class="text-left">
-                Mode Of Payment
-                </th>
-                <th class="text-left">
-                Payment Date
-                </th>
-                <th class="text-left">
-                Invoice Number
-                </th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr v-for="payment in payments" :key="payment.id" >
+                    <td>{{ formatCurrency(payment.amount) }}</td>
+                    <td>{{ payment.mode_of_payment }}</td>
+                    <td>{{ payment.date_of_payment }}</td>
+                    <td>{{ payment.invoice_number }}</td>
+                </tr>
+                </tbody>
+            </v-table>
+            <span>THIS IS SYSTEM GENERATED REPORT</span>
+        </div>
+        <button class="btn btn-block btn-info" @click="doPrint('payment-history')">Print</button>
 
-            </tr>
-            </thead>
-            <tbody>
-            <tr v-for="payment in payments" :key="payment.id" >
-                <td>{{ formatCurrency(payment.amount) }}</td>
-                <td>{{ payment.mode_of_payment }}</td>
-                <td>{{ payment.date_of_payment }}</td>
-                <td>{{ payment.invoice_number }}</td>
-            </tr>
-            </tbody>
-        </v-table>
     </Dialog>
-    <Dialog v-model:visible="payment_plan" modal header="Payment Plan" :style="{ width: '60rem' }">
+    <Dialog v-model:visible="payment_plan" modal header="Payment Plan" :style="{ width: '100rem' }">
         <div ref="chartOfAccountRef">
             <v-table class="responsive">
                                 <tbody>
@@ -170,6 +202,12 @@ const doTransfer = (lot) => {
                     <th class="text-left">
                         Invoice Number
                     </th>
+                    <th>
+                        Total Paid Amount
+                    </th>
+                    <th>
+                        Remaining Balance
+                    </th>
 
                 </tr>
                 </thead>
@@ -201,12 +239,23 @@ const doTransfer = (lot) => {
                             <span v-if="plan.payment">{{ plan.payment.invoice_number }}</span>
                             <span v-else>-</span>
                         </td>
+                        <td>
+                            <span v-if="plan.payment"> {{ formatCurrency(plan.total_amount_paid) }}</span>
+                            <span v-else> - </span>
+                        </td>
+                        <td>
+
+                            <span v-if="plan.payment"> {{ formatCurrency(plan.remaining_balance) }}</span>
+                            <span v-else> - </span>
+                        </td>
 
                     </tr>
                 </tbody>
             </v-table>
+            <span>THIS IS SYSTEM GENERATED REPORT</span>
+
         </div>
-        <button class="btn btn-block btn-info" @click="handlePrint">Print</button>
+        <button class="btn btn-block btn-info" @click="doPrint('payment-breakdown')">Print</button>
     </Dialog>
     <!-- <div class="tw-mx-auto tw-bg-whitetw- tw-p-8 tw-my-8 tw-rounded tw-shadow-md">
         <div class="tw-relative tw-overflow-x-auto tw-mt-5">
@@ -334,8 +383,8 @@ const doTransfer = (lot) => {
                                     <td class="px-6 py-4">
 
                                         Phase {{ lot.property.phase }},
-                                        purok {{ lot.property.purok }},
-                                        barangay {{ lot.property.barangay }},
+                                        Purok {{ lot.property.purok }},
+                                        Barangay {{ lot.property.barangay }},
                                         {{ lot.property.city }},
                                         {{ lot.property.province }},
                                         {{ lot.name }}

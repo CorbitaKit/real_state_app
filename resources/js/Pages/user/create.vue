@@ -23,11 +23,13 @@ const form = useForm({
     file: {},
     account_info: {
         email :'',
-        password:''
+        password:'',
+        password_confirmation: ''
     },
     personal_info: {
         first_name: '',
         last_name: '',
+        middle_name: '',
         phone_number: '',
         birth_day: '',
     },
@@ -149,6 +151,14 @@ const validateAccountInfoData = () => {
             text: "Please fill out all fields",
         });
         return false;
+    } else if (form.account_info.password != form.account_info.password_confirmation) {
+        account_info_error.value = true
+        Swal.fire({
+            icon: "error",
+            title: "Oops...",
+            text: "Password does not match",
+        });
+        return false
     }
         return true;
 }
@@ -213,7 +223,7 @@ const validatePersonalAddressData = () => {
 
                 <WorkInfoForm :work_details="form.work_details" @skip="is_skip = true" />
             </tab-content>
-            <tab-content title="Upload Proof of Income" v-if="is_client">
+            <tab-content title="Upload Requirements" v-if="is_client">
 
                 <fileupload :file="form.file" />
             </tab-content>

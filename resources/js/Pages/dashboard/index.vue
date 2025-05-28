@@ -8,6 +8,7 @@ import Property from './components/property.vue'
 import Staffs from './components/staff.vue'
 import Application from './components/application.vue'
 import {getUser} from '../plugins/get-user-plugin'
+import { convertAddress } from '../composables/sentenceCase.js'
 
 import Payment from './components/payment.vue'
 import Lot from './components/lot.vue'
@@ -38,6 +39,7 @@ const props = defineProps(
         occupied_lot : Number,
         lots: Object,
         payment_plans: Object,
+        total_applications: Number
     },
 
 
@@ -58,6 +60,14 @@ const calculateRemainingBalance = (lot) => {
     return total_amount - total_payment
 }
 
+const calculatePercentage = (lot) => {
+    const total_amount = lot.lot_group.sqr_meter * lot.lot_group.amount_per_sqr_meter;
+    const total_payment = lot.payments.reduce((sum, payment) => sum + payment.amount, 0);
+
+    const percentage = (total_payment / total_amount) * 100;
+    return percentage.toFixed(2);
+}
+
 
 defineOptions({ layout: Layout })
 </script>
@@ -65,41 +75,21 @@ defineOptions({ layout: Layout })
 
 <template>
     <div>
+        <div class="row" v-if="user.role.name === 'Admin'">
+            <Widget :properties="properties.length" :clients="clients.length" :applications="total_applications" :sales="sales.overall" v-if="user.role.name "/>
+        </div>
         <div class="row" >
-            <div class="col-lg-5 col-xl-4 col-xxl-4 mb-3" v-if="user.role.name === 'Client'">
-                <div class="card-heading">
-                    <h5 class="card-title">Upcoming Due Dates</h5>
-                </div>
-                <div class="card card-statistics border-0 shadow-none mb-0">
-
-                    <div class="card-body">
-                        <ul class="activity">
-                            <li class="activity-item primary" v-for="payment_plan in payment_plans">
-                                <div class="activity-icon text-warning">
-
-                                    <i class="fe fe-calendar"></i>
-                                </div>
-                                <div class="activity-info">
-
-                                    <span>Block {{  payment_plan.lot.block }} Phase{{  payment_plan.lot.property.phase }} Barangay {{ payment_plan.lot.property.barangay }} {{ payment_plan.lot.property.city }} City</span>&nbsp;
-                                    <span>Amount:  {{  formatCurrency(payment_plan.lot.lot_group.monthly_amortizations)}}</span><br>
-                                    <span>Payment Date: {{  payment_plan.due_date}}</span>
-                                </div>
-
-                            </li>
-
-                        </ul>
-                    </div>
-                </div>
-            </div>
-            <div class="col-lg-5 col-xl-4 col-xxl-4 mb-3">
+            <div class="col-lg-5 col-xl-4 col-xxl-4 mb-3 ">
                 <div class="card-heading">
                     <h5 class="card-title">Applications Overview</h5>
                 </div>
-                <div class="card card-statistics border-0 shadow-none mb-0">
+                <div class="card card-statistics border-1 shadow-none mb-0 tw-shadow-xl">
 
                     <div class="card-body">
-                        <ul class="activity">
+                        <div v-if="applications.length == 0">
+                            No Applications Yet
+                        </div>
+                        <ul class="activity" v-else>
                             <li class="activity-item primary" v-for="application in applications">
                                 <div class="activity-icon text-warning">
                                     <i v-if="application.application_type === 'Lot Application'" class="fe fe-map"></i>
@@ -122,65 +112,45 @@ defineOptions({ layout: Layout })
             </div>
             <div class="col-lg-7 col-xl-8 col-xxl-8 mb-3">
                 <div class="card-heading">
-                    <h5 class="card-title">Payments Overview</h5>
+                    <h5 class="card-title">Upcoming Payments</h5>
                 </div>
                 <div class="scrollbar scroll_dark" >
-                    <div class="card card-statistics border-0 shadow-none mb-0">
+                    <div class="card card-statistics border-1 tw-shadow-xl mb-0 ">
                         <div class="card-body">
-                            <div class="table-responsive">
+                            <div v-if="payment_plans.length == 0" class="flex items-center gap-4">
+                                No Upcoming Payment Yet
+                            </div>
+                            <div class="table-responsive" v-else>
                                 <table class="table mb-0 table-border-3">
                                     <thead>
                                         <tr>
-                                            <th>Payment Proof</th>
-                                            <th>Payment ID</th>
-                                            <th>Mode of Payment</th>
-                                            <th>Payment Date</th>
-                                            <th v-if="user.role.name != 'Client'">Client</th>
+                                            <th>Due Date</th>
                                             <th>Amount</th>
-                                            <th>Status</th>
+                                            <th>Property</th>
+                                            <th v-if="user.role.name === 'Admin'">Client</th>
+
                                         </tr>
                                     </thead>
                                     <tbody class="mb-0">
-                                        <tr v-for="payment in payments">
+                                        <tr v-for="plan in payment_plans">
                                             <td>
-                                                <div class="avatar avatar-lg">
-                                                            <Image alt="Image" preview>
-                                                    <template #previewicon>
-                                                        <i class="pi pi-search"></i>
-                                                    </template>
-                                                    <template #image>
-                                                        <img :src="'/storage/'+payment.files[0]?.url" alt="image" class="tw-h-[50px]"/>
-                                                    </template>
-                                                    <template #preview="slotProps">
-                                                        <img :src="'/storage/'+payment.files[0]?.url" alt="preview" :style="slotProps.style" @click="slotProps.onClick" />
-                                                    </template>
-                                                </Image>
-                                                </div>
-                                            </td>
-                                            <td> {{ payment.id }} </td>
-                                            <td>
-                                                {{ payment.mode_of_payment }} </td>
-                                            <td>
-                                                {{ payment.date_of_payment }}
-                                            </td>
-                                            <td v-if="user.role.name != 'Client'">
-                                                {{ payment.user?.personal_info.first_name }}
-                                                {{ payment.user?.personal_info.last_name }}
-
+                                                {{ plan.due_date }}
                                             </td>
                                             <td>
-                                                {{ payment.amount }}
+                                                {{ formatCurrency( plan.lot.lot_group.monthly_amortizations) }}
                                             </td>
                                             <td>
-                                                {{ payment.status }}
+                                                <span>Block {{  plan.lot.block }}, phase{{  plan.lot.property.phase }}, barangay {{ plan.lot.property.barangay }}, {{ plan.lot.property.city }} city</span>&nbsp;
                                             </td>
-
+                                            <td v-if="user.role.name === 'Admin'">
+                                                {{ plan.user.personal_info?.first_name }}
+                                                {{ plan.user.personal_info?.last_name }}
+                                            </td>
                                         </tr>
-
                                     </tbody>
                                 </table>
                             </div>
-                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -209,6 +179,10 @@ defineOptions({ layout: Layout })
                                         <th scope="col">
                                             Remaining Balance
                                         </th>
+                                        <th scope="col">
+                                            Payment Percentage
+                                        </th>
+
 
                                     </tr>
                                 </thead>
@@ -217,8 +191,8 @@ defineOptions({ layout: Layout })
                                         <td class="px-6 py-4">
 
                                             Phase {{ lot.property.phase }},
-                                            purok {{ lot.property.purok }},
-                                            barangay {{ lot.property.barangay }},
+                                            Purok {{ lot.property.purok }},
+                                            Barangay {{ lot.property.barangay }},
                                             {{ lot.property.city }},
                                             {{ lot.property.province }},
                                             {{ lot.name }}
@@ -237,6 +211,9 @@ defineOptions({ layout: Layout })
                                         <td class="px-6 py-4">
                                             {{ formatCurrency(calculateRemainingBalance(lot)) }}
                                         </td>
+                                        <td class="px-6 py-4">
+                                            <ProgressBar :value="calculatePercentage(lot)" />
+                                        </td>
 
                                     </tr>
 
@@ -249,10 +226,8 @@ defineOptions({ layout: Layout })
         </div>
         <br>
         <div class="row" v-if="user.role.name != 'Client'">
-            <Widget :properties="properties.length" :clients="clients.length" :applications="applications.length" :sales="sales.overall" v-if="user.role.name "/>
             <Sales :daily="daily" :weekly="weekly" :monthly="monthly"/>
-            <!-- <Profile :clients="clients"/> -->
-            <Application :for_review_application="for_review_application" :rejected_application="rejected_application" :approved_application="approved_application"/>
+            <Application :clients="clients"/>
             <Payment :pending_payment="pending_payment" :approved_payment="approved_payment"/>
             <Lot :available_lot="available_lot" :occupied_lot="occupied_lot" :pending_lot="pending_lot"/>
             <Property :properties="properties"/>
