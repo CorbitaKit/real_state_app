@@ -175,15 +175,15 @@ const setButton = () => {
                                     {{formatCurrency(payment.amount) }}
                                 </td>
                                 <td >
-                                    <Image alt="Image" preview v-if="payment.status == 'Confirmed'">
+                                   <Image alt="Image" preview>
                                         <template #previewicon>
                                             <i class="pi pi-search"></i>
                                         </template>
                                         <template #image>
-                                            <img :src="'/storage/app/public/'+payment.files[1]?.url" alt="image" class="tw-h-[50px]"/>
+                                            <img :src="'/storage/app/public/'+payment.files[0]?.url" alt="image" class="tw-h-[50px]"/>
                                         </template>
                                         <template #preview="slotProps">
-                                            <img :src="'/storage/app/public/'+payment.files[1]?.url" alt="preview" :style="slotProps.style" @click="slotProps.onClick" />
+                                            <img :src="'/storage/app/public/'+payment.files[0]?.url" alt="preview" :style="slotProps.style" @click="slotProps.onClick" />
                                         </template>
                                     </Image>
                                 </td>
