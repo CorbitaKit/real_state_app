@@ -35,6 +35,7 @@ class DashboardController extends Controller
             ->latest()
             ->take(5)
             ->get();
+            $applicationCounts = Application::get()->count();
             $payments = Payment::with('user.personal_info', 'files', 'lots')->get();
             $properties = Property::with('lots', 'files')->get();
             $paymentPlans =  PaymentPlan::with('lot', 'lot.lotGroup', 'lot.property', 'user.personal_info')->whereBetween('due_date', [$startOfWeek, $endOfWeek])->
@@ -49,6 +50,7 @@ class DashboardController extends Controller
             ->latest()
             ->take(5)
             ->get();
+
             $payments = Payment::with('user.personal_info', 'files', 'lots')->where('user_id', $user->id)->get();
             $clientLots = Lot::where('user_id', $user->id)->with(['user', 'property', 'lotGroup', 'payments', 'paymentPlans.payment', 'paymentPlans.lot.lotGroup'])->get();
 
@@ -153,7 +155,8 @@ class DashboardController extends Controller
             'pending_lot' => $pendingLotCount,
             'occupied_lot' => $occupiedLotCount,
             'lots' => isset($clientLots) ? $clientLots : null,
-            'payment_plans' => isset($paymentPlans) ? $paymentPlans : null
+            'payment_plans' => isset($paymentPlans) ? $paymentPlans : null,
+            'total_applications' => isset($applicationCounts) ? $applicationCounts : 0
         ]);
     }
 }

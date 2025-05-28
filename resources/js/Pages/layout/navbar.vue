@@ -74,7 +74,7 @@ const clearNotification = () => {
             <div class="navbar-header align-items-center d-lg-none d-block">
                 <a href="javascript:void:(0)" class="mobile-toggle"><i class="ti ti-align-right"></i></a>
                 <a class="navbar-brand" href="index.html">
-                    <img src="assets/img/logo.png" class="img-fluid logo-desktop" alt="logo" />
+                    <img src="/logo-final.png" class="img-fluid logo-desktop" alt="logo" />
                 </a>
             </div>
             <div class="collapse navbar-collapse" id="navbarSupportedContent">

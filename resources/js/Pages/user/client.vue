@@ -7,6 +7,7 @@ import { reactive, ref, watch } from 'vue'
 import moment from 'moment'
 import { transformAddress } from '../composables/sentenceCase.js'
 import Swal from 'sweetalert2'
+import Avatar from "vue3-avatar";
 import {getUser} from '../plugins/get-user-plugin'
 import { debounce } from "lodash";
 import axios from 'axios'
@@ -37,6 +38,7 @@ const filterText = ref()
 const user = getUserInfo()
 const clientPrint = ref()
 const clientList = ref(props.clients)
+
 const form = useForm({
     file: {},
     lot_id: 0,
@@ -56,9 +58,19 @@ const reportsData = reactive({
     payments: {}
 })
 
-const clientFilter = () => {
-    console.log(filterText.value)
-}
+
+const payment_modes = ref([
+    {
+        payment: 'Gcash'
+    },
+    {
+        payment: 'Bank Transfer'
+    },
+    {
+        payment: 'Cash'
+    }
+])
+
 defineOptions({layout: Layout})
 
 
@@ -174,8 +186,12 @@ const setMonthlyAmount = () => {
 }
 
 const convertAddress = (lot) => {
-    const transformedAddress = 'Phase ' + lot.property.phase + ', block ' + lot.block + ', ' + lot.name
+    const transformedAddress = 'Phase ' + lot.property.phase + ', block ' + lot.block + ', ' + lot.name + ', Barangay ' + uppercase(lot.property.barangay) + ', ' + lot.property.city
     return transformAddress(transformedAddress)
+}
+
+const uppercase = (value) => {
+     return value.toUpperCase()
 }
 
 const generateTodaysDate = () => {
@@ -375,13 +391,19 @@ watch(filterText, (newVal, oldVal) => {
                 <option  v-for="lot in client_lots" :value="lot.id" :key="lot.id">{{ convertAddress(lot) }}</option>
             </select>
         </div>
+        <div class="tw-flex tw-items-center tw-gap-4 tw-mb-4">
+            <label for="username" class="tw-font-semibold tw-w-24">Mode of Payment</label>
+            <select  class="js-basic-single form-control" name="lot" v-model="form.mode_of_payment">
+                <option  v-for="payment in payment_modes" :value="payment.payment" :key="payment.payment">{{ payment.payment }}</option>
+            </select>
+        </div>
 
         <div class="tw-flex tw-items-center tw-gap-4 tw-mb-4">
             <label for="username" class="tw-font-semibold tw-w-24">Amount</label>
-            <InputText class="tw-w-full tw-rounded-md" v-model="form.amount"/>
+            <InputText class="tw-w-full tw-rounded-md" disabled v-model="form.amount"/>
 
         </div>
-        <div class="tw-flex tw-items-center tw-gap-4 tw-mb-4">
+        <div class="tw-flex tw-items-center tw-gap-4 tw-mb-4" v-if="form.mode_of_payment != 'Cash'">
             <label for="username" class="tw-font-semibold tw-w-24">Reference Number</label>
             <InputText class="tw-w-full tw-rounded-md" v-model="form.reference_number"/>
 
@@ -716,7 +738,8 @@ watch(filterText, (newVal, oldVal) => {
                                 <td>
                                     <div class="">
                                         <div class="avatar avatar-lg mr-2">
-                                            <img src="assets/img/avatar/01.jpg" class="img-fluid avatar-img rounded-circle" alt="Clients-01">
+                                            <Avatar :name="client.personal_info?.first_name" />
+                                            <!-- <img src="assets/img/avatar/01.jpg" class="img-fluid avatar-img rounded-circle" alt="Clients-01"> -->
                                         </div>
                                         <p class="font-weight-bold text-dark">{{ client.personal_info?.first_name }} {{ client.personal_info?.last_name }}</p>
                                     </div>

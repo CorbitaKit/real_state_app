@@ -371,7 +371,7 @@ defineOptions({layout: Layout})
 
 
                                     <td v-if="user.role_id != 3">
-                                        <div class="dropdown">
+                                        <div class="dropdown" v-if="application.status === 'For Review'">
                                             <a class="p-2" href="#!" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                                 <i class="fe fe-more-horizontal"></i>
                                             </a>

@@ -39,6 +39,7 @@ const props = defineProps(
         occupied_lot : Number,
         lots: Object,
         payment_plans: Object,
+        total_applications: Number
     },
 
 
@@ -75,7 +76,7 @@ defineOptions({ layout: Layout })
 <template>
     <div>
         <div class="row" v-if="user.role.name === 'Admin'">
-            <Widget :properties="properties.length" :clients="clients.length" :applications="applications.length" :sales="sales.overall" v-if="user.role.name "/>
+            <Widget :properties="properties.length" :clients="clients.length" :applications="total_applications" :sales="sales.overall" v-if="user.role.name "/>
         </div>
         <div class="row" >
             <div class="col-lg-5 col-xl-4 col-xxl-4 mb-3 ">

@@ -223,7 +223,7 @@ const validatePersonalAddressData = () => {
 
                 <WorkInfoForm :work_details="form.work_details" @skip="is_skip = true" />
             </tab-content>
-            <tab-content title="Upload Proof of Income" v-if="is_client">
+            <tab-content title="Upload Requirements" v-if="is_client">
 
                 <fileupload :file="form.file" />
             </tab-content>

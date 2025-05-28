@@ -48,6 +48,7 @@ const togglePasswordConfirmationVisibility = () => {
                 <div class="col-lg-4">
                     <div class="d-flex align-items-center">
                         <div class="register pt-4">
+                            <img src="/logo101.png" alt="RealEstateApp Logo" class="tw-h-12">
                             <h1 class="mb-2">Jef Aldebal Real State Service </h1>
                             <p>Welcome, Please create your account.</p>
                             <div v-if="error">
@@ -58,10 +59,10 @@ const togglePasswordConfirmationVisibility = () => {
                                         {{ e }}
                                     </div>
                             </div>
-                            
+
                             <form action="https://themes.potenzaglobalsolutions.com/html/arioxa/auth-register.html" class="mt-2 mt-sm-5">
                                 <div class="row">
-                                    
+
                                     <div class="col-12">
                                         <div class="form-group">
                                             <label class="control-label">Email*</label>
@@ -96,14 +97,7 @@ const togglePasswordConfirmationVisibility = () => {
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="col-12">
-                                        <div class="form-check">
-                                            <input class="form-check-input" type="checkbox" id="gridCheck">
-                                            <label class="form-check-label" for="gridCheck">
-                                                I accept terms & policy
-                                            </label>
-                                        </div>
-                                    </div>
+
                                     <div class="col-12 mt-3">
                                         <a href="#" @click="submit" class="btn btn-light text-uppercase">Sign up</a>
                                     </div>

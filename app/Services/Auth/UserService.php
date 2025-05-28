@@ -44,43 +44,26 @@ class UserService extends Service
         if (Auth::attempt($request->all())) {
             $user = User::with('role')->where('id', Auth::user()->id)->first();
 
-            // if ($user->role->name === 'Admin' || $user->role->name === 'Staff') {
-            //     $overduePaymentPlans = PaymentPlan::with('user.personal_info', 'lot')
-            //     ->where('due_date', '<', now()->format('Y-m-d'))
-            //     ->whereNull('payment_id')
-            //     ->where('is_sms_sent', 0)->get();
+            //  try {
+            //         $account_sid = config('app.twilio.sid');
+            //         $auth_token = config('app.twilio.token');
+            //         $twilio_number = config('app.twilio.number');
 
+            //         $client = new \Twilio\Rest\Client($account_sid, $auth_token);
 
-            //     foreach ($overduePaymentPlans as $overDue) {
-            //         $cleanedNumber = preg_replace('/[^0-9]/', '', $overDue->user->personal_info->phone_number);
-
-            //         $response = Http::withHeaders([
-            //             'Authorization' => 'App 37e306dbf911a4db4de9da34a281639d-5bc56cee-cb75-4e21-8915-1d9f0b41d091', // Replace YOUR_API_KEY with your actual key
-            //             'Content-Type' => 'application/json',
-            //             'Accept' => 'application/json'
-            //         ])->post('https://e1p4v1.api.infobip.com/sms/2/text/advanced', [
-            //             'messages' => [
-            //                 [
-            //                     'destinations' => [['to' => $cleanedNumber]],
-            //                     'from' => '447491163443',
-            //                     'text' => 'Good day! this is from Aldebal Real State Services. we just want to inform you that you missed your payment for ' . $overDue->due_date
-            //                 ]
+            //         $client->messages->create(
+            //             "+639638805540", // Recipient's phone number
+            //             [
+            //                 'from' => $twilio_number,
+            //                 'body' => 'Good day! This is from Aldebal Real State Services. We just want to inform you that you have an upcoming payment on April 17, 2025 amounting ₱2,500.',
             //             ]
-            //         ]);
-
-            //         if ($response->successful()) {
-            //             $overDue->is_sms_sent = 1;
-            //             $overDue->save();
-            //         } else {
-            //             dd($response->status());
-            //         }
+            //         );
+            //     } catch (\Exception $e) {
+            //         dd($e->getMessage()); // Dump the error message for debugging
             //     }
-
-
-            // }
-            $request->session()->regenerate();
-            return back()->with(['message' => 'Authorized', 'user' => parent::doFindById(Auth::user()->id)]);
-        }
+                $request->session()->regenerate();
+                return back()->with(['message' => 'Authorized', 'user' => parent::doFindById(Auth::user()->id)]);
+            }
 
         return back()->withErrors([
             'error' => 'The provided credentials do not match our records.',

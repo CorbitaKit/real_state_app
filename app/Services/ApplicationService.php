@@ -77,7 +77,7 @@ class ApplicationService extends Service
 
         }
 
-        $this->sendMessage($application->id);
+        // $this->sendMessage($application->id);
 
         return $application;
     }

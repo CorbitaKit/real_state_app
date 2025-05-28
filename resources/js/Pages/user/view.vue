@@ -162,7 +162,7 @@ defineOptions({layout: Layout})
                             <form>
                                 <div class="form-row">
                                     <div class="form-group col-md-12">
-                                        <label for="name1">Phase</label>
+                                        <label for="name1">Complete Address</label>
                                         <input type="text" v-model="form.address.complete_address" class="form-control" id="name1">
                                     </div>
                                     <div class="form-group col-md-12">

@@ -5,6 +5,19 @@ import 'leaflet/dist/leaflet.css'
 import axios from 'axios'
 import Show from '../show.vue'
 import { router } from '@inertiajs/vue3'
+import markerIcon2x from '@images/marker-icon-2x.png';
+import markerIcon from '@images/marker-icon.png';
+import markerShadow from '@images/marker-shadow.png';
+
+const customIcon = new L.Icon({
+  iconUrl: markerIcon,
+  iconRetinaUrl: markerIcon2x,
+  shadowUrl: markerShadow,
+  iconSize: [25, 41],
+  iconAnchor: [12, 41],
+  popupAnchor: [1, -34],
+  shadowSize: [41, 41],
+})
 
 const defaultLatLng = [7.3151, 125.6190]
 const latLng = ref(defaultLatLng)
@@ -59,7 +72,7 @@ onMounted(() => {
 
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map.value)
 
-    const marker = L.marker(latLng.value).addTo(map.value)
+    const marker = L.marker(latLng.value, { icon: customIcon }).addTo(map.value)
     marker.bindPopup("Marker Location").openPopup()
     marker.on('click', () => {
       visible.value = true
@@ -94,7 +107,7 @@ const calculateTotalPayment = (lot) => {
 
 <template>
   <div>
-    <div id="map" ref="mapContainer" style="height: 500px;"></div>
+    <div id="map" ref="mapContainer" style="height: 500px;" class="tw-w-full"></div>
     <Dialog v-model:visible="visible" modal header="Lot Details" :style="{ width: '100rem' }">
         <span>Please click the image below to see the whole image</span>
         <div class="row"  style="display: flex; height: 500px; overflow: hidden;">
